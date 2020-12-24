@@ -2,7 +2,7 @@
 
 	Mr.H的个人主页
 
-## Linux
+## linux-server
 
 20201101 [初始化服务器账号信息](https://github.com/zfhlm/mrh.github.io/blob/main/document/linux/linux-20201101%20%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B4%A6%E5%8F%B7%E4%BF%A1%E6%81%AF.md)
 
@@ -16,5 +16,5 @@
 
 20201106 [初始化消息中间件kafka](https://github.com/zfhlm/mrh.github.io/blob/main/document/linux/linux-20201106%20%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka.md)
 
-## Micro
+## micro-service
 
