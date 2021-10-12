@@ -174,25 +174,25 @@
 
 #### 优化配置
 
-	max_connections=1024		#最大连接数
+	max_connections=1024			#最大连接数
 	
-	accept_threads=2				#接收客户端连接的线程数，默认值为1
+	accept_threads=2			#接收客户端连接的线程数，默认值为1
 	
 	work_threads=10				#工作线程用来处理网络IO，默认值为4
 	
-	disk_rw_separated = true	#磁盘读写是否分离
+	disk_rw_separated = true		#磁盘读写是否分离
 	
-	disk_reader_threads=5		#读取磁盘数据的线程数，默认为1
+	disk_reader_threads=5			#读取磁盘数据的线程数，默认为1
 	
-	disk_writer_threads=5		#写磁盘的线程数量，默认为1
+	disk_writer_threads=5			#写磁盘的线程数量，默认为1
 	
-	use_connection_pool=true	#开启连接池
+	use_connection_pool=true		#开启连接池
 	
 	sync_binlog_buff_interval=2		#将binlog buffer写入磁盘的时间间隔
 	
-	sync_wait_msec=50				#同步文件轮询时间
+	sync_wait_msec=50			#同步文件轮询时间
 	
-	sync_interval=0					#同步完一个文件休眠时间
+	sync_interval=0				#同步完一个文件休眠时间
 
 #### 启动测试
 
