@@ -69,14 +69,14 @@
 	
 	4，zoo.cfg配置优化：
 		
-		tickTime=2000						#维持心跳的时间间隔
-		initLimit=5							#主从之间初始连接时能容忍的最多心跳数
-		syncLimit=10						#主从之间请求和应答之间能容忍的最多心跳数
-		maxClientCnxns=2000					#客户端最大连接数
-		autopurge.snapRetainCount=10		#保留的文件数目，默认3个
+		tickTime=2000					#维持心跳的时间间隔
+		initLimit=5					#主从之间初始连接时能容忍的最多心跳数
+		syncLimit=10					#主从之间请求和应答之间能容忍的最多心跳数
+		maxClientCnxns=2000				#客户端最大连接数
+		autopurge.snapRetainCount=10			#保留的文件数目，默认3个
 		autopurge.purgeInterval=1			#自动清理snapshot和事务日志，清理频率，单位是小时
 		globalOutstandingLimit=200			#等待处理的最大请求数量
-		leaderServes=yes					#leader是否接受client请求
+		leaderServes=yes				#leader是否接受client请求
 
 #### 启动测试
 
