@@ -40,7 +40,7 @@
 		yum -y install libevent
 		
 		rpm -qa | grep libevent
-
+	
 	③，安装libfastcommon
 		
 		输入命令编译安装：
@@ -172,6 +172,28 @@
 				base_path=/usr/local/fastdfs/client
 				tracker_server=192.168.0.1:22122
 
+#### 优化配置
+
+	max_connections=1024		#最大连接数
+	
+	accept_threads=2				#接收客户端连接的线程数，默认值为1
+	
+	work_threads=10				#工作线程用来处理网络IO，默认值为4
+	
+	disk_rw_separated = true	#磁盘读写是否分离
+	
+	disk_reader_threads=5		#读取磁盘数据的线程数，默认为1
+	
+	disk_writer_threads=5		#写磁盘的线程数量，默认为1
+	
+	use_connection_pool=true	#开启连接池
+	
+	sync_binlog_buff_interval=2		#将binlog buffer写入磁盘的时间间隔
+	
+	sync_wait_msec=50				#同步文件轮询时间
+	
+	sync_interval=0					#同步完一个文件休眠时间
+
 #### 启动测试
 
 	①，fastdfs启动、停止和监控：
@@ -191,7 +213,7 @@
 			/usr/bin/fdfs_monitor /etc/fdfs/client.conf
 			
 	②，fastdfs文件上传测试：
-
+		
 		cd /usr/local/fastdfs
 		
 		mkdir test
@@ -201,13 +223,45 @@
 		echo test > test.txt
 		
 		/usr/bin/fdfs_test /etc/fdfs/client.conf upload ./test.txt
-
-#### 编写启动脚本
-
-	脚本目录： mrh.github.io/installer/fastdfs
+	
+	④，编写启动脚本： mrh.github.io/installer/fastdfs
 
 #### 集群配置
 
+	配置2个tracker和3个storage（实际同一台服务器可以存在tracker和storage实例）：
 	
+		tracker 服务器： 
+		
+			192.168.140.134
+			192.168.140.135
+		
+		storage 服务器：
+	
+			192.168.140.136
+			192.168.140.137
+			192.168.140.138
+	
+	①，在三台服务器上分别安装好单点fastdfs.
+	
+	②，修改配置文件 /etc/fdfs/storage.conf 和 /etc/fdfs/client.conf：
+	
+		tracker_server=192.168.140.136:22122
+		tracker_server=192.168.140.137:22122
+	
+	③，启动tracker集群
+	
+	④，启动storage集群
+	
+#### 集群错误
+
+	1， item "group_count" is not found
+	
+		删掉新加入节点的/data目录，拷贝当前Leader 目录下的 /data/*.dat 文件到新节点目录
+		
+	2，节点一直处于 WAIT_SYNC 状态
+	
+		删除storage节点数据，重新启动即可
+	
+
 
 
