@@ -17,7 +17,7 @@
 	
 		ln -s apache-zookeeper-3.6.1-bin zookeeper
 
-#### 修改配置
+#### 配置修改
 
 	进入配置目录：
 	
@@ -42,6 +42,41 @@
 			dataDir=/usr/local/zookeeper/data
 			logDir=/usr/local/zookeeper/logs
 			admin.serverPort=18080
+
+#### 配置调优
+
+	1，调整zookeeper JVM内存占用大小，在配置文件目录conf下新建java.env，加入以下内容：
+	
+		#!/bin/sh
+		export JAVA_HOME=/usr/java/jdk
+		export JVMFLAGS="-Xms512m -Xmx1024m $JVMFLAGS"
+	
+	2，调整日志输出，按天出zookeeper日志，zkEnv.sh文件日志输出方式从CONSOLE改为ROLLINGFILE；
+		
+		if [ "x${ZOO_LOG4J_PROP}" = "x" ]
+		then
+		#   ZOO_LOG4J_PROP="INFO,CONSOLE"
+		    ZOO_LOG4J_PROP="INFO,ROLLINGFILE"
+		fi
+	
+	3，调整日志级别，配置文件log4j.properties更改：
+	
+		zookeeper.root.logger=INFO, ROLLINGFILE
+		log4j.appender.ROLLINGFILE=org.apache.log4j.DailyRollingFileAppender
+		log4j.appender.ROLLINGFILE.Threshold=${zookeeper.log.threshold}
+		log4j.appender.ROLLINGFILE.File=${zookeeper.log.dir}/${zookeeper.log.file}
+		log4j.appender.ROLLINGFILE.DatePattern='.'yyyy-MM-dd
+	
+	4，zoo.cfg配置优化：
+		
+		tickTime=2000						#维持心跳的时间间隔
+		initLimit=5							#主从之间初始连接时能容忍的最多心跳数
+		syncLimit=10						#主从之间请求和应答之间能容忍的最多心跳数
+		maxClientCnxns=2000					#客户端最大连接数
+		autopurge.snapRetainCount=10		#保留的文件数目，默认3个
+		autopurge.purgeInterval=1			#自动清理snapshot和事务日志，清理频率，单位是小时
+		globalOutstandingLimit=200			#等待处理的最大请求数量
+		leaderServes=yes					#leader是否接受client请求
 
 #### 启动测试
 
@@ -106,4 +141,3 @@
 		./bin/zkServer.sh status
 		
 	可以看到一个leader节点、两个follower节点，集群安装成功.
-
