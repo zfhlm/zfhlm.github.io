@@ -71,11 +71,11 @@
 	线程IO：
 		
 		num.network.threads=3					#broker处理网络请求的线程数，建议CPU核数+1
-		num.io.threads=8							#broker处理磁盘IO的线程数，建议CPU核数*2
+		num.io.threads=8					#broker处理磁盘IO的线程数，建议CPU核数*2
 		
 	刷盘策略：
 		
-		log.flush.interval.messages=10000	#每写入10000条消息刷数据到磁盘
+		log.flush.interval.messages=10000			#每写入10000条消息刷数据到磁盘
 		log.flush.interval.ms=1000				# 每间隔1秒刷数据到磁盘
 	
 	日志保留策略：
@@ -87,15 +87,15 @@
 	
 		num.replica.fetchers=3					#拉取线程数
 		replica.fetch.min.bytes=1				#拉取最小字节数
-		replica.fetch.max.bytes=5242880		#拉取最大字节数，默认1M，需要可调大
-		replica.fetch.wait.max.ms=1000		#拉取最大时间间隔，默认即可
+		replica.fetch.max.bytes=5242880				#拉取最大字节数，默认1M，需要可调大
+		replica.fetch.wait.max.ms=1000				#拉取最大时间间隔，默认即可
 	
 	消息可靠策略：
 	
 		delete.topic.enable=true				#是否允许删除topic
-		num.partitions=2							#每个topic的默认分区个数
+		num.partitions=2					#每个topic的默认分区个数
 		min.insync.replicas=2					#broker端必须成功响应client消息发送的最小副本数
-		message.max.bytes=						#接受的消息最大byte数
+		message.max.bytes=					#接受的消息最大byte数
 
 #### 界面管理工具cmak
 
