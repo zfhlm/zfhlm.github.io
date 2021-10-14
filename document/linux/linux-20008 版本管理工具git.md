@@ -158,7 +158,80 @@
 		lisi:x:1002:1003::/home/lisi:/usr/bin/git-shell
 
 	然后保存即可.
+	
+#### 配置ssh免登陆
+
+	1，git客户端生成秘钥，打开 Git bash:
+	
+		输入命令，生成ssh秘钥文件：
+			
+			cd ~/.ssh/
+			
+			ssh-keygen -t rsa
+			
+			键入以上命令之后，名称按提示输入 git，密码两次不输入直接回车
+		
+		然后在本地 ~/.ssh/ 目录会生成两个文件：
+		
+			公钥文件 git.pub
+			
+			私钥文件 git
+		
+	2，将私钥配置到git客户端：
+		
+		输入命令：
+			
+			cd ~/.ssh/
+			
+			ssh-agent bash
+			
+			ssh-add ./git
+		
+		私钥配置完成，注意：如果关闭了bash窗口，再次打开需要重复上面的命令添加 私钥
+					
+	3，将公钥配置到git服务端：
+	
+		使用记事本打开 git.pub 公钥文件，复制里面的内容为一行
+		
+		登录到 git 服务器，切换到 git 用户，输入命令：
+		
+			su - git
+			
+			cd ~
+			
+			ls -a 
+		
+		如果不存在 ~/.ssh/ 目录，则创建目录：
+		
+			mkdir .ssh
+		
+		进入 .ssh 目录：
+		
+			cd .ssh
+			
+			ls -a
+		
+		如果不存在 authorized_keys 文件，则创建文件：
+		
+			touch authorized_keys
+		
+		将 git.pub 公钥文件的内容，单独一行粘贴到 authorized_keys 文件中
+		
+		注意，还需要执行以下命令，否则不生效：
+		
+			cd ~
+			
+			chmod 700 -R .ssh
+			
+			cd ~/.ssh/
+			
+			chmod 600 authorized_keys
+		
+	4，至此完成配置，在 git bash 使用 git 用户，发现已经不用再输入密码：
+	
+		git clone git@192.168.140.139:/home/repository
 
 #### git基本使用
 
-	查看目录 installer/git/
+	查看目录 installer/git/ 下的 pdf 电子书
+
