@@ -170,7 +170,9 @@
 	2，配置 master 服务器 keepalived
 	
 		输入命令编辑配置文件：
-		
+			
+			cp /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
+			
 			vi /etc/keepalived/keepalived.conf
 		
 		粘贴以下内容到配置文件：
@@ -211,7 +213,7 @@
 			    #定义为主服务器
 			    state MASTER
 			
-			    #网络接口
+			    #网络接口，根据实际的填写
 			    interface ens33
 				
 			    #发送多播数据包时的源IP地址，填写master服务器IP地址
@@ -255,7 +257,9 @@
 	3，配置 backup 服务器 keepalived
 		
 		输入命令编辑配置文件：
-		
+			
+			cp /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
+			
 			vi /etc/keepalived/keepalived.conf
 		
 		粘贴以下内容到配置文件：
@@ -296,7 +300,7 @@
 			    #定义为备用服务器
 			    state BACKUP
 			
-			    #网络接口
+			    #网络接口，根据实际的填写
 			    interface ens33
 			
 			    #发送多播数据包时的源IP地址，填写backup服务器IP地址
@@ -352,6 +356,7 @@
 		将以下内容粘贴到脚本内容：
 		
 			#!/bin/sh
+			#脚本含义：如果 nginx 停止运行，尝试启动，但是如果无法启动，则杀死本机的 keepalived 进程
 			A=`ps -C nginx --no-header |wc -l`
 			if [ $A -eq 0 ]
 			then
@@ -364,50 +369,331 @@
 			  fi
 			fi
 		
-		脚本含义：如果 nginx 停止运行，尝试启动，但是如果无法启动，则杀死本机的 keepalived 进程
-	
 	5，启动主备服务器的keepalived
 	
 		主备服务器都执行命令：
-			
+		
 			service keepalived start
-	
-	6，使用VIP访问nginx
-	
-		浏览器输入地址：
+		
+		浏览器访问以下地址：
 		
 			http://192.168.140.200/
-			
-		可以看到浏览器界面显示的是 master服务器 192.168.140.147 nginx欢迎页
+		
+		可以看到浏览器界面显示的是 master服务器nginx欢迎页
 	
 	7，测试主备keepalived功能
 	
-		关闭 master服务器 192.168.140.147 上的nginx
+		关闭 master服务器 nginx，刷新浏览器地址：http://192.168.140.200/
 		
-		刷新浏览器地址：
+		可以看到浏览器界面显示 backup服务器nginx欢迎页
 		
-			http://192.168.140.200/
+		重启master服务器nginx和keepalived，刷新浏览器地址：http://192.168.140.200/
 		
-		可以看到浏览器界面显示 backup服务器  192.168.140.148 nginx欢迎页
-		
-		重新启动master服务器 192.168.140.147 上的nginx和keepalived，输入命令：
-		
-			cd /usr/local/nginx
-			
-			./sbin/nginx
-			
-			service keepalived start
-		
-		刷新浏览器地址：
-		
-			http://192.168.140.200/
-		
-		可以看到显示界面已经切换回master服务器
-	
-	8，至此完成了nginx的主备模式配置
+		可以看到显示界面已经切换回master服务器nginx欢迎页
 
 #### 双主模式(nginx+keepalived)
 
-
-
+	1，配置前准备工作
+		
+		主服务器一： 192.168.140.147
+		
+		主服务器二： 192.168.140.148
+		
+		双机VIP：192.168.140.200、192.168.140.201
+		
+		两台服务器都安装好 nginx、keepalived
+		
+		启动nginx服务，将 nginx 的 index.html 都加上各自的IP地址
+	
+	2，配置主服务器一 keepalived
+	
+		输入命令编辑配置文件：
+			
+			vi /etc/keepalived/keepalived.conf
+		
+		粘贴以下内容到配置文件：
+			
+			! Configuration File for keepalived
+			
+			#全局配置
+			global_defs {
+			
+			    #服务标识符
+			    router_id nginx_keepalived_master147
+			
+			}
+			
+			#定义监控nginx脚本
+			vrrp_script chk_nginx {
+			
+			    #脚本位置
+			    script "/etc/keepalived/check_nginx.sh"
+			
+			    #执行间隔2秒钟
+			    interval 2
+			
+			    #脚本优先级
+			    weight -5
+			
+			    #确定2次失败才算失败
+			    fall 2
+			
+			    #确顶1次成功就算成功
+			    rise 1
+			
+			}
+			
+			#定义vrrp实例一
+			vrrp_instance VI_1 {
+			
+			    #定义为主服务器
+			    state MASTER
+			
+			    #网络接口，根据实际的填写
+			    interface ens33
+			    
+			    #发送多播数据包时的源IP地址，填写本机IP地址
+			    mcast_src_ip 192.168.140.147
+			    
+			    #虚拟路由标识，MASTER和BACKUP必须一致
+			    virtual_router_id 51
+			
+			    #优先级，MASTER必须大于BACKUP
+			    priority 101
+			
+			    #主备之间同步检查的时间间隔秒
+			    advert_int 1  
+			
+			    #设置主从验证信息
+			    authentication {
+			
+			        #使用密码验证 
+			        auth_type PASS
+			
+			        #验证密码
+			        auth_pass 123456
+			
+			    }
+			
+			    #设置VIP地址
+			    virtual_ipaddress {
+			        192.168.140.200
+			    }
+			
+			    #执行nginx检测脚本
+			    track_script {
+			
+			       #引用nginx监控脚本
+			       chk_nginx
+			
+			    }
+			
+			}
+			
+			#定义vrrp实例二
+			vrrp_instance VI_2 {
+			
+			    #定义为备服务器
+			    state BACKUP
+			
+			    #网络接口，根据实际的填写
+			    interface ens33
+			    
+			    #发送多播数据包时的源IP地址，填写本机IP地址
+			    mcast_src_ip 192.168.140.147
+			    
+			    #虚拟路由标识，MASTER和BACKUP必须一致
+			    virtual_router_id 52
+			
+			    #优先级，MASTER必须大于BACKUP
+			    priority 100
+			
+			    #主备之间同步检查的时间间隔秒
+			    advert_int 1  
+			
+			    #设置主从验证信息
+			    authentication {
+			
+			        #使用密码验证 
+			        auth_type PASS
+			
+			        #验证密码
+			        auth_pass 456789
+			
+			    }
+			
+			    #设置VIP地址
+			    virtual_ipaddress {
+			        192.168.140.201
+			    }
+			
+			    #执行nginx检测脚本
+			    track_script {
+			
+			       #引用nginx监控脚本
+			       chk_nginx
+			
+			    }
+			
+			}
+	
+	2，配置主服务器二 keepalived
+	
+		输入命令编辑配置文件：
+			
+			vi /etc/keepalived/keepalived.conf
+		
+		粘贴以下内容到配置文件：
+						
+			! Configuration File for keepalived
+			
+			#全局配置
+			global_defs {
+			
+			    #服务标识符
+			    router_id nginx_keepalived_master148
+			
+			}
+			
+			#定义监控nginx脚本
+			vrrp_script chk_nginx {
+			
+			    #脚本位置
+			    script "/etc/keepalived/check_nginx.sh"
+			
+			    #执行间隔2秒钟
+			    interval 2
+			
+			    #脚本优先级
+			    weight -5
+			
+			    #确定2次失败才算失败
+			    fall 2
+			
+			    #确顶1次成功就算成功
+			    rise 1
+			
+			}
+			
+			#定义vrrp实例一
+			vrrp_instance VI_1 {
+			
+			    #定义为备服务器
+			    state BACKUP
+			
+			    #网络接口，根据实际的填写
+			    interface ens33
+			    
+			    #发送多播数据包时的源IP地址，填写本机IP地址
+			    mcast_src_ip 192.168.140.148
+			    
+			    #虚拟路由标识，MASTER和BACKUP必须一致
+			    virtual_router_id 51
+			
+			    #优先级，MASTER必须大于BACKUP
+			    priority 100
+			
+			    #主备之间同步检查的时间间隔秒
+			    advert_int 1  
+			
+			    #设置主从验证信息
+			    authentication {
+			
+			        #使用密码验证 
+			        auth_type PASS
+			
+			        #验证密码
+			        auth_pass 123456
+			
+			    }
+			
+			    #设置VIP地址
+			    virtual_ipaddress {
+			        192.168.140.200
+			    }
+			
+			    #执行nginx检测脚本
+			    track_script {
+			
+			       #引用nginx监控脚本
+			       chk_nginx
+			
+			    }
+			
+			}
+			
+			#定义vrrp实例二
+			vrrp_instance VI_2 {
+			
+			    #定义为主服务器
+			    state MASTER
+			
+			    #网络接口，根据实际的填写
+			    interface ens33
+			    
+			    #发送多播数据包时的源IP地址，填写本机IP地址
+			    mcast_src_ip 192.168.140.148
+			    
+			    #虚拟路由标识，MASTER和BACKUP必须一致
+			    virtual_router_id 52
+			
+			    #优先级，MASTER必须大于BACKUP
+			    priority 101
+			
+			    #主备之间同步检查的时间间隔秒
+			    advert_int 1  
+			
+			    #设置主从验证信息
+			    authentication {
+			
+			        #使用密码验证 
+			        auth_type PASS
+			
+			        #验证密码
+			        auth_pass 456789
+			
+			    }
+			
+			    #设置VIP地址
+			    virtual_ipaddress {
+			        192.168.140.201
+			    }
+			
+			    #执行nginx检测脚本
+			    track_script {
+			
+			       #引用nginx监控脚本
+			       chk_nginx
+			
+			    }
+			
+			}
+	
+	4，配置双主服务器的nginx监控脚本
+	
+		(配置方式和主备模式一致)
+			
+	5，启动双主服务器的keepalived
+	
+		服务器都执行命令：
+		
+			service keepalived start
+		
+		浏览器访问以下地址：
+		
+			http://192.168.140.200/
+		
+			http://192.168.140.201/
+		
+		可以看到浏览器界面显示分别显示两台服务器的欢迎页
+	
+	7，测试双主keepalived功能
+	
+		关闭 主服务器一 nginx，刷新浏览器地址：http://192.168.140.200/
+		
+		可以看到浏览器界面显示 主服务器二nginx欢迎页
+		
+		重启主服务器一 nginx和keepalived，刷新浏览器地址：http://192.168.140.200/
+		
+		可以看到显示界面已经切换回主服务器一nginx欢迎页
 

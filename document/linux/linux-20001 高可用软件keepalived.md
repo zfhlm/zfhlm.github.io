@@ -55,9 +55,18 @@
 		
 		chkconfig –list
 	
-	5，启动
+	5，启动keepalived
 	
-		需要根据配合使用的 nginx、mysql、HA-Proxy等各自做进一步的配置
+		启动前需要根据配合使用的 nginx、mysql、HA-Proxy等各自做进一步的配置
+		
+		启动命令：
+		
+			service keepalived start
+			
+		停止命令：
+		
+			service keepalived stop
+		
 
 
 
