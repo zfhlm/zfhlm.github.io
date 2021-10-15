@@ -15,7 +15,7 @@
 	
 	将文件上传到三台服务器目录 /usr/local/software
 
-#### 安装kafka
+#### 安装kafka集群
 
 	1，解压安装包
 	

@@ -10,6 +10,14 @@
 		openssl-fips-2.0.16.tar.gz
 		
 		nginx-1.9.9.tar.gz
+		
+		perl-5.34.0.tar.gz
+		
+	准备好两台服务器：
+	
+		192.168.140.147
+		
+		192.168.140.148
 	
 	远程root账号登录，用ftp工具上传到服务器目录：/usr/local/backup
 
@@ -21,6 +29,16 @@
 	
 	②，安装依赖包：
 	
+		cd /usr/local/backup
+		
+		tar -zxvf ./perl-5.34.0.tar.gz
+		
+		cd ./perl-5.34.0
+		
+		./Configure -des -Dprefix=/usr/local/perl
+		
+		make && make test && make install
+		
 		cd /usr/local/backup
 		
 		tar -zxvf openssl-fips-2.0.16.tar.gz
@@ -67,9 +85,11 @@
 	
 	②，访问：
 	
-		http://host:port/
+		http://192.168.140.147
+		
+		http://192.168.140.148
 
-#### 参数配置
+#### 配置运行参数
 
 	1，worker进程
 	
@@ -132,3 +152,262 @@
 	　　ssl_session_cache shared:SSL:10m;			#缓存为10M
 		
 	　　ssl_session_timeout 10m;				#会话超时时间为10分钟
+
+#### 主备模式(nginx+keepalived)
+
+	1，配置前准备工作
+	
+		master服务器： 192.168.140.147
+		
+		backup服务器： 192.168.140.148
+		
+		VIP：192.168.140.200
+		
+		两台服务器都安装好 nginx、keepalived
+		
+		启动nginx服务，将 nginx 的 index.html 都加上各自的IP地址
+	
+	2，配置 master 服务器 keepalived
+	
+		输入命令编辑配置文件：
+		
+			vi /etc/keepalived/keepalived.conf
+		
+		粘贴以下内容到配置文件：
+		
+			! Configuration File for keepalived
+			
+			#全局配置
+			global_defs {
+			
+			    #服务标识符
+			    router_id nginx_keepalived_master
+			
+			}
+			
+			#定义监控nginx脚本
+			vrrp_script chk_nginx {
+			
+			    #脚本位置
+			    script "/etc/keepalived/check_nginx.sh"
+			
+			    #执行间隔2秒钟
+			    interval 2
+			
+			    #脚本优先级
+			    weight -5
+			
+			    #确定2次失败才算失败
+			    fall 2
+			
+			    #确顶1次成功就算成功
+			    rise 1
+			
+			}
+			
+			#定义vrrp实例
+			vrrp_instance VI_1 {
+			
+			    #定义为主服务器
+			    state MASTER
+			
+			    #网络接口
+			    interface ens33
+				
+			    #发送多播数据包时的源IP地址，填写master服务器IP地址
+			    mcast_src_ip 192.168.140.147
+				
+			    #虚拟路由标识，MASTER和BACKUP必须一致
+			    virtual_router_id 51
+			
+			    #优先级，MASTER必须大于BACKUP
+			    priority 101
+			
+			    #主备之间同步检查的时间间隔秒
+			    advert_int 1  
+			
+			    #设置主从验证信息
+			    authentication {
+			
+			        #使用密码验证 
+			        auth_type PASS
+			
+			        #验证密码
+			        auth_pass 123456
+			
+			    }
+			
+			    #设置VIP地址
+			    virtual_ipaddress {
+			        192.168.140.200
+			    }
+			
+			    #执行nginx检测脚本
+			    track_script {
+			
+			       #引用nginx监控脚本
+			       chk_nginx
+			
+			    }
+			
+			}
+	
+	3，配置 backup 服务器 keepalived
+		
+		输入命令编辑配置文件：
+		
+			vi /etc/keepalived/keepalived.conf
+		
+		粘贴以下内容到配置文件：
+			
+			! Configuration File for keepalived
+			
+			#全局配置
+			global_defs {
+			
+			    #服务标识符
+			    router_id nginx_keepalived_backup
+			
+			}
+			
+			#定义监控nginx脚本
+			vrrp_script chk_nginx {
+			
+			    #脚本位置
+			    script "/etc/keepalived/check_nginx.sh"
+			
+			    #执行间隔2秒钟
+			    interval 2
+			
+			    #脚本优先级
+			    weight -5
+			
+			    #确定2次失败才算失败
+			    fall 2
+			
+			    #确顶1次成功就算成功
+			    rise 1
+			
+			}
+			
+			#定义vrrp实例
+			vrrp_instance VI_1 {
+			
+			    #定义为备用服务器
+			    state BACKUP
+			
+			    #网络接口
+			    interface ens33
+			
+			    #发送多播数据包时的源IP地址，填写backup服务器IP地址
+			    mcast_src_ip 192.168.140.148
+			
+			    #虚拟路由标识，MASTER和BACKUP必须一致
+			    virtual_router_id 51
+			
+			    #优先级，MASTER必须大于BACKUP
+			    priority 100
+			
+			    #主备之间同步检查的时间间隔秒
+			    advert_int 1  
+			
+			    #设置主从验证信息
+			    authentication {
+			
+			        #使用密码验证 
+			        auth_type PASS
+			
+			        #验证密码
+			        auth_pass 123456
+			
+			    }
+			
+			    #设置VIP地址
+			    virtual_ipaddress {
+			        192.168.140.200
+			    }
+			
+			    #执行nginx检测脚本
+			    track_script {
+			
+			       #引用nginx监控脚本
+			       chk_nginx
+			
+			    }
+			
+			}
+	
+	4，配置主备服务器的nginx监控脚本
+	
+		输入命令：
+		
+			cd /etc/keepalived/
+			
+			touch check_nginx.sh
+			
+			chmod 777 ./check_nginx.sh
+			
+			vi ./check_nginx.sh
+		
+		将以下内容粘贴到脚本内容：
+		
+			#!/bin/sh
+			A=`ps -C nginx --no-header |wc -l`
+			if [ $A -eq 0 ]
+			then
+			  /usr/sbin/nginx
+			  sleep 1
+			  A2=`ps -C nginx --no-header |wc -l`
+			  if [ $A2 -eq 0 ]
+			  then
+			    systemctl stop keepalived
+			  fi
+			fi
+		
+		脚本含义：如果 nginx 停止运行，尝试启动，但是如果无法启动，则杀死本机的 keepalived 进程
+	
+	5，启动主备服务器的keepalived
+	
+		主备服务器都执行命令：
+			
+			service keepalived start
+	
+	6，使用VIP访问nginx
+	
+		浏览器输入地址：
+		
+			http://192.168.140.200/
+			
+		可以看到浏览器界面显示的是 master服务器 192.168.140.147 nginx欢迎页
+	
+	7，测试主备keepalived功能
+	
+		关闭 master服务器 192.168.140.147 上的nginx
+		
+		刷新浏览器地址：
+		
+			http://192.168.140.200/
+		
+		可以看到浏览器界面显示 backup服务器  192.168.140.148 nginx欢迎页
+		
+		重新启动master服务器 192.168.140.147 上的nginx和keepalived，输入命令：
+		
+			cd /usr/local/nginx
+			
+			./sbin/nginx
+			
+			service keepalived start
+		
+		刷新浏览器地址：
+		
+			http://192.168.140.200/
+		
+		可以看到显示界面已经切换回master服务器
+	
+	8，至此完成了nginx的主备模式配置
+
+#### 双主模式(nginx+keepalived)
+
+
+
+
