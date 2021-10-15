@@ -21,31 +21,35 @@
 		
 		passwd git
 	
-	创建git工作目录：
+	创建git存储父目录，即所有git仓库都建立到其子目录中：
 	
-		mkdir -p /home/git/repository
+		mkdir -p /home/repo
 		
-		cd /home/git
+		cd /home/repo
 		
-		git init --bare ./repository
+		chmod -R g+rwX ./repo/
+			
+	创建git项目目录，假设项目名称为 test：
 		
-		chown -R git:git ./repository/
-	
+		cd /home/repo
+		
+		mkdir test.git
+		
+		git init --bare ./test.git
+		
+		chown -R git:git ./test.git
+
 #### 客户端测试
 
-	下载git客户端，地址：
+	下载git客户端，点击运行安装，地址：
 	
 		https://git-for-windows.github.io/
-	
-	使用bash命令行，clone仓库到本地F盘：
+		
+	鼠标右键打开 git bash命令行，clone仓库到本地F盘：
 	
 		cd F:/
 		
-		mkdir git
-		
-		cd git
-		
-		git clone git@192.168.140.139:/home/git/repository
+		git clone git@192.168.140.139/home/repo/test.git
 	
 	客户端bash可以看到输出：
 	
@@ -53,14 +57,14 @@
 		git@192.168.140.139's password:
 		warning: You appear to have cloned an empty repository.
 		
-	切换到F盘目录，可以看到 repository 目录
+	打开 F盘，可以看到有个test文件夹
 
 #### 多用户配置
 
 	创建用户分组gitgroup:
 	
 		groupadd gitgroup
-		
+	
 	创建分组用户：
 	
 		useradd zhangsan
@@ -81,25 +85,27 @@
 		
 		cat /etc/group
 	
-	将原有的git仓库删除：
-	
-		cd /home/git
+	将仓库父目录权限赋予用户组：
 		
-		rm -rf ./repository
-		
-	创建新的仓库：
-	
 		cd /home
+			
+		chgrp -R gitgroup ./repo/
 		
-		mkdir repository
+		chmod -R g+rwX ./repo/
 		
-		git init --bare ./repository
+	创建test项目仓库：
 	
-	将仓库目录权限赋予用户组：
+		cd /home/repo
 		
-		chgrp -R gitgroup /home/repository/
+		mkdir test.git
 		
-		chmod -R g+rwX ./repository/
+		chgrp -R gitgroup ./test.git
+		
+		chmod -R g+rwX ./test.git
+		
+		git init --bare ./test.git
+	
+	项目test仓库即创建完毕，路径： /home/repo/test.git
 
 #### 多用户测试
 
@@ -107,58 +113,39 @@
 	
 		cd F:\
 		
-		mkdir git
+		git clone git@192.168.140.139/home/repo/test.git
 		
-		cd ./git
+		git clone zhangsan@192.168.140.139/home/repo/test.git
+		
+		git clone lisi@192.168.140.139/home/repo/test.git
 	
-		git clone git@192.168.140.139:/home/repository
-		
-		git clone zhangsan@192.168.140.139:/home/repository
-		
-		git clone lisi@192.168.140.139:/home/repository
-		
-	使用本地客户端创建文件：
+	在test文件夹随便加几个文件，使用本地客户端提交到git服务器：
 	
-		cd ./repository
-		
-		mkdir test
-		
-		cd test
-		
-		echo 'test' > test.html
-		
-	使用本地客户端提交到git服务器：
+		cd F:\test
 	
 		git status
 		
-		git add ./test
+		git add .
 		
 		git commit -m '测试'
 		
 		git push origin master
-		
-	使用本地客户端 clone git服务器文件：
-	
-		cd F:\
-		
-		mkdir repo
-		
-		git clone zhangsan@192.168.140.139:/home/repository/
 
 #### 禁用控制台登录
 
+	禁止 zhangsan、lisi 两个账号的 bash 登录服务器
+	
 	修改用户信息配置：
-
+	
 		vi /etc/passwd
 	
 	更改以下信息为：
 	
-		git:x:1000:1000::/home/git:/usr/bin/git-shell
 		zhangsan:x:1001:1002::/home/zhangsan:/usr/bin/git-shell
 		lisi:x:1002:1003::/home/lisi:/usr/bin/git-shell
-
-	然后保存即可.
 	
+	然后保存即可.
+
 #### 配置ssh免登陆
 
 	1，git客户端生成秘钥，打开 Git bash:
@@ -229,7 +216,7 @@
 		
 	4，至此完成配置，在 git bash 使用 git 用户，发现已经不用再输入密码：
 	
-		git clone git@192.168.140.139:/home/repository
+		git clone git@192.168.140.139/home/repo/test.git
 
 #### git基本使用
 
