@@ -111,6 +111,10 @@
 		
 		输入账号admin，密码admin，进入监控页面
 
+#### haproxy日志配置
+
+	
+
 #### 七层http负载均衡
 
 	1，环境准备
@@ -398,11 +402,11 @@
 #### 双主模式(haproxy+keepalived)
 
 	1，安装准备
-
+	
 		复用四层tcp负载均衡搭建的环境
 		
 		双主服务器都安装好 keepalived
-
+	
 	2，实例相关
 		
 		192.168.140.149		#haproxy节点一，负载均衡代理端口9050
@@ -417,10 +421,167 @@
 		
 		192.168.140.203		#keepalived VIP 二
 	
+	3，配置主服务器一 keepalived
 	
+		输入命令编辑配置文件：
+			
+			vi /etc/keepalived/keepalived.conf
+		
+		粘贴以下内容到配置文件：
+			
+			! Configuration File for keepalived
+			
+			global_defs {
+			    router_id hka_149
+			}
+			
+			vrrp_script chk_haproxy {
+			    script "/usr/bin/pkill -0 haproxy || systemctl stop keepalived"
+			    interval 2
+			    weight -5
+			    fall 2
+			    rise 1
+			}
+			
+			vrrp_instance VI_1 {
+			
+			    state MASTER
+			    interface ens33
+			    mcast_src_ip 192.168.140.149
+			    virtual_router_id 51
+			    priority 101
+			    advert_int 1  
+			
+			    authentication {
+			        auth_type PASS
+			        auth_pass haproxy123456
+			    }
+			
+			    virtual_ipaddress {
+			        192.168.140.202
+			    }
+			
+			    track_script {
+			       chk_haproxy
+			    }
+			
+			}
+			
+			vrrp_instance VI_2 {
+			
+			    state BACKUP
+			    interface ens33
+			    mcast_src_ip 192.168.140.149
+			    virtual_router_id 52
+			    priority 100
+			    advert_int 1  
+			
+			    authentication {
+			        auth_type PASS
+			        auth_pass haproxy456789
+			    }
+			
+			    virtual_ipaddress {
+			        192.168.140.203
+			    }
+			
+			    track_script {
+			       chk_haproxy
+			    }
+			
+			}
 	
-
-
-
+	4，配置主服务器二 keepalived
+	
+		输入命令编辑配置文件：
+			
+			vi /etc/keepalived/keepalived.conf
+		
+		粘贴以下内容到配置文件：
+						
+			! Configuration File for keepalived
+			
+			global_defs {
+			    router_id hka_150
+			}
+			
+			vrrp_script chk_haproxy {
+			    script "/usr/bin/pkill -0 haproxy || systemctl stop keepalived"
+			    interval 2
+			    weight -5
+			    fall 2
+			    rise 1
+			}
+			
+			vrrp_instance VI_1 {
+			
+			    state BACKUP
+			    interface ens33
+			    mcast_src_ip 192.168.140.150
+			    virtual_router_id 51
+			    priority 100
+			    advert_int 1  
+				
+			    authentication {
+			        auth_type PASS
+			        auth_pass haproxy123456
+			    }
+			
+			    virtual_ipaddress {
+			        192.168.140.202
+			    }
+			
+			    track_script {
+			       chk_haproxy
+			
+			    }
+			
+			}
+			
+			vrrp_instance VI_2 {
+				
+			    state MASTER
+			    interface ens33
+			    mcast_src_ip 192.168.140.150
+			    virtual_router_id 52
+			    priority 101
+			    advert_int 1  
+			
+			    authentication {
+			        auth_type PASS
+			        auth_pass haproxy456789
+			    }
+				
+			    virtual_ipaddress {
+			        192.168.140.203
+			    }
+			
+			    track_script {
+			       chk_haproxy
+			    }
+			
+			}
+		
+	5，检测脚本：
+		
+		脚本内容：/usr/bin/pkill -0 haproxy || systemctl stop keepalived
+		
+		 脚本含义：如果haproxy进程存在，不做任何操作；如果haproxy进程不存在，杀死keepalived
+	
+	6，启动keepalived，双主服务器都输入命令：
+		
+		service keepalived start
+	
+	7，连接测试
+	
+		使用四层tcp负载均衡示例的客户端进行测试，选择以下地址：
+		
+			192.168.140.202		#端口9050
+			
+			192.168.140.203		#端口9050
+		
+		先对两个地址的tcp代理进行测试
+		
+		再关闭其中一个keepalived，对VIP转移进行测试
 
 
