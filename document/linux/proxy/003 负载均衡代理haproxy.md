@@ -154,7 +154,7 @@
 			# See rsyslogd(8) for more details
 			SYSLOGD_OPTIONS="-r -m 0 -c 2"
 	
-	4，添加haproxy配置
+	4，添加haproxy日志配置
 	
 		输入命令：
 		
@@ -162,9 +162,8 @@
 			
 			vi ./conf/haproxy.cfg
 			
-		在global下面添加以下配置：
-		
-			# 八个日志级别：emerg alert crit err warning notice info debug 
+		在global下面添加以下配置(日志级别：emerg alert crit err warning notice info debug )：
+			
 			log 127.0.0.1 local0 info
 	
 	5，重启日志服务和haproxy服务
@@ -215,8 +214,7 @@
 			
 			mkdir ROOT
 			
-			#192.168.140.150 上执行命令IP地址为192.168.140.150
-			echo 'tomcat 192.168.140.149' > ROOT/index.html
+			ifconfig ens33 | grep "inet " | awk '{ print $2}' > ./ROOT/index.html
 		
 		更改运行端口，修改http端口为8888，输入命令：
 		
