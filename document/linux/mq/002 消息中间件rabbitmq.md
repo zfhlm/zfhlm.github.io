@@ -8,8 +8,6 @@
 		This release requires Erlang/OTP 23.2 and supports Erlang 24.
 	
 	该安装包依赖 Erlang 23.2版本
-	
-	假设服务器IP地址：192.168.140.144
 
 #### 安装erlang
 
