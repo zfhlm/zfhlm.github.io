@@ -107,25 +107,25 @@
 	
 			namesrvAddr					#NameServer地址，多个用分号隔开
 			
-			brokerClusterName			#Broker所属集群名称，同一集群名称一致
+			brokerClusterName				#Broker所属集群名称，同一集群名称一致
 			
 			brokerName					#Broker名称，主备名称一致
 			
-			brokerId						#0为Master，大于0为 Slave，Slave多个可以不同数值进行区别
+			brokerId					#0为Master，大于0为 Slave，Slave多个可以不同数值进行区别
 			
 			listenPort					#监听的端口
 			
-			brokerIP1						#IP地址，多个分号隔开
+			brokerIP1					#IP地址，多个分号隔开
 			
-			storePathCommitLog			#提交日志保存目录
+			storePathCommitLog				#提交日志保存目录
 			
-			storePathConsumerQueue		#队列消费记录保存目录
+			storePathConsumerQueue				#队列消费记录保存目录
 			
-			mapedFileSizeCommitLog		#mapped file文件大小
+			mapedFileSizeCommitLog				#mapped file文件大小
 			
 			deleteWhen					#当天几点删除过期提交日志
 			
-			fileReserverdTime			#提交日志过期时间小时
+			fileReserverdTime				#提交日志过期时间小时
 			
 			brokerRole					#Broker角色，可选 SYNC_MASTER/ASYNC_MASTER/SLAVE
 			
@@ -263,6 +263,6 @@
 			
 			brokerRole=SYNC_MASTER		#同步双写
 			
-			brokerRole=ASYNC_MASTER	#异步复制
+			brokerRole=ASYNC_MASTER		#异步复制
 
 

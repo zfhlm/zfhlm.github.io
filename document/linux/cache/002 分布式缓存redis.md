@@ -39,35 +39,35 @@
 		
 		bind 127.0.0.1  192.168.140.160					#监听主机地址
 		
-		port 6379												#监听端口
+		port 6379							#监听端口
 		
-		requirepass 123456									#配置使用密码
+		requirepass 123456						#配置使用密码
 		
 		daemonize yes                      				#启用守护进程
 		
-		pidfile /usr/local/redis/bin/6379.pid			#指定PID文件
+		pidfile /usr/local/redis/bin/6379.pid				#指定PID文件
 		
-		loglevel notice										#日志级别
+		loglevel notice							#日志级别
 		
-		logfile /usr/local/redis/log/6379/redis.log	#日志位置
+		logfile /usr/local/redis/log/6379/redis.log			#日志位置
 		
 		dir "/usr/local/redis/data/6379/"				#本地数据库存放目录
 		
-		dbfilename dump.rdb									#本地数据库文件名
+		dbfilename dump.rdb						#本地数据库文件名
 		
-		activerehashing yes									#是否激活重置哈希
+		activerehashing yes						#是否激活重置哈希
 		
-		rdbcompression yes									#是否储存启用压缩
+		rdbcompression yes						#是否储存启用压缩
 		
-		maxmemory												#最大内存占用
+		maxmemory							#最大内存占用
 		
-		maxmemory-policy										#缓存淘汰策略
+		maxmemory-policy						#缓存淘汰策略
 		
-		save 900 1											#RDB配置，每900秒至少有1个key发生变化，dump内存快照
+		save 900 1							#RDB配置，每900秒至少有1个key发生变化，dump内存快照
 		
-		save 300 10											#RDB配置，每300秒至少有10个key发生变化，dump内存快照
+		save 300 10							#RDB配置，每300秒至少有10个key发生变化，dump内存快照
 		
-		save 60 1000											#RDB配置，每60秒至少有10000个key发生变化，dump内存快照
+		save 60 1000							#RDB配置，每60秒至少有10000个key发生变化，dump内存快照
 				
 		appendonly yes                     				#AOF配置，是否开启AOF持久化
 		
@@ -130,19 +130,19 @@
 		主节点可读可写，从节点只读，客户端配置必须加以区分，不能往从节点中写入数据
 	
 	6，使用 springboot 连接主从复制redis代码示例：
-			
-			// 使用主节点创建配置
-			RedisStaticMasterReplicaConfiguration serverConfig = new RedisStaticMasterReplicaConfiguration("192.168.140.160", 6379);
-			
-			// 添加从节点
-			serverConfig.addNode("192.168.140.161", 6379);
-			serverConfig.addNode("192.168.140.162", 6379);
-						
-			// 客户端策略，任意从节点读，主节点写
-			LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder().readFrom(ReadFrom.ANY_REPLICA).build();
-			
-			// 创建连接工厂
-			LettuceConnectionFactory factory = new LettuceConnectionFactory(serverConfig, clientConfig);
+		
+		// 使用主节点创建配置
+		RedisStaticMasterReplicaConfiguration serverConfig = new RedisStaticMasterReplicaConfiguration("192.168.140.160", 6379);
+		
+		// 添加从节点
+		serverConfig.addNode("192.168.140.161", 6379);
+		serverConfig.addNode("192.168.140.162", 6379);
+					
+		// 客户端策略，任意从节点读，主节点写
+		LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder().readFrom(ReadFrom.ANY_REPLICA).build();
+		
+		// 创建连接工厂
+		LettuceConnectionFactory factory = new LettuceConnectionFactory(serverConfig, clientConfig);
 
 #### redis集群——哨兵模式
 	
