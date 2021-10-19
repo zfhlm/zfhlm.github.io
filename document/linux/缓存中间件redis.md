@@ -67,7 +67,7 @@
 			
 			save 300 10							#RDB配置，每300秒至少有10个key发生变化，dump内存快照
 			
-			save 60 1000							#RDB配置，每60秒至少有10000个key发生变化，dump内存快照
+			save 60 10000							#RDB配置，每60秒至少有10000个key发生变化，dump内存快照
 					
 			appendonly yes                     				#AOF配置，是否开启AOF持久化
 			
@@ -710,5 +710,81 @@
 				
 				return "success";
 			}
+
+### redis集群——Twemproxy
+
+	1，服务器准备
+		
+		192.168.140.160		# redis 服务器一，端口6379
+		
+		192.168.140.161		# redis 服务器二，端口6379
+		
+		192.168.140.162		# redis 服务器三，端口6379
+		
+		192.168.140.163		# Twemproxy服务器
+		
+	2，下载安装包
+	
+		官方文档地址：https://github.com/twitter/twemproxy
+		
+		下载地址：https://github.com/twitter/twemproxy/releases
+		
+		下载安装包：twemproxy-0.5.0.tar.gz
+		
+		上传到服务器目录：/usr/local/software
+	
+	3，编译 twemproxy，输入命令：
+	
+		cd /usr/local/software
+		
+		tar -zxvf twemproxy-0.5.0.tar.gz
+		
+		cd twemproxy-0.5.0
+		
+		yum install -y gcc-c++
+		
+		./configure --prefix=/usr/local/twemproxy/
+		
+		make && make install
+		
+		cd ..
+		
+		rm -rf ./twemproxy-0.5.0
+	
+	4，配置 twemproxy 代理规则，输入命令：
+		
+		cd /usr/local/twemproxy
+		
+		mkdir conf
+		
+		mkdir logs
+		
+		vi ./conf/nutcracker.yml
+		
+		=>
+			
+			beta:
+			  listen: 192.168.140.163:6379
+			  hash: fnv1a_64
+			  distribution: ketama
+			  tcpkeepalive: true
+			  redis: true
+			  auto_eject_hosts: true
+			  server_retry_timeout: 2000
+			  server_failure_limit: 3
+			  servers:
+			   - 192.168.140.160:6379:1
+			   - 192.168.140.161:6379:1
+			   - 192.168.140.162:6379:1
+		
+		./sbin/nutcracker -h
+		
+		./sbin/nutcracker -t -c ./conf/nutcracker.yml
+		
+		./sbin/nutcracker -d -c ./conf/nutcracker.yml -p ./sbin/twemproxy.pid -o  ./logs/twemproxy.log
+	
+	5，连接客户端
+	
+		客户端创建连接，直连 twemproxy 即可
 
 
