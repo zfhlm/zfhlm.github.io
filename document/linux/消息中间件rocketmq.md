@@ -1,110 +1,94 @@
 
-#### 下载安装包
+#### 单点配置
 
-	文档地址：https://rocketmq.apache.org/docs/quick-start/
+	1，下载安装包
 	
-	下载地址：https://github.com/apache/rocketmq/releases
+		文档地址：https://rocketmq.apache.org/docs/quick-start/
+		
+		下载地址：https://github.com/apache/rocketmq/releases
+		
+		下载安装包：rocketmq-rocketmq-all-4.9.1.tar.gz
+		
+		上传到服务器目录：/usr/local/software
 	
-	下载安装包：rocketmq-rocketmq-all-4.9.1.tar.gz
-	
-	上传到服务器目录：/usr/local/software
-
-#### 安装配置rocketmq
-
-	1，环境准备
+	2，环境准备
 		
 		安装配置好jdk-1.8
 		
 		安装配置好maven-3.8.3
 	
-	2，解压编译
-	
-		输入命令：
+	3，解压编译，输入命令：
 		
-			cd /usr/local/software
-			
-			tar -zxvf ./rocketmq-rocketmq-all-4.9.1.tar.gz
-			
-			cd rocketmq-rocketmq-all-4.9.1
-			
-			mvn -Prelease-all -DskipTests clean install -U
-			
-			cd ./distribution/target/rocketmq-4.9.1
-			
-			mv ./rocketmq-4.9.1/ /usr/local/
-			
-			cd /usr/local
-			
-			ln -s ./rocketmq-4.9.1 rocketmq
-			
-			cd /usr/local/software/
-			
-			rm -rf ./rocketmq-rocketmq-all-4.9.1
+		cd /usr/local/software
 		
-	3，启动 Name Server
-	
-		输入命令：
+		tar -zxvf ./rocketmq-rocketmq-all-4.9.1.tar.gz
 		
-			cd /usr/local/rocketmq
-			
-			nohup sh bin/mqnamesrv &
-			
-			tail -f ~/logs/rocketmqlogs/namesrv.log
-	
-	4，启动 Broker
-	
-		输入命令：
+		cd rocketmq-rocketmq-all-4.9.1
 		
-			cd /usr/local/rocketmq
+		mvn -Prelease-all -DskipTests clean install -U
 		
-			nohup sh bin/mqbroker -n localhost:9876 &
-			
-			tail -f ~/logs/rocketmqlogs/broker.log
-	
-	5，停止 Name Server 和 Broker
-	
-		输入命令：
+		cd ./distribution/target/rocketmq-4.9.1
 		
-			cd /usr/local/rocketmq
+		mv ./rocketmq-4.9.1/ /usr/local/
 		
-			sh bin/mqshutdown broker
-			
-			sh bin/mqshutdown namesrv
-	
-	6，调整JVM内存占用
-	
-		输入命令：
-			
-			cd /usr/local/rocketmq
-			
-			vi ./bin/runserver.sh
+		cd /usr/local
 		
-		修改以下内容，调整合适参数：
+		ln -s ./rocketmq-4.9.1 rocketmq
+		
+		cd /usr/local/software/
+		
+		rm -rf ./rocketmq-rocketmq-all-4.9.1
+		
+	4，启动 Name Server，输入命令：
+		
+		cd /usr/local/rocketmq
+		
+		nohup sh bin/mqnamesrv &
+		
+		tail -f ~/logs/rocketmqlogs/namesrv.log
+	
+	5，启动 Broker，输入命令：
+		
+		cd /usr/local/rocketmq
+	
+		nohup sh bin/mqbroker -n localhost:9876 &
+		
+		tail -f ~/logs/rocketmqlogs/broker.log
+	
+	6，停止 Name Server 和 Broker，输入命令：
+		
+		cd /usr/local/rocketmq
+	
+		sh bin/mqshutdown broker
+		
+		sh bin/mqshutdown namesrv
+	
+	7，调整JVM内存占用，输入命令：
+			
+		cd /usr/local/rocketmq
+		
+		vi ./bin/runserver.sh
+		
+		=>
 		
 			JAVA_OPT="${JAVA_OPT} -server -Xms4g -Xmx4g -Xmn2g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m"
 		
-		输入命令：
+		cd /usr/local/rocketmq
 		
-			cd /usr/local/rocketmq
-			
-			vi ./bin/runbroker.sh
+		vi ./bin/runbroker.sh
 		
-		修改以下内容，调整合适参数：
+		=>
 			
 			JAVA_OPT="${JAVA_OPT} -server -Xms8g -Xmx8g"
 	
-	7，配置Broker
-	
-		配置文件官方文档：http://rocketmq.apache.org/docs/rmq-deployment/
+	8，配置Broker，输入命令：
 		
-		修改配置文件，输入命令：
+		cd /usr/local/rocketmq
 		
-			cd /usr/local/rocketmq
-			
-			vi conf/broker.conf
+		vi conf/broker.conf
 		
-		配置参数含义：
-	
+		常用配置参数含义：
+		
 			namesrvAddr					#NameServer地址，多个用分号隔开
 			
 			brokerClusterName				#Broker所属集群名称，同一集群名称一致
@@ -131,7 +115,7 @@
 			
 			flushDiskType					#刷盘策略，可选 SYNC_FLUSH/ASYNC_FLUSH
 
-#### 可视化控制台
+#### web控制台配置
 
 	1，下载源码包
 	
@@ -141,35 +125,29 @@
 		
 		上传到服务器目录：/usr/local/software
 	
-	2，解压编译
-	
-		输入命令：
+	2，解压编译，输入命令：
 		
-			cd /usr/local/software
-			
-			tar -zxvf ./rocketmq-dashboard-rocketmq-dashboard-1.0.0.tar.gz
-			
-			cd ./rocketmq-dashboard-rocketmq-dashboard-1.0.0
-			
-			mvn clean package -Dmaven.test.skip=true
-			
-			mkdir /usr/local/dashboard-rocketmq/
-			
-			mv ./target/rocketmq-dashboard-1.0.0.jar /usr/local/dashboard-rocketmq/
-			
-	3，启动
-	
-		输入命令：
+		cd /usr/local/software
 		
-			cd /usr/local/dashboard-rocketmq/
+		tar -zxvf ./rocketmq-dashboard-rocketmq-dashboard-1.0.0.tar.gz
+		
+		cd ./rocketmq-dashboard-rocketmq-dashboard-1.0.0
+		
+		mvn clean package -Dmaven.test.skip=true
+		
+		mkdir /usr/local/dashboard-rocketmq/
+		
+		mv ./target/rocketmq-dashboard-1.0.0.jar /usr/local/dashboard-rocketmq/
 			
-			nohup java -jar rocketmq-dashboard-1.0.0.jar &
+	3，启动控制台进程，输入命令：
+		
+		cd /usr/local/dashboard-rocketmq/
+		
+		nohup java -jar rocketmq-dashboard-1.0.0.jar &
 			
-	4，修改配置
+	4，修改配置，更改jar配置文件：
 	
-		更改jar配置文件：
-	
-			rocketmq-dashboard-1.0.0.jar/BOOT-INF/classes/application.properties
+		rocketmq-dashboard-1.0.0.jar/BOOT-INF/classes/application.properties
 
 #### 集群-双主模式
 
@@ -261,8 +239,8 @@
 		
 		两者配置的区别在于 Broker Master 节点 brokerRole 配置不同：
 			
-			brokerRole=SYNC_MASTER		#同步双写
-			
-			brokerRole=ASYNC_MASTER		#异步复制
+		brokerRole=SYNC_MASTER		#同步双写
+		
+		brokerRole=ASYNC_MASTER		#异步复制
 
 
