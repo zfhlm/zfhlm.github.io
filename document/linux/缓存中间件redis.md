@@ -11,7 +11,7 @@
 
 #### 安装redis
 
-	编译安装，输入命令：
+	1，编译安装，输入命令：
 	
 		cd /usr/local/software
 		
@@ -29,54 +29,54 @@
 		
 		rm -rf redis-6.2.6
 	
-	修改redis配置文件，输入命令：
+	2，修改redis配置文件，输入命令：
 	
 		cd /usr/local/redis
 		
 		vi redis.conf
+		
+		=>
+		
+			bind 127.0.0.1  192.168.140.160					#监听主机地址
+			
+			port 6379							#监听端口
+			
+			requirepass 123456						#配置使用密码
+			
+			daemonize yes                      				#启用守护进程
+			
+			pidfile /usr/local/redis/bin/6379.pid				#指定PID文件
+			
+			loglevel notice							#日志级别
+			
+			logfile /usr/local/redis/log/6379/redis.log			#日志位置
+			
+			dir "/usr/local/redis/data/6379/"				#本地数据库存放目录
+			
+			dbfilename dump.rdb						#本地数据库文件名
+			
+			activerehashing yes						#是否激活重置哈希
+			
+			rdbcompression yes						#是否储存启用压缩
+			
+			maxmemory							#最大内存占用
+			
+			maxmemory-policy						#缓存淘汰策略
+			
+			save 900 1							#RDB配置，每900秒至少有1个key发生变化，dump内存快照
+			
+			save 300 10							#RDB配置，每300秒至少有10个key发生变化，dump内存快照
+			
+			save 60 1000							#RDB配置，每60秒至少有10000个key发生变化，dump内存快照
+					
+			appendonly yes                     				#AOF配置，是否开启AOF持久化
+			
+			appendfilename "appendonly.aof"    				#AOF配置，AOF日志文件名
+			
+			appendfsync always                 				#AOF配置，每次有数据变动写入AOF文件，可选值 always/everysec/no
 	
-	更改以下配置：
+	3，启动redis，输入命令：
 		
-		bind 127.0.0.1  192.168.140.160					#监听主机地址
-		
-		port 6379							#监听端口
-		
-		requirepass 123456						#配置使用密码
-		
-		daemonize yes                      				#启用守护进程
-		
-		pidfile /usr/local/redis/bin/6379.pid				#指定PID文件
-		
-		loglevel notice							#日志级别
-		
-		logfile /usr/local/redis/log/6379/redis.log			#日志位置
-		
-		dir "/usr/local/redis/data/6379/"				#本地数据库存放目录
-		
-		dbfilename dump.rdb						#本地数据库文件名
-		
-		activerehashing yes						#是否激活重置哈希
-		
-		rdbcompression yes						#是否储存启用压缩
-		
-		maxmemory							#最大内存占用
-		
-		maxmemory-policy						#缓存淘汰策略
-		
-		save 900 1							#RDB配置，每900秒至少有1个key发生变化，dump内存快照
-		
-		save 300 10							#RDB配置，每300秒至少有10个key发生变化，dump内存快照
-		
-		save 60 1000							#RDB配置，每60秒至少有10000个key发生变化，dump内存快照
-				
-		appendonly yes                     				#AOF配置，是否开启AOF持久化
-		
-		appendfilename "appendonly.aof"    				#AOF配置，AOF日志文件名
-		
-		appendfsync always                 				#AOF配置，每次有数据变动写入AOF文件，可选值 always/everysec/no
-	
-	启动redis，输入命令：
-	
 		cd /usr/local/redis
 		
 		./bin/redis-server ./redis.conf
@@ -91,23 +91,19 @@
 		
 		192.168.140.162		#从服务器
 	
-	2，更改从服务器redis配置：
+	2，更改从服务器redis配置，输入命令：
+		
+		cd /usr/local/redis
+		
+		vi redis.conf
 	
-		输入命令：
-		
-			cd /usr/local/redis
+		=>
 			
-			vi redis.conf
-		
-		更改以下配置：
-		
 			replicaof 192.168.140.160 6379
 		
-		重启redis服务，输入命令：
+		pkill redis
 		
-			pkill redis
-			
-			./bin/redis-server ./redis.conf
+		./bin/redis-server ./redis.conf
 		
 	4，验证主从复制
 	
@@ -160,59 +156,49 @@
 		
 		192.168.140.162		#sentinel服务器三，端口26379
 	
-	2，从服务器redis配置
-				
-		输入命令：
+	2，从服务器redis配置，输入命令：
 		
-			cd /usr/local/redis
+		cd /usr/local/redis
+		
+		vi redis.conf
+		
+		=>
 			
-			vi redis.conf
-		
-		更改以下配置：
-		
 			replicaof 192.168.140.160 6379
 	
-	3，修改redis哨兵配置
-		
-		输入命令：
+	3，修改redis哨兵配置，输入命令：
 			
-			cd /usr/local/redis
-			
-			vi sentinel.conf
+		cd /usr/local/redis
 		
-		更改以下配置：
+		vi sentinel.conf
+		
+		=>
 		
 			protected-mode no
 			
 			daemonize yes
 			
 			sentinel monitor stnmaster 192.168.140.160 6379 2
-	
-	4，启动主从服务器redis(先主后从)
-	
-		输入命令：
 		
-			cd /usr/local/redis
-			
-			./bin/redis-server ./redis.conf
+	4，启动主从服务器redis(先主后从)，输入命令：
 	
-	5，启动哨兵进程
+		cd /usr/local/redis
 		
-		输入命令：
-			
-			cd /usr/local/redis
-			
-			./bin/redis-sentinel ./sentinel.conf
+		./bin/redis-server ./redis.conf
 	
-	6，查看集群信息
-	
-		输入命令：
+	5，启动哨兵进程，输入命令：
+			
+		cd /usr/local/redis
 		
-			cd /usr/local/redis
-			
-			./bin/redis-cli
-			
-			info replication
+		./bin/redis-sentinel ./sentinel.conf
+	
+	6，查看集群信息，输入命令：
+		
+		cd /usr/local/redis
+		
+		./bin/redis-cli
+		
+		info replication
 		
 		主服务器可看到如下信息：
 			
@@ -295,18 +281,18 @@
 		
 		192.168.140.162		#redis 6380
 	
-	2，添加redis配置
+	2，添加redis配置，各台服务器输入命令：
+		
+		cd /usr/local/redis
+		
+		cp ./redis.conf redis.6379.conf
+		
+		cp ./redis.conf redis.6380.conf
 	
-		各台服务器输入命令：
+		vi redis.6379.conf
 		
-			cd /usr/local/redis
-			
-			cp ./redis.conf redis.6379.conf
-			
-			cp ./redis.conf redis.6380.conf
+		=>
 		
-		更改 redis.6379.conf 以下配置：
-			
 			port 6379
 			
 			dir "/usr/local/redis/data/6379/"
@@ -323,8 +309,10 @@
 			
 			appendonly yes
 		
-		更改 redis.6380.conf 以下配置：
-			
+		vi redis.6380.conf
+		
+		=>
+		
 			port 6380
 			
 			dir "/usr/local/redis/data/6380/"
@@ -341,45 +329,37 @@
 			
 			appendonly yes
 		
-		创建配置包含的目录，输入命令：
-		
-			mkdir -p /usr/local/redis/data/6379/
-		
-			mkdir -p /usr/local/redis/data/6380/
-		
-			mkdir -p /usr/local/redis/log/6379/
-		
-			mkdir -p /usr/local/redis/log/6380/
-		
-			mkdir -p /usr/local/redis/cluster/6379/
-		
-			mkdir -p /usr/local/redis/cluster/6380/
-		
-	3，启动所有redis服务
+		mkdir -p /usr/local/redis/data/6379/
 	
-		输入命令：
-		
-			cd /usr/local/redis
-			
-			./bin/redis-server ./redis.6379.conf
-			
-			./bin/redis-server ./redis.6380.conf
+		mkdir -p /usr/local/redis/data/6380/
 	
-	4，构建redis集群
+		mkdir -p /usr/local/redis/log/6379/
 	
-		创建集群，输入命令：
-			
-			cd /usr/local/redis
-			
-			./bin/redis-cli --cluster create 
-				192.168.140.160:6379 192.168.140.160:6380 
-				192.168.140.161:6379 192.168.140.161:6380 
-				192.168.140.162:6379 192.168.140.162:6380 
-				--cluster-replicas 1
+		mkdir -p /usr/local/redis/log/6380/
+	
+		mkdir -p /usr/local/redis/cluster/6379/
+	
+		mkdir -p /usr/local/redis/cluster/6380/
 		
-		查看集群状态，输入命令：
-			
-			./bin/redis-cli --cluster check 192.168.140.160:6379
+	3，启动所有redis服务，输入命令：
+		
+		cd /usr/local/redis
+		
+		./bin/redis-server ./redis.6379.conf
+		
+		./bin/redis-server ./redis.6380.conf
+		
+	4，构建redis集群，输入命令：
+		
+		cd /usr/local/redis
+		
+		./bin/redis-cli --cluster create 
+			192.168.140.160:6379 192.168.140.160:6380 
+			192.168.140.161:6379 192.168.140.161:6380 
+			192.168.140.162:6379 192.168.140.162:6380 
+			--cluster-replicas 1
+		
+		./bin/redis-cli --cluster check 192.168.140.160:6379
 	
 	5，验证主从切换
 	
@@ -405,7 +385,64 @@
 
 #### redis集群——Codis
 
+	1，安装配置golang，输入命令：
+		
+		cd /usr/local/software
 	
+		curl https://studygolang.com/dl
+		
+		wget https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz
+		
+		tar -zxvf ./go1.11.1.linux-amd64.tar.gz
+		
+		mv ./go ..
+		
+		mkdir -p /usr/local/progress/src
+		
+		mkdir -p /usr/local/progress/bin
+		
+		mkdir -p /usr/local/progress/pkg
+		
+		vi /etc/profile
+		
+		=>
+	
+			export GOROOT=/usr/local/go
+			export GOPATH=/usr/local/progress
+			export PATH=$PATH:/usr/local/go/bin:/usr/local/progress/bin
+		
+		source /etc/profile
+		
+		go version
+		
+	2，编译codis，输入命令：
+		
+		cd /usr/local/software
+		
+		wget -O codis-3.2.2.tar.gz https://codeload.github.com/CodisLabs/codis/tar.gz/refs/tags/3.2.2
+		
+		mkdir -p $GOPATH/src/github.com/CodisLabs
+		
+		cd $GOPATH/src/github.com/CodisLabs
+		
+		tar -zxvf /usr/local/software/codis-3.2.2.tar.gz -C ./
+		
+		mv ./codis-3.2.2 codis
+		
+		cd ./codis
+		
+		yum install -y autoconf
+		
+		make
+		
+		
+			
+			
+			
+			
+
+
+		
 
 
 

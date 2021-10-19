@@ -66,9 +66,5 @@
 		停止命令：
 		
 			service keepalived stop
-		
-
-
-
 
 

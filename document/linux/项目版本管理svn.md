@@ -1,17 +1,17 @@
 
 #### 安装svn
 
-	基于centos服务器，服务器IP地址：
+	1，基于centos服务器，服务器IP地址：
 	
 		192.168.140.139
 	
-	使用yum命令安装svn:
+	2，使用yum命令安装svn:
 	
 		yum -y install subversion
 		
 		rpm -ql subversion
 	
-	创建版本仓库：
+	3，创建版本仓库：
 	
 		cd /home
 		
@@ -23,8 +23,8 @@
 		
 		ll
 		
-	创建完毕可以看见仓库下面的目录：
-	
+	4，创建完毕可以看见仓库下面的目录：
+		
 		svn/repo/conf			#仓库配置文件的目录
 		svn/repo/db			#版本数据库目录
 		svn/repo/hooks			#版本库钩子程序目录
@@ -33,25 +33,13 @@
 
 #### 用户配置
 
-	进入版本仓库目录：
-	
+	1，分配账号权限，输入命令：
+		
 		cd /home/svn/repo
 		
-		cd ./conf
+		vi ./conf/authz
 		
-		ll
-		
-	可以看到多个文件：
-		
-		authz				#账号权限的管理
-		passwd				#账号密码管理
-		svnserve.conf			#仓库配置文件
-	
-	分配账号权限：
-	
-		vi authz
-		
-		输入如下信息：
+		=>
 			
 			# admin拥有所有根目录权限，其他人无权限
 			[/]
@@ -66,11 +54,13 @@
 			wangwu=r
 			*=
 	
-	分配账号密码：
-	
-		vi passwd
+	2，分配账号密码，输入命令：
 		
-		输入如下信息：
+		cd /home/svn/repo
+		
+		vi ./conf/passwd
+		
+		=>
 		
 			[users]
 			admin=admin
@@ -78,11 +68,13 @@
 			lisi=123456
 			wangwu=123456
 	
-	修改svn配置：
-	
-		vi svnserve.conf
+	3，修改仓库服务配置，输入命令：
 		
-		更改以下信息：
+		cd /home/svn/repo
+		
+		vi ./conf/svnserve.conf
+		
+		=>
 		
 			#匿名用户不可读写(read/write/none)
 			anon-access=none
@@ -99,21 +91,18 @@
 		 	#认证空间名，版本库所在目录
 			realm=/home/svn/repo
 		
-	重启svn：
+	4，重启svn服务，输入命令：
 	
 		ps -ef | grep svn
 		
 		kill -9  进程号
 		
 		svnserve -d -r /home/svn/repo/
-		
-	注意：配置文件如果有空格，以及同行注释，需要去掉
-
-#### 连接测试
-
-	使用不同账号访问以下地址测试权限：
 	
+	5，使用不同账号连接测试以下地址：
+		
 		svn://192.168.140.139:3690/
 		
 		svn://192.168.140.139:3690/dev
-	
+
+
