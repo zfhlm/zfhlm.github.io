@@ -1,0 +1,25 @@
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+#                                 mysql组复制加入或更改以下配置，IP地址配置hosts后替换                                                                                         #
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+[mysqld]
+
+log-bin=mysql-bin                                                                                            #binlog日志名称
+binlog_format=ROW                                                                                            #binlog格式
+binlog_checksum=NONE                                                                                         #binlog关闭日志校验
+
+gtid_mode=ON                                                                                                 #开启全局事务GTID
+enforce_gtid_consistency=ON                                                                                  #开启全局事务强一致性
+master_info_repository=TABLE                                                                                 #使用表记录master信息
+relay_log_info_repository=TABLE                                                                              #使用表记录中继日志信息
+transaction_write_set_extraction=XXHASH64                                                                    #事务依赖关系算法
+loose-group_replication_group_name="d81fa4d2-9cd2-455d-bf97-2acd2a672543"                                    #组名称
+loose-group_replication_local_address="192.168.140.164:13306"                                                #本节点通讯地址
+loose-group_replication_group_seeds="192.168.140.164:13306,192.168.140.165:13306,192.168.140.166:13306"      #全部节点通讯地址
+loose-group_replication_bootstrap_group=OFF                                                                  #关闭引导设置
+loose-group_replication_start_on_boot=OFF                                                                    #关闭插件数据库启动时自启
+loose-group_replication_enforce_update_everywhere_checks=TRUE                                                #启用多主写验证
+loose-group_replication_single_primary_mode=OFF                                                              #关闭单主模式
+
+
