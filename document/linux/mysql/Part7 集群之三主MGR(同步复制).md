@@ -115,7 +115,7 @@
 		
 		SELECT * FROM 'test2' WHERE `id` = 1;
 
-#### 关闭服务器 mysql MGR 集群
+### 关闭服务器 mysql MGR 集群
 
 	输入命令：
 		
@@ -128,18 +128,28 @@
 		RESET SLAVE ALL;
 		
 ### 搭建 mysql MGR 遇到的问题
+
+	1，未配置 hosts
+	
+		配置主机 hostname，使用 IP 地址作为配置非引导节点一直处在 RECOVERING 状态
+	
+	2，主从配置错误
+	
+		使用 reset master 命令重置，再使用 change master 命令进行配置
+	
+	3，节点故障或者集群关闭
+	
+		如果节点出现故障，整个数据库会变成只读不允许写状态，直到故障恢复
 		
-	配置主机 hostname，使用 IP 地址作为配置非引导节点一直处在 RECOVERING 状态
+		如果 MGR 集群被关闭，整个数据库会变成只读不允许写状态，直到重新启用 MGR 或重启mysql
 	
-	主主配置错误，使用 reset master 命令重置，再使用 change master 命令进行配置
+	4，启动错误 This member has more executed transactions than those present in the group
 	
-	如果节点出现故障，整个数据库会变成只读不允许写状态，直到故障恢复
-	
-	如果 MGR 集群被关闭，整个数据库会变成只读不允许写状态，直到重新启用 MGR 或重启mysql
+		被剔除集群期间，通过其他方式插入了数据，使用 reset master 命令重置，再加入集群
 
 ### 三主切换为一主二从
 
-	1，更改两台从服务器 mysql 的 my.cnf配置，设置为：
+	1，更改两台从服务器 mysql 的 my.cnf配置，然后重启 mysql：
 	
 		loose-group_replication_enforce_update_everywhere_checks=FALSE
 		loose-group_replication_single_primary_mode=ON
@@ -169,5 +179,19 @@
 	4，使用命令查看集群各个数据库，主节点可读可写，从节点只读不允许写
 	
 		show variables like '%read_only%';
+
+### 集群 MGR 添加新节点
+
+	1，所有节点的 binlog 并集为所有记录的 binlog，跳到第4步
+	
+	2，所有节点的 binlog 并集都不完整，使用 mysqldump 导出全量数据备份：
+	
+		mysqldump -uroot -p --single-transaction --master-data=2 -R --default-character-set=utf8 --databases test test2 >  fullback.sql
+	
+	3，导入全量数据到新节点
+		
+		mysql -uroot -p < ./fullback.sql
+	
+	4，修改所有节点的配置文件，加入新节点配置，然后按照正常的流程添加节点到 MGR 集群
 
 
