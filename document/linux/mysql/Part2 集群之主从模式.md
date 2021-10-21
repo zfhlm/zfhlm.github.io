@@ -58,9 +58,9 @@
 		
 		mysql -uroot -p
 		
-		create database 'test';
+		create database `test`;
 		
-		use test;
+		use `test`;
 		
 		create table `test_user` (
 		  `id` int(11) NOT NULL,

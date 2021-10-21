@@ -1,7 +1,7 @@
 
 # mysql集群异步复制和半同步复制
 
-### 异步复制和半同步复制
+#### 异步复制和半同步复制
 
 	异步复制：
 		
@@ -17,9 +17,9 @@
 		
 		基于主从模式、主主模式，可以通过安装 mysql 插件的方式，开启半同步复制
 
-### 第一步，主从服务器 mysql 安装插件
+#### 开启mysql半同步复制
 
-	输入命令：
+	主从服务器 mysql 安装插件，输入命令：
 		
 		mysql -uroot -p
 		
@@ -29,34 +29,31 @@
 		
 		show plugins;
 		
-### 第二步，主从服务器 mysql 修改配置文件并重启
-
-	输入命令：
+	主从服务器 mysql 修改配置文件并重启，输入命令：
 		
 		vi /etc/my.cnf
 		
-		=>
+		加入以下配置：
 			
 			rpl_semi_sync_master_enabled=1
 			rpl_semi_sync_slave_enabled=1
 		
 		service mysqld restart
 	
-### 第三步，主从服务器 mysql 通过启动日志查看是否已启用半同步复制
-
-	查看mysql启动日志，输入命令：
+	查看主服务器 mysql 日志，可以看到是否开启半同步复制，输入命令：
 		
 		tail -f /usr/local/mysql/log/mysql.log
 		
-		-> master
+		->
 			
-			Start semi-sync binlog_dump to slave (server_id: 165), pos(mysql-bin.000016, 1653)
-			Start semi-sync binlog_dump to slave (server_id: 166), pos(mysql-bin.000016, 1653)
-			
-		-> slave
-			
-			Start semi-sync replication to master 'replicator@192.168.140.164:3306' in log 'mysql-bin.000016' at position 1653
+			Start semi-sync binlog_dump to slave ......
 	
-	可以看到主库和从库都已经开启了半同步复制
+	查看从服务器 mysql 日志，可以看到是否开启半同步复制，输入命令：
+		
+		tail -f /usr/local/mysql/log/mysql.log
+		
+		->
+			
+			Start semi-sync replication to master ......
 
 
