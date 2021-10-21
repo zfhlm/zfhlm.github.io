@@ -19,7 +19,7 @@
 		
 		mysql开启了 GTID，当在主库上提交事务或者被从库应用时，可以定位和追踪每一个事务
 		
-		通过CHANGE MASTER TO MASTER_HOST='xxx', MASTER_AUTO_POSITION=1的即可方便的搭建从库
+		通过change master to master_host='xxx', master_auto_position=1的即可方便的搭建从库
 
 #### 开启 mysql GTID
 
