@@ -11,9 +11,7 @@
 
 #### 解压到安装目录，输入命令：
 
-	rpm -qa | grep mariadb
-	
-	rpm -e --nodeps mariadb-libs-5.5.68-1.el7.x86_64
+	yum -y remove mariadb*
 	
 	cd /usr/loca/software
 	

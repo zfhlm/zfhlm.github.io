@@ -15,11 +15,7 @@
 		
 		从节点获取主节点binlog转存到relaylog后，会比对本节点是否有该GTID，再决定是否执行该GTID事务并记录到本节点binlog
 		
-		开启GTID之后，通过 change master to master_host='xxx', master_auto_position=1 就可以建立主从关联，不用再去查询binlog偏移量
-		
 		mysql开启了 GTID，当在主库上提交事务或者被从库应用时，可以定位和追踪每一个事务
-		
-		通过change master to master_host='xxx', master_auto_position=1的即可方便的搭建从库
 
 #### 开启 mysql GTID
 
@@ -37,12 +33,18 @@
 	
 	重启 mysql，输入命令：
 		
+		mysql -uroot -p
+		
 		service mysqld restart
+	
+	从节点关联主节点，输入命令：
+	
+		mysql -uroot -p
+		
+		change master to master_host='192.168.140.164', master_user='replicator', master_password='123456',master_auto_position = 1;
 		
 	查看 mysql 当前事务 GTID，输入命令：
 		
 		show master status;
-		
-		show slave status;
 
 

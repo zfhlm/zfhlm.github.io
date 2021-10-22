@@ -209,3 +209,11 @@
 	4，修改所有节点的配置文件，加入新节点配置，然后按照正常的流程添加节点到 MGR 集群
 
 
+#### 集群 MGR 多主
+
+	和搭建主从MGR一样的流程，只需更改 my.cnf 以下配置：
+		
+		loose-group_replication_enforce_update_everywhere_checks=TRUE       #启用多主写验证
+		loose-group_replication_single_primary_mode=OFF                     #关闭单主模式
+
+
