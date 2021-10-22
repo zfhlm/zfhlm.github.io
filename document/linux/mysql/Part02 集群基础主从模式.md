@@ -21,12 +21,16 @@
 	
 	主节点修改以下配置：
 		
+		[mysqld]
+		
 		relay-log=mysql-relay-bin                                       #主从中继日志名称
 		relay_log_purge=1                                               #主从中继日志开启自动删除
 		max_relay_log_size=1024M                                        #主从中继日志文件最大值
 		log-slave-updates=1                                             #主从复制是否写入binlog
 		
 	从节点修改以下配置：
+		
+		[mysqld]
 		
 		read_only=1                                                     #开启只读
 		
@@ -68,7 +72,7 @@
 		
 		show slave status\G
 
-#### 创建 mysql 普通账号
+#### 创建 mysql 客户端账号
 
 	原则上禁止超级管理员账号操作主从数据库，而应该创建指定权限的普通账号给客户端使用：
 		
@@ -90,7 +94,7 @@
 	
 	以上完成，从节点无须再创建，账号信息会被复制到从服务器
 
-#### 使用普通账号测试 mysql 主从同步
+#### 使用客户端账号测试 mysql 主从同步
 	
 	主节点建库建表，输入命令：
 	
@@ -149,7 +153,7 @@
 		
 		head -100 ./backup.test.sql | grep 'CHANGE MASTER TO'
 		
-		-> 输入信息例如：CHANGE MASTER TO MASTER_LOG_FILE='mysql-bin.000010', MASTER_LOG_POS=2260;
+		-> 输出信息例如：CHANGE MASTER TO MASTER_LOG_FILE='mysql-bin.000010', MASTER_LOG_POS=2260;
 		-> 新节点主从关联使用 MASTER_LOG_FILE 和 MASTER_LOG_POS 的值
 		
 		mysql < ./backup.test.sql
@@ -159,4 +163,8 @@
 		# 注意修改  MASTER_LOG_FILE 和 MASTER_LOG_POS 的值
 		change master to master_host='192.168.140.164', master_user='replicator', master_password='123456', master_log_file='mysql-bin.000010', master_log_pos=2260;
 		
+		start slave;
+		
+		show slave status\G
+
 
