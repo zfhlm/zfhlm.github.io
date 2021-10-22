@@ -15,7 +15,7 @@
 		
 	mysql -uroot -p
 	
-	CREATE USER 'replicator'@'host' IDENTIFIED BY '123456';
+	CREATE USER 'replicator'@'%' IDENTIFIED BY '123456';
 	
 	GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'%' IDENTIFIED BY '123456';
 	
@@ -78,4 +78,5 @@
 		
 		SELECT * FROM `test_user` where `id` = 1;
 
+#### 
 

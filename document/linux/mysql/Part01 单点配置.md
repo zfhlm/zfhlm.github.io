@@ -1,58 +1,66 @@
 
 # mysql数据库单点配置
 
-#### 下载安装包，相关信息：
+#### 下载安装包
 
-	下载地址：https://downloads.mysql.com/archives/community/
-	
-	下载安装包：Compressed TAR Archive mysql-5.7.35-linux-glibc2.12-x86_64.tar.gz
-	
-	上传到服务器目录：/usr/local/software
+	相关信息：
+		
+		下载地址：https://downloads.mysql.com/archives/community/
+		
+		下载安装包：Compressed TAR Archive mysql-5.7.35-linux-glibc2.12-x86_64.tar.gz
+		
+		上传到服务器目录：/usr/local/software
 
-#### 解压到安装目录，输入命令：
+#### 解压到安装目录
 
-	yum -y remove mariadb*
+	输入命令：
 	
-	cd /usr/loca/software
-	
-	tar -zxvf ./mysql-5.7.35-linux-glibc2.12-x86_64.tar.gz
-	
-	mv mysql-5.7.35-linux-glibc2.12-x86_64 ../mysql-5.7.35
-	
-	cd ..
-	
-	ln -s mysql-5.7.35 mysql
+		yum -y remove mariadb*
+		
+		cd /usr/loca/software
+		
+		tar -zxvf ./mysql-5.7.35-linux-glibc2.12-x86_64.tar.gz
+		
+		mv mysql-5.7.35-linux-glibc2.12-x86_64 ../mysql-5.7.35
+		
+		cd ..
+		
+		ln -s mysql-5.7.35 mysql
 
-#### 配置数据库启动账号，输入命令：
-	
-	groupadd mysql
-	
-	useradd -r -s /sbin/nologin -g mysql mysql -d /usr/local/mysql/
-	
-	chown -R mysql:mysql /usr/local/mysql
-	
-	chown -R mysql:mysql /usr/local/mysql/
+#### 配置数据库启动账号
 
-#### 配置数据库启动参数，输入命令：
+	输入命令：
+		
+		groupadd mysql
+		
+		useradd -r -s /sbin/nologin -g mysql mysql -d /usr/local/mysql/
+		
+		chown -R mysql:mysql /usr/local/mysql
+		
+		chown -R mysql:mysql /usr/local/mysql/
 
-	cd /usr/local/mysql
-	
-	mkdir log && touch ./log/mysql.log
-	
-	chown -R mysql:mysql ./log
-	
-	vi /ect/my.cnf
-	
+#### 配置数据库启动参数
+
+	输入命令：
+		
+		cd /usr/local/mysql
+		
+		mkdir log && touch ./log/mysql.log
+		
+		chown -R mysql:mysql ./log
+		
+		vi /ect/my.cnf
+		
 	添加以下配置：
 		
 		[client]
 		
 		port=3306                                                       #连接端口
-		default-character-set=utf8mb4                                   #客户端默认字符集
+		default_character_set=utf8mb4                                   #客户端默认字符集
 		
 		[mysqld_safe]
 		
-		log-error=/usr/local/mysql/log/mysql.log                        #错误日志位置
+		log_error=/usr/local/mysql/log/mysql.log                        #错误日志位置
 		
 		[mysqld]
 		
@@ -61,15 +69,15 @@
 		socket=/tmp/mysql.sock                                          #套接字文件位置
 		
 		user=mysql                                                      #启动用户
-		server-id=1                                                     #服务器ID
-		read_only=0                                                     #是否开启只读
-		symbolic-links=0                                                #是否允许分区存储
+		server_id=1                                                     #服务器ID
+		read_only=0                                                     #是否开启只读(非super账号只读)
+		symbolic_links=0                                                #是否允许分区存储
 		lower_case_table_names=1                                        #是否表名不区别大小写
 		explicit_defaults_for_timestamp=1                               #是否允许日期自动填充
 		open_files_limit=4096                                           #打开文件句柄最大数
 		character_set_server=utf8mb4                                    #默认字符集
 		collation_server=utf8mb4_general_ci                             #默认字符集排序规则
-		default-storage-engine=INNODB                                   #默认存储引擎
+		default_storage_engine=INNODB                                   #默认存储引擎
 		skip_name_resolve                                               #禁止DNS解析
 		back_log=128                                                    #最大等待连接数
 		max_connections=1000                                            #最大连接数
@@ -83,41 +91,41 @@
 		innodb_open_files=4096                                          #innodb打开文件句柄最大数
 		innodb_print_all_deadlocks=1                                    #innodb输出死锁日志
 		
-		log-bin=mysql-bin                                               #binlog日志名称
+		log_bin=mysql-bin                                               #binlog日志名称
 		binlog_format=ROW                                               #binlog格式
 		sync_binlog=0                                                   #binlog是否每次刷盘
 		expire_logs_days=7                                              #binlog过期天数
 		max_binlog_size=1024M                                           #binlog文件最大值
 		binlog_cache_size=1M                                            #binlog缓存大小
-		binlog-ignore-db=mysql                                          #binlog忽略指定数据库
-		binlog-ignore-db=information_schema                             #binlog忽略指定数据库
-		binlog-ignore-db=performance_schema                             #binlog忽略指定数据库
-		binlog-ignore-db=sys                                            #binlog忽略指定数据库
-		#binlog-do-db=test                                              #binlog开启指定数据库
-		#binlog-do-db=business                                          #binlog开启指定数据库
+		binlog_ignore_db=mysql                                          #binlog忽略指定数据库
+		binlog_ignore_db=information_schema                             #binlog忽略指定数据库
+		binlog_ignore_db=performance_schema                             #binlog忽略指定数据库
+		binlog_ignore_db=sys                                            #binlog忽略指定数据库
+		#binlog_do_db=test                                              #binlog开启指定数据库
+		#binlog_do_db=business                                          #binlog开启指定数据库
 		
 		slow_query_log=ON                                               #慢查询日志是否开启
 		slow_query_log_file=/usr/local/mysql/log/mysql-slow.log         #慢查询日志文件
 		long_query_time=2                                               #慢查询最小时间秒
-		
-		relay-log=mysql-relay-bin                                       #主从中继日志名称
-		max_relay_log_size=1024M                                        #主从中继日志文件最大值
-		log-slave-updates=1                                             #主从复制是否写入binlog
 
-#### 初始化并启动数据库，输入命令：
-		
-	cd /usr/local/mysql
-	
-	# 执行完毕控制台会输出初始密码，需要记住密码文本
-	./bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql/ --datadir=/usr/local/mysql/data/
-	
-	cp -a ./support-files/mysql.server /etc/init.d/mysqld
-	
-	service mysqld start
+#### 初始化并启动数据库
 
-#### 配置数据库shell环境变量，输入命令：
+	输入命令：
+		
+		cd /usr/local/mysql
+		
+		# 执行完毕控制台会输出初始密码，需要记住密码文本
+		./bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql/ --datadir=/usr/local/mysql/data/
+		
+		cp -a ./support-files/mysql.server /etc/init.d/mysqld
+		
+		service mysqld start
+
+#### 配置数据库shell环境变量
+
+	添加环境变量，输入命令：
 				
-	vi /etc/profile
+		vi /etc/profile
 	
 	添加以下配置：
 		
@@ -125,25 +133,81 @@
 		
 		export PATH="$PATH:$MYSQL_HOME/bin"
 		
-	source /etc/profile
+	刷新环境变量，输入命令：
+		
+		source /etc/profile
 
-#### 初始化超管账号，输入命令：
+#### 初始化超管账号
 
-	# 初始化登录，使用控制台输出的初始密码登录
-	mysql -uroot -p
-			
-	set PASSWORD = PASSWORD('123456');
+	输入命令：
+		
+		# 初始化登录，使用控制台输出的初始密码登录
+		mysql -uroot -p
+				
+		set PASSWORD = PASSWORD('123456');
+		
+		update mysql.user set host='%' where user='root';
+		
+		grant all privileges on *.* to 'root'@'%' identified by '123456' with grant option;;
+		
+		flush privileges;
+
+#### 账号授权管理
+
+	查看有哪些权限，输入命令：
+		
+		mysql -uroot -p
+		
+		SHOW PRIVILEGES;
+		
+	可以看到以下权限列表：
+		
+		+-------------------------+---------------------------------------+-------------------------------------------------------+
+		| Privilege               | Context                               | Comment                                               |
+		+-------------------------+---------------------------------------+-------------------------------------------------------+
+		| Alter                   | Tables                                | To alter the table                                    |
+		| Alter routine           | Functions,Procedures                  | To alter or drop stored functions/procedures          |
+		| Create                  | Databases,Tables,Indexes              | To create new databases and tables                    |
+		| Create routine          | Databases                             | To use CREATE FUNCTION/PROCEDURE                      |
+		| Create temporary tables | Databases                             | To use CREATE TEMPORARY TABLE                         |
+		| Create view             | Tables                                | To create new views                                   |
+		| Create user             | Server Admin                          | To create new users                                   |
+		| Delete                  | Tables                                | To delete existing rows                               |
+		| Drop                    | Databases,Tables                      | To drop databases, tables, and views                  |
+		| Event                   | Server Admin                          | To create, alter, drop and execute events             |
+		| Execute                 | Functions,Procedures                  | To execute stored routines                            |
+		| File                    | File access on server                 | To read and write files on the server                 |
+		| Grant option            | Databases,Tables,Functions,Procedures | To give to other users those privileges you possess   |
+		| Index                   | Tables                                | To create or drop indexes                             |
+		| Insert                  | Tables                                | To insert data into tables                            |
+		| Lock tables             | Databases                             | To use LOCK TABLES (together with SELECT privilege)   |
+		| Process                 | Server Admin                          | To view the plain text of currently executing queries |
+		| Proxy                   | Server Admin                          | To make proxy user possible                           |
+		| References              | Databases,Tables                      | To have references on tables                          |
+		| Reload                  | Server Admin                          | To reload or refresh tables, logs and privileges      |
+		| Replication client      | Server Admin                          | To ask where the slave or master servers are          |
+		| Replication slave       | Server Admin                          | To read binary log events from the master             |
+		| Select                  | Tables                                | To retrieve rows from table                           |
+		| Show databases          | Server Admin                          | To see all databases with SHOW DATABASES              |
+		| Show view               | Tables                                | To see views with SHOW CREATE VIEW                    |
+		| Shutdown                | Server Admin                          | To shut down the server                               |
+		| Super                   | Server Admin                          | To use KILL thread, SET GLOBAL, CHANGE MASTER, etc.   |
+		| Trigger                 | Tables                                | To use triggers                                       |
+		| Create tablespace       | Server Admin                          | To create/alter/drop tablespaces                      |
+		| Update                  | Tables                                | To update existing rows                               |
+		| Usage                   | Server Admin                          | No privileges - allow connect only                    |
+		+-------------------------+---------------------------------------+-------------------------------------------------------+
 	
-	flush privileges;
+	创建账号并授权，可输入以下任意一个命令：
+		
+		# 创建一个所有权限的账号admin，允许访问所有数据库，允许该账户授权给其他用户
+		GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
+		
+		# 创建一个指定权限的账号test，只允许访问数据库test
+		GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, ALTER, DROP, INDEX, EXECUTE, CREATE VIEW, SHOW VIEW on test.* TO 'test'@'%' IDENTIFIED BY '123456';
+		
+		FLUSH PRIVILEGES;
 	
-	use mysql;
-	
-	update user set host='%' where user='root';
-	
-	grant all privileges on *.* to 'root'@'%' identified by '123456';
-	
-	flush privileges;
-	
-	service mysqld restart
+	如果是业务账号，不允许设置为超级管理员，并且要细化指定各项权限，防止出现数据问题和安全问题
 
 

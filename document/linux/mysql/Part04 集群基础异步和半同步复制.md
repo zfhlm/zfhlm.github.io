@@ -56,4 +56,15 @@
 			
 			Start semi-sync replication to master ......
 
+#### 开启mysql半同步复制(方法二)
+
+	数据库直接加入配置文件参数：
+		
+		[mysqld]
+		
+		plugin_load="rpl_semi_sync_master=semisync_master.so;rpl_semi_sync_slave=semisync_slave.so"
+		loose-rpl_semi_sync_master_enabled=1
+		loose-rpl_semi_sync_slave_enabled=1
+		loose-rpl_semi_sync_master_timeout=5000
+
 
