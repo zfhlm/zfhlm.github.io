@@ -70,7 +70,7 @@
 		
 		user=mysql                                                      #启动用户
 		server_id=1                                                     #服务器ID
-		read_only=0                                                     #是否开启只读(非super账号只读)
+		read_only=0                                                     #是否开启只读
 		symbolic_links=0                                                #是否允许分区存储
 		lower_case_table_names=1                                        #是否表名不区别大小写
 		explicit_defaults_for_timestamp=1                               #是否允许日期自动填充
@@ -197,6 +197,8 @@
 		| Update                  | Tables                                | To update existing rows                               |
 		| Usage                   | Server Admin                          | No privileges - allow connect only                    |
 		+-------------------------+---------------------------------------+-------------------------------------------------------+
+		
+	如果是业务账号，不允许设置为超级管理员，并且要细化指定各项权限，防止出现数据问题和安全问题
 	
 	创建账号并授权，可输入以下任意一个命令：
 		
@@ -207,7 +209,5 @@
 		GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, ALTER, DROP, INDEX, EXECUTE, CREATE VIEW, SHOW VIEW on test.* TO 'test'@'%' IDENTIFIED BY '123456';
 		
 		FLUSH PRIVILEGES;
-	
-	如果是业务账号，不允许设置为超级管理员，并且要细化指定各项权限，防止出现数据问题和安全问题
 
 
