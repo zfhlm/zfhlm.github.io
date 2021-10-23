@@ -20,7 +20,15 @@
 	搭建单点数据库：
 		
 		(基于 Part01 进行)
+				
+	开启半同步复制：
 		
+		(基于 Part04 进行)
+		
+	开启 GTID：
+		
+		(基于 Part05 进行)
+	
 	搭建一主二从集群：
 		
 		(基于 Part02 进行)
@@ -30,14 +38,6 @@
 		限制从节点只读模式，修改 my.cnf 参数 read_only=1
 	
 		限制所有节点不允许删除主从中继日志，修改 my.cnf 参数 relay_log_purge=0
-		
-	集群开启半同步复制：
-		
-		(基于 Part04 进行)
-	
-	集群开启 GTID：
-		
-		(基于 Part05 进行)
 
 #### 服务器ssh免密配置
 
@@ -81,7 +81,7 @@
 		
 		https://github.com/yoshinorim/mha4mysql-manager/releases/
 		
-	下载RPM包：
+	下载源码包：
 	
 		mha4mysql-node-0.58.tar.gz
 		
@@ -333,8 +333,13 @@
 
 #### 模拟 MHA 故障恢复
 
-	MHA 故障转移切换之后，节点二成为了新的 master 继续对外提供服务，先模拟写入数据到节点二，提升集群 GTID
+	节点二(新master)模拟写入数据提升集群 GTID，输入命令：
 	
+		mysql -uroot -p
+		
+		#根据实际情况插入数据
+		insert into table_name ......
+		
 	节点一(原 master)以只读的方式启动，输入命令：
 		
 		service mysqld start --read-only=1
