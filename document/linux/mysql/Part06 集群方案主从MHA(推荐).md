@@ -1,9 +1,11 @@
 
 # mysql集群 主从MHA
 
-#### 集群 MHA 简单介绍
-
+	Master HA，开源的 MySQL 的高可用程序
 	
+	MHA 在监控到 master 节点故障时，会提升其中拥有最新数据的 slave 节点成为新的master 节点，在此期间，MHA 会通过于其它从节点获取额外信息来避免一致性方面的问题
+	
+	MHA 还提供了 master 节点的在线切换功能，即按需切换 master/slave 节点
 
 #### 服务器准备
 
@@ -382,10 +384,17 @@
 		
 		masterha_check_status --conf=/etc/app1.cnf
 
-#### 配置 MHA 邮件通知
+#### 配置 MHA 执行脚本
 
-	
-	
-
+	选择性加入到全局配置文件，或 集群配置文件：
+		
+		# 故障二次检测确认脚本，提升集群网络容忍能力
+		secondary_check_script=masterha_secondary_check -s 192.168.140.175 -s 192.168.140.176
+		
+		# 故障切换邮件通知，自带脚本未实现邮件发送的功能，仅仅是定义了命令行传递的参数，需要额外编写发送逻辑
+		report_script=/usr/local/bin/send_report
+		
+		# 故障切换 VIP 到备用 master
+		master_ip_failover_script=/usr/local/bin/master_ip_failover
 
 

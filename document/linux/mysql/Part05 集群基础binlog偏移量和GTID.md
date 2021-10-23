@@ -1,7 +1,5 @@
 
-# mysql binlog偏移量和GTID
-
-#### 简单介绍
+# mysql binlog 偏移量 和 GTID
 
 	基于偏移量的binlog：
 		

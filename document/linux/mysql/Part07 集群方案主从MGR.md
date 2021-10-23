@@ -1,9 +1,9 @@
 
 # mysql集群 主从MGR
 
-#### MGR 简单介绍
-
-	MGR 全称 MySQL Group Replication 组复制，是MySQL官方在5.7.17版本引进的一个数据库高可用与高扩展的解决方案，以插件形式提供
+	MySQL Group Replication，组复制
+	
+	MGR 是MySQL官方在5.7.17版本引进的一个数据库高可用与高扩展的解决方案，以插件形式提供
 	
 	MGR 不是全同步方案MGR，相对于半同步复制，在relay log前增加了冲突检查协调，但是binlog回放仍然可能延时
 	
