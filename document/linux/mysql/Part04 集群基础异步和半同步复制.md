@@ -1,5 +1,5 @@
 
-# mysql集群异步复制和半同步复制
+# mysql  异步复制  半同步复制
 
 #### 简单介绍
 
@@ -59,6 +59,6 @@
 		
 		-> Start semi-sync replication to master ......
 	
-	其中的 semi-sync 半同步复制插件已经被启用
+	其中的 Start semi-sync 显示半同步复制插件已经被启用
 
 

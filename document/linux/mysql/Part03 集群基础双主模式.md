@@ -7,15 +7,30 @@
 	
 	192.168.140.165		# 主节点二
 	
-	(根据 Part01 安装配置好三台服务器)
+	(根据 Part01 安装配置好两台服务器)
 
-#### 双主 mysql 创建主从同步账号
+#### 修改 mysql 主从配置
+
+	修改 my.cnf 配置，输入命令：
+		
+		mysql -uroot -p
+		
+		vi /etc/my.cnf
+	
+	修改以下配置：
+		
+		[mysqld]
+		
+		relay-log=mysql-relay-bin                                       #主从中继日志名称
+		relay_log_purge=1                                               #主从中继日志开启自动删除
+		max_relay_log_size=1024M                                        #主从中继日志文件最大值
+		log-slave-updates=1                                             #主从复制是否写入binlog
+
+#### 创建 mysql 主从同步账号
 
 	输入命令：
 		
 		mysql -uroot -p
-		
-		CREATE USER 'replicator'@'host' IDENTIFIED BY '123456';
 		
 		GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'%' IDENTIFIED BY '123456';
 		
@@ -90,13 +105,7 @@
 		SELECT * FROM `test_user` where `id` = 2;
 
 #### 客户端连接 mysql 双主集群
-	
-	创建指定权限的普通账号给客户端使用：
-		
-		GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, ALTER, DROP, INDEX on test.* TO 'test'@'%' IDENTIFIED BY '123456';
-		
-		FLUSH PRIVILEGES;
-		
+
 	虽然双主都允许写入数据，但是为了保证数据的一致性，只允许写入一个主节点，另一个主节点可承担部分读请求
 	
 	可以搭配 keepalived + VIP 的方式，主节点 down 掉后转移 VIP 到另一个主节点，继续提供服务给客户端

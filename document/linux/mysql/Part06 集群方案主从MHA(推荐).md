@@ -25,13 +25,11 @@
 		
 		(基于 Part02 进行)
 	
-	限制从节点只读模式：
-		
-		(调整 my.cnf 参数 read_only=1 并重启服务)
+	主从配置修改：
 	
-	限制所有节点不允许删除中继日志：
+		限制从节点只读模式，修改 my.cnf 参数 read_only=1
 	
-		(调整 my.cnf 参数 relay_log_purge=0 并重启服务)
+		限制所有节点不允许删除主从中继日志，修改 my.cnf 参数 relay_log_purge=0
 		
 	集群开启半同步复制：
 		
@@ -149,31 +147,31 @@
 		
 	MHA Manager 节点脚本作用说明：
 		
-		masterha_check_repl             #
+		masterha_check_repl             #检查 MHA 主从数据库状态脚本
 		
-		masterha_check_ssh              #
+		masterha_check_ssh              #检查 MHA ssh 连接配置脚本
 		
-		masterha_check_status           #
+		masterha_check_status           #检测当前MHA运行状态脚本
 		
-		masterha_conf_host              #
+		masterha_conf_host              #管理 MHA server配置脚本
 		
-		masterha_manager                #
+		masterha_manager                #启动 MHA 脚本
 		
-		masterha_master_monitor         #
+		masterha_master_monitor         #监控主从 master 状态脚本
 		
-		masterha_master_switch          #
+		masterha_master_switch          #故障转移脚本
 		
-		masterha_secondary_check        #
+		masterha_secondary_check        #检查网络连接脚本
 		
-		masterha_stop                   #
+		masterha_stop                   #停止 MHA 脚本
 		
-		master_ip_failover              #
+		master_ip_failover              #VIP故障转移脚本
 		
-		master_ip_online_change         #
+		master_ip_online_change         #VIP手动切换脚本
 		
-		power_manager                   #
+		power_manager                   #防止集群脑裂关闭master服务脚本
 		
-		send_report                     #
+		send_report                     #发送邮件通知脚本
 
 #### 配置 MHA Manager
 
@@ -230,28 +228,40 @@
 			
 			[server default]
 			
-			#集群1检测脚本
-			secondary_check_script=masterha_secondary_check -s 192.168.140.174 -s 192.168.140.175 -s 192.168.140.176
-			
 			#管理节点集群1工作目录
 			manager_workdir=/usr/local/masterha/app1/
 			
 			#管理节点集群1日志目录
 			manager_log=/usr/local/masterha/app1/manager.log
 			
-			#数据库主节点
 			[server1]
+			
+			#主节点IP
 			hostname=192.168.140.174
 			
-			#数据库从节点，故障切换可提升为主节点
-			[server2]
-			hostname=192.168.140.175
+			#允许故障切换为master
 			candidate_master=1
+			
+			#切换master不用考虑复制延迟
 			check_repl_delay=0
 			
-			#数据库从节点
+			[server2]
+			
+			#从节点IP
+			hostname=192.168.140.175
+			
+			#允许故障切换为master
+			candidate_master=1
+			
+			#切换master不用考虑复制延迟
+			check_repl_delay=0
+			
 			[server3]
+			
+			#从节点IP
 			hostname=192.168.140.176
+			
+			#不允许故障切换为master
 			no_master=1
 	
 	管理节点添加 MHA Manager 集群2 ... 集群N，只需创建不同的配置文件，例如：
@@ -282,21 +292,95 @@
 		
 		masterha_manager --conf=/etc/app1.cnf &
 		
+		masterha_check_status --conf=/etc/app1.cnf
+		
 		tail -f /usr/local/masterha/app1/manager.log
 		
-		-> 观察控制台输出日志
-		
-		masterha_check_status --conf=/etc/app1.cnf
-	
 	如果需要关闭 MHA Manager，输入命令：
 		
 		masterha_stop --conf=/etc/app1.cnf 
 
-#### 测试 MHA 故障转移
+#### 模拟 MHA 故障转移
 
-	将 mysql 主节点关掉，输入命令：
-	
+	管理节点持续查看日志，输入命令：
 		
+		tail -f /usr/local/masterha/app1/manager.log
+		
+	主节点 mysql 模拟故障，重启服务器，输入命令：
+		
+		reboot
+	
+	MHA切换master成功，管理节点可以看到如下输出信息：
+	
+		Started automated(non-interactive) failover.
+		Selected 192.168.140.175(192.168.140.175:3306) as a new master.
+		192.168.140.175(192.168.140.175:3306): OK: Applying all logs succeeded.
+		192.168.140.176(192.168.140.176:3306): OK: Slave started, replicating from 192.168.140.175(192.168.140.175:3306)
+		192.168.140.175(192.168.140.175:3306): Resetting slave info succeeded.
+		Master failover to 192.168.140.175(192.168.140.175:3306) completed successfully.
+	
+	从节点可以看到节点三的master已经是节点二，输入命令：
+	
+		mysql -uroot -p
+	
+		show slave status\G;
+		
+		show master status;
+	
+	管理节点 MHA Manager 在故障转移后会杀死自身进程，查看进程输入命令：
+		
+		ps -ef | grep masterha
+
+#### 模拟 MHA 故障恢复
+
+	MHA 故障转移切换之后，节点二成为了新的 master 继续对外提供服务，先模拟写入数据到节点二，提升集群 GTID
+	
+	节点一(原 master)以只读的方式启动，输入命令：
+		
+		service mysqld start --read-only=1
+		
+		mysql -uroot -p
+	
+		show variables like 'read_only';
+	
+	节点一(原 master)加入到主从集群，输入命令：
+		
+		change master to master_host='192.168.140.175', master_user='replicator', master_password='123456',master_auto_position=1;
+		
+		start slave;
+		
+		show slave status\G
+	
+	管理节点删除上次故障切换的标记文件，检查配置文件信息是否正确，输入命令：
+	
+		rm -rf /usr/local/masterha/app1/app1.failover.complete
+		
+		cat /etc/app1.cnf
+	
+	管理节点执行切换脚本，将主节点切换为 master，输入命令：
+	
+		masterha_master_switch --conf=/etc/app1.cnf --master_state=alive --new_master_host=192.168.140.174 --new_master_port=3306  --orig_master_is_new_slave
+	
+	所有节点检查状态是否正常，输入命令：
+	
+		show master status;
+		
+		show slave status\G;
+		
+		show variables like 'read_only';
+		
+	管理节点重新启动 MHA，输入命令：
+		
+		masterha_check_ssh --conf=/etc/app1.cnf
+		
+		masterha_manager --conf=/etc/app1.cnf &
+		
+		masterha_check_status --conf=/etc/app1.cnf
+
+#### 配置 MHA 邮件通知
+
+	
+	
 
 
 

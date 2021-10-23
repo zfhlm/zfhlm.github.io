@@ -1,7 +1,7 @@
 
 # mysql binlog偏移量和GTID
 
-#### binlog偏移量和GTID
+#### 简单介绍
 
 	基于偏移量的binlog：
 		
@@ -17,34 +17,54 @@
 		
 		mysql开启了 GTID，当在主库上提交事务或者被从库应用时，可以定位和追踪每一个事务
 
-#### 开启 mysql GTID
+#### 主从 mysql 开启 GTID
 
-	修改 mysql 主从配置文件，输入命令：
-	
+	主从节点修改 my.cnf，输入命令：
+		
 		vi /etc/my.cnf
 		
-		加入以下配置：
-			
-			log-bin=mysql-bin
-			binlog_format=row
-			log-slave-updates=1
-			gtid_mode=ON
-			enforce_gtid_consistency=ON
+	修改以下配置：
+		
+		log-bin=mysql-bin                                               #binlog开启
+		binlog_format=row                                               #binlog格式
+		
+		log-slave-updates=1                                             #主从复制写入binlog
+		
+		gtid_mode=ON                                                    #开启GTID
+		enforce_gtid_consistency=ON                                     #开启GTID强一致性事务
 	
 	重启 mysql，输入命令：
 		
 		mysql -uroot -p
 		
 		service mysqld restart
-	
-	从节点关联主节点，输入命令：
+
+#### 建立 mysql 主从复制
+
+	从节点输入命令：
 	
 		mysql -uroot -p
 		
 		change master to master_host='192.168.140.164', master_user='replicator', master_password='123456',master_auto_position = 1;
 		
-	查看 mysql 当前事务 GTID，输入命令：
+		start slave;
 		
-		show master status;
+		show slave status\G
+
+#### 常见的 GTID 错误：Slave has more GTIDs than the master has, using the master's SERVER_UUID
+
+	错误原因：
+	
+		人为在从节点上做了更新操作，从节点的 GTID_NEXT 超出主节点翻译
+	
+	避免错误：
+		
+		从节点开启只读，禁止使用super账号连接从节点，禁止对从节点进行更新操作
+		
+		提供给客户端的账号不允许为 super 账号
+	
+	解决办法：
+	
+		主节点人为干预追平从节点的 GTID；或解除主从关系，从节点清除数据，主节点全量备份之后导入从库
 
 
