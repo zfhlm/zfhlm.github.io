@@ -1,8 +1,8 @@
 
 # mysql集群 多主PXC
 
-#### PXC 简单介绍
-
+	Percona XtraDB Cluster，简称 PXC
+	
 	PXC 是基于 Galera 的面向 OLTP 的多主同步复制插件
 	
 	PXC 是多主架构，可以在任何节点读写数据
