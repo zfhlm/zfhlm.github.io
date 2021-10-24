@@ -88,9 +88,6 @@
 		wait_timeout=7200                                               #非交互连接最大等待时间
 		log_slow_admin_statements=ON                                    #是否记录管理日志
 		
-		innodb_open_files=4096                                          #innodb打开文件句柄最大数
-		innodb_print_all_deadlocks=1                                    #innodb输出死锁日志
-		
 		log_bin=mysql-bin                                               #binlog日志名称
 		binlog_format=ROW                                               #binlog格式
 		sync_binlog=0                                                   #binlog是否每次刷盘
@@ -107,6 +104,17 @@
 		slow_query_log=ON                                               #慢查询日志是否开启
 		slow_query_log_file=/usr/local/mysql/log/mysql-slow.log         #慢查询日志文件
 		long_query_time=2                                               #慢查询最小时间秒
+		
+		innodb_open_files=4096                                          #innodb打开文件句柄最大数
+		innodb_buffer_pool_size=512M                                    #innodb缓冲池大小，根据服务器内存分配设置
+		innodb_buffer_pool_chunk_size=128M                              #innodb缓冲池每次增减大小
+		innodb_buffer_pool_instances=1                                  #innodb缓冲池数量，一般划分1G以上缓冲区对应一个缓冲池
+		innodb_buffer_pool_dump_at_shutdown=1                           #innodb关闭时记录缓冲页面
+		innodb_buffer_pool_load_at_startup=1                            #innodb启动时加载缓冲页面
+		innodb_log_file_size=256M                                       #innodb事务日志大小
+		innodb_flush_log_at_trx_commit=1                                #innodb事务日志刷盘策略
+		innodb_flush_method=O_DIRECT                                    #innodb磁盘读写模式
+		innodb_print_all_deadlocks=1                                    #innodb输出死锁日志
 
 #### 初始化并启动数据库
 

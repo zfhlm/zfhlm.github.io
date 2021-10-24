@@ -17,11 +17,11 @@
 
 #### 服务器准备
 
-	192.168.140.164		# 服务器一
+	192.168.140.164		# 服务器一，主节点
 	
-	192.168.140.165		# 服务器二
+	192.168.140.165		# 服务器二，从节点
 	
-	192.168.140.166		# 服务器三
+	192.168.140.166		# 服务器三，从节点
 	
 	根据 Part1 安装配置好三台服务器，搭建一主二从 MGR 集群
 
@@ -71,7 +71,7 @@
 		log-bin=mysql-bin                                                                         #binlog日志名称
 		binlog_format=ROW                                                                         #binlog格式
 		binlog_checksum=NONE                                                                      #binlog关闭日志校验
-		
+				
 		gtid_mode=ON                                                                              #开启全局事务GTID
 		enforce_gtid_consistency=ON                                                               #开启全局事务强一致性
 		master_info_repository=TABLE                                                              #使用表记录master信息
