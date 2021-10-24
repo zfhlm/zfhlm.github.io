@@ -33,8 +33,6 @@
 	
 	重启 mysql，输入命令：
 		
-		mysql -uroot -p
-		
 		service mysqld restart
 
 #### 建立 mysql 主从复制
