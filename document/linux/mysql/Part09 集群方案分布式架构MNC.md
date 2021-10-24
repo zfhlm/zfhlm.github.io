@@ -3,41 +3,31 @@
 
 	MySQL NDB Cluster，一个 MNC 集群由若干管理节点、若干数据节点和若干 SQL 节点组成
 	
-	管理节点：对 SQL 节点和数据节点进行配置管理，可以设置为1个到多个
-		
+	管理节点：用于管理集群内的其他节点，如提供配置数据，启动并停止节点，运行备份等，可以设置为1个到多个
+			
+	SQL节点：用于访问数据的节点，提供SQL接口，用户认证，赋予权限等功能，可以设置为1个到多个
+	
 	数据节点：
 		
-		集群数据存取节点，多个节点组成一个分组，集群中可以有多个分组
+		用于保存数据、索引，控制事务等，多个节点组成一个分组，集群中可以有多个分组
 		
-		在同个分组中，数据节点数量必须能被 NoOfReplicas 参数整除，例如：
+		在同个分组中，数据节点数量必须能被 NoOfReplicas 参数整除，一般配置2个数据节点为同一个组，配置 NoOfReplicas=2
 		
-			同分组数据节点数=2，则 NoOfReplicas ∈ {1, 2}
+		如果同分组数据节点数=2，则 NoOfReplicas ∈ {1, 2}
 		
-			同分组数据节点数=3，则 NoOfReplicas ∈ {1, 3}
+		如果同分组数据节点数=3，则 NoOfReplicas ∈ {1, 3}
 		
-			同分组数据节点数=4，则 NoOfReplicas ∈ {1, 2, 4}
-		
-		一般配置2个数据节点为同一个组，配置 NoOfReplicas=2
-		
-		如果配置不正确，启动管理节点会报类似错误：Nodegroup 1 has 1 members, NoOfReplicas=2
-		
-	SQL节点：对外提供数据访问
+		如果同分组数据节点数=4，则 NoOfReplicas ∈ {1, 2, 4}
 
 #### 下载安装包
 
+	文档地址：https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster.html
+	
 	下载地址：https://dev.mysql.com/downloads/cluster/
 	
 	下载安装包：mysql-cluster-8.0.27-linux-glibc2.12-x86_64.tar.gz
 	
 	上传到服务器目录：/usr/local/software
-	
-	配置文件官方文档地址：
-		
-		https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-mgm-definition.html
-		
-		https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-ndbd-definition.html
-		
-		https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-install-configuration.html
 
 #### 服务器准备
 
@@ -66,24 +56,12 @@
 		cd ..
 		
 		ln -s ./mysql-cluster-8.0.27 mysql
-	
-	创建运行用户，输入命令：
-		
-		groupadd mysql
-		
-		useradd -r -s /sbin/nologin -g mysql mysql -d /usr/local/mysql/
-		
-		chown -R mysql:mysql mysql
-		
-		chown -R mysql:mysql mysql-cluster-8.0.27/
 
 #### 配置管理节点
 
 	管理节点修改配置文件，输入命令：
 		
 		mkdir -p /usr/local/mysql/mgmd/{data,log}
-		
-		chown -R mysql:mysql /usr/local/mysql/
 		
 		vi /etc/mgmd.cnf
 		
@@ -98,8 +76,6 @@
 		[ndbd default]
 		ServerPort=2202                                                                          #数据节点默认端口
 		NoOfReplicas=2                                                                           #数据节点默认冗余备份数
-		DataMemory=100M                                                                          #数据节点默认数据内存大小
-		IndexMemory=100M                                                                         #数据节点默认索引内存大小
 		DataDir=/usr/local/mysql/ndbd/data                                                       #数据节点默认存储目录
 		
 		[ndb_mgmd]
@@ -112,12 +88,10 @@
 		
 		[ndbd]
 		NodeId=1                                                                                 #数据节点一ID
-		NodeGroup=0                                                                              #数据节点一分组
 		HostName=192.168.140.178                                                                 #数据节点一IP地址
 		
 		[ndbd]
 		NodeId=2                                                                                 #数据节点二ID
-		NodeGroup=0                                                                              #数据节点二分组
 		HostName=192.168.140.179                                                                 #数据节点二IP地址
 		
 		[mysqld]
@@ -132,6 +106,8 @@
 
 	数据节点修改配置文件，输入命令：
 		
+		mkdir -p /usr/local/mysql/ndbd/data
+		
 		vi /etc/my.cnf
 	
 	添加以下配置内容：
@@ -143,7 +119,17 @@
 		ndb-connectstring=192.168.140.180,192.168.140.181                                        #管理节点连接地址
 
 #### 配置SQL节点
-
+	
+	创建运行用户，输入命令：
+		
+		groupadd mysql
+		
+		useradd -r -s /sbin/nologin -g mysql mysql -d /usr/local/mysql/
+		
+		chown -R mysql:mysql mysql
+		
+		chown -R mysql:mysql mysql-cluster-8.0.27/
+	
 	SQL 节点初始化数据库，输入命令：
 		
 		mkdir -p /usr/local/mysql/data/
@@ -152,8 +138,11 @@
 		
 		cd /usr/local/software
 		
-		# 记住临时密码，用于启动初始化账号
 		./bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+		
+		-> 控制台输出 root 临时密码
+		
+		cp ./support-files/mysql.server /etc/init.d/mysqld
 		
 	SQL 节点修改配置文件，输入命令：
 		
@@ -169,73 +158,35 @@
 		[mysql_cluster]
 		ndb-connectstring=192.168.140.180,192.168.140.181                                        #管理节点连接地址
 
-#### 启动管理节点
+#### 启动 MNC 集群
 
-	管理节点分别启动，输入命令：
+	启动管理节点，输入命令：
 		
 		cd /usr/local/mysql
 		
-		./bin/ndb_mgmd -f /etc/mgmd.cnf
+		./bin/ndb_mgmd --initial -f /etc/mgmd.cnf
+		
+	启动数据节点，输入命令：
+		
+		cd /usr/local/mysql
+		
+		./bin/ndbd --initial
+	
+	启动 SQL 节点，输入命令：
+		
+		cd /usr/local/mysql
+		
+		service mysqld start
 	
 	管理节点查看各节点状态，输入命令：
 		
-		# 因为 SQL 节点和管理节点在一个服务器时，受到 my.cnf 影响，要指定 NodeId 和 ConnectString
-		# ./bin/ndb_mgm
-		./bin/ndb_mgm --ndb-nodeid=181 --connect-string=192.168.140.181
-		
-		# 输出当前集群各节点信息
-		show
-	
-	管理节点可以看到控制台输出：
-		
-		Connected to Management Server at: localhost:1186
-		Cluster Configuration
-		---------------------
-		[ndbd(NDB)]	2 node(s)
-		id=1 (not connected, accepting connect from 192.168.140.178)
-		id=2 (not connected, accepting connect from 192.168.140.179)
-		
-		[ndb_mgmd(MGM)]	2 node(s)
-		id=180	@192.168.140.180  (mysql-8.0.27 ndb-8.0.27)
-		id=181	@192.168.140.181  (mysql-8.0.27 ndb-8.0.27)
-		
-		[mysqld(API)]	2 node(s)
-		id=100 (not connected, accepting connect from 192.168.140.180)
-		id=101 (not connected, accepting connect from 192.168.140.181)
+		./bin/ndb_mgm -e -show --ndb-nodeid=181 --connect-string=192.168.140.181
 
-#### 启动数据节点
-	
-	数据节点分别启动，输入命令：
+#### 使用 MNC 集群
+
+	初始化 SQL 节点 root 登录信息(使用临时密码)，输入命令：
 		
 		cd /usr/local/mysql
-		
-		./bin/ndbd
-	
-	管理节点查看各节点状态，控制台可以看到如下输出：
-		
-		Cluster Configuration
-		---------------------
-		[ndbd(NDB)]	2 node(s)
-		id=1	@192.168.140.178  (mysql-8.0.27 ndb-8.0.27, starting, Nodegroup: 0)
-		id=2	@192.168.140.179  (mysql-8.0.27 ndb-8.0.27, starting, Nodegroup: 0)
-		
-		[ndb_mgmd(MGM)]	2 node(s)
-		id=180	@192.168.140.180  (mysql-8.0.27 ndb-8.0.27)
-		id=181	@192.168.140.181  (mysql-8.0.27 ndb-8.0.27)
-		
-		[mysqld(API)]	2 node(s)
-		id=100 (not connected, accepting connect from 192.168.140.180)
-		id=101 (not connected, accepting connect from 192.168.140.181)
-
-#### 启动 SQL 节点
-
-	SQL 节点分别启动，输入命令：
-		
-		cd /usr/local/mysql
-		
-		./support-files/mysql.server start
-		
-	初始化 root 登录信息，输入命令：
 		
 		./bin/mysql -uroot -p
 		
@@ -245,38 +196,176 @@
 		
 		flush privileges;
 	
-	管理节点查看各节点状态，控制台可以看到如下输出：
+	使用远程工具连接数据库，连接地址：
 		
-		Connected to Management Server at: localhost:1186
-		Cluster Configuration
-		---------------------
-		[ndbd(NDB)]	2 node(s)
-		id=1	@192.168.140.178  (mysql-8.0.27 ndb-8.0.27, Nodegroup: 0, *)
-		id=2	@192.168.140.179  (mysql-8.0.27 ndb-8.0.27, Nodegroup: 0)
+		192.168.140.180:3306
 		
-		[ndb_mgmd(MGM)]	2 node(s)
-		id=180	@192.168.140.180  (mysql-8.0.27 ndb-8.0.27)
-		id=181	@192.168.140.181  (mysql-8.0.27 ndb-8.0.27)
+		192.168.140.181:3306
 		
-		[mysqld(API)]	2 node(s)
-		id=100	@192.168.140.180  (mysql-8.0.27 ndb-8.0.27)
-		id=101	@192.168.140.181  (mysql-8.0.27 ndb-8.0.27)
+	创建数据库和测试表，输入 SQL 语句：
+	
+		CREATE DATABASE `test`;
+		
+		CREATE TABLE `test`.`test_user` (
+		  `id` INT NOT NULL,
+		  `name` VARCHAR(45) NULL,
+		  PRIMARY KEY (`id`))
+		ENGINE = ndbcluster
+		DEFAULT CHARACTER SET = utf8mb4
+		COLLATE = utf8mb4_bin;
+	
+	插入数据输入 SQL 语句：
+		
+		insert into `test_user` values ('1', '张三');
+		
+		insert into `test_user` values ('2', '李四');
+	
+	查询数据输入 SQL 语句：
+	
+		select * from `test_user`;
 
-#### 使用 MNC 集群
+#### 模拟节点故障
 
+	如果 SQL 节点 down 掉，只会影响连接这个 SQL 节点的客户端，其他 SQL 节点可以正常工作，这里不做模拟
+	
+	关闭第一个数据节点，输入命令：
+	
+		ps -ef | grep ndbd
+		
+		pkill ndbd
+	
+	客户端对数据库进行读写，正常执行(关闭第二个数据节点，发现数据库已经不能读写)：
+		
+		insert into `test_user` values ('3', '王五');
+		
+		select * from `test_user`;
+	
+	关闭第一个管理节点，输入命令：
+	
+		ps -ef | grep mgmd
+		
+		kill pid
+	
+	客户端对数据库进行读写，正常执行(关闭第二个管理节点，数据库仍旧可以正常读写)：
+		
+		insert into `test_user` values ('4', '赵六');
+		
+		select * from `test_user`;
 
+#### 在线添加数据节点
+	
+	添加两个新的数据节点，组成一个新分组：
+		
+		192.168.140.182
+		
+		192.168.140.183
+		
+		(按照初始化安装、配置数据节点步骤，设定好各项配置)
+		
+	修改管理节点配置，输入命令：
+		
+		vi /etc/mgmd.cnf
+		
+	加入以下配置内容：
+		
+		[ndbd]
+		NodeId=3                                                                                 #数据节点三ID
+		HostName=192.168.140.182                                                                 #数据节点三IP地址
+		
+		[ndbd]
+		NodeId=4                                                                                 #数据节点四ID
+		HostName=192.168.140.183                                                                 #数据节点四IP地址
+		
+	管理节点重启，输入命令：
+		
+		ps -ef | grep mgmd
+		
+		kill pid
+		
+		./bin/ndb_mgmd -f /etc/mgmd.cnf --reload
+		
+	数据节点重启，管理节点输入命令：
+		
+		./bin/ndb_mgm --ndb-nodeid=181 --connect-string=192.168.140.181
+		
+		show
+		
+		1 restart
+		
+		-> 注意控制台输出，等待到启动成功
+		-> Node 1: Node shutdown initiated
+		-> Node 1: Node shutdown completed, restarting, no start.
+		-> Node 1 is being restarted
+		-> Node 1: Start initiated (version 8.0.27)
+		-> Node 1: Started (version 8.0.27)
+		
+		2 restart
+		
+		-> 注意控制台输出，等待到启动成功
+		-> Node 2: Node shutdown initiated
+		-> Node 2: Node shutdown completed, restarting, no start.
+		-> Node 2 is being restarted
+		-> Node 2: Start initiated (version 8.0.27)
+		-> Node 2: Started (version 8.0.27)
+		
+	SQL节点重启，输入命令：
+		
+		service mysqld restart
+		
+	初始化启动新的数据节点，输入命令：
+		
+		cd /usr/local/mysql
+		
+		./bin/ndbd --initial
+	
+	管理节点创建分组，输入命令：
+	
+		./bin/ndb_mgm --ndb-nodeid=181 --connect-string=192.168.140.181
+		
+		show
+		
+		create nodegroup 3,4
+		
+		show
 
+#### 常用 MNC 命令
 
-
-#### 添加新存储节点
-
-
-
-
-
-
-
-
-
+	注意，以下所有包含 --initial 命令中，只能在初次启动的时候使用
+	
+	数据节点命令：
+		
+		./bin/ndbd                                       #启动数据节点守护进程(常规启动)
+		
+		./bin/ndbd --initial                             #启动数据节点守护进程(初次启动)
+		
+	SQL节点命令：
+		
+		service mysqld start                             #启动SQL节点守护进程
+		
+		service mysqld stop                              #停止SQL节点守护进程
+		
+		service mysqld restart                           #重启SQL节点守护进程
+	
+	管理节点命令：
+	
+		./bin/ndb_mgmd -f /etc/mgmd.cnf                  #启动管理节点守护进程(常规启动)
+		
+		./bin/ndb_mgmd -f /etc/mgmd.cnf --reload         #启动管理节点守护进程(配置文件有改动时启动)
+	
+		./bin/ndb_mgmd -f /etc/mgmd.cnf --initial        #启动管理节点守护进程(初次启动)
+		
+		./bin/ndb_mgm                                    #进入管理节点控制台
+		
+		./bin/ndb_mgm -e show                            #使用管理节点控制台执行show命令
+		
+	管理节点控制台命令：
+		
+		show                                             #查看所有节点状态
+		
+		[nodeid] restart                                 #重启指定nodeid进程
+		
+		[nodeid] stop                                    #停止指定nodeid进程
+		
+		create nodegroup [nodeid1],[nodeid2]             #创建数据节点分组
 
 
