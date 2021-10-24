@@ -1,7 +1,7 @@
 
 # mysql集群 多主PXC
 
-	Percona XtraDB Cluster，简称 PXC
+	Percona XtraDB Cluster，属于 Galera Cluster 两个版本之一，简称 PXC
 	
 	PXC 是基于 Galera 的面向 OLTP 的多主同步复制插件
 	
@@ -34,6 +34,18 @@
 		service network restart
 		
 		hostname
+		
+	关闭三台服务器防火墙，输入命令：
+	
+		setenforce 0
+		
+		vi /etc/selinux/config
+		
+		=> SELINUX=disabled
+		
+		systemctl stop firewalld
+		
+		systemctl disable firewalld
 
 #### 下载安装包
 	
@@ -66,7 +78,9 @@
 		tar -xvf ./Percona-XtraDB-Cluster-5.7.34-31.51-r604-el7-x86_64-bundle.tar
 		
 		yum localinstall -y *.rpm
-		
+	
+	注意，如果需要修改数据库相关目录，请在此配置完 my.cnf 再初始化启动
+	
 	初始化 PXC 数据库账号，输入命令：
 		
 		systemctl start mysql
@@ -84,104 +98,92 @@
 	关闭 PXC 开启自启动，输入命令：
 	
 		chkconfig mysqld off
-		
-	关闭 PXC 服务器防火墙：
-	
-		setenforce　0
-		
-		vi /etc/selinux/config
-		
-		修改以下内容：
-		
-			SELINUX=disabled
-		
-		systemctl stop firewalld
-		
-		systemctl disable firewalld
 
 #### 修改 PXC 集群配置
 
+	注意，此处只是修改了 PXC 集群相关配置，优化配置参考单点配置
+	
 	修改 PXC 数据库配置，输入命令：
 		
 		vi /etc/percona-xtradb-cluster.conf.d/mysqld.cnf
 		
-		节点一添加以下内容：
-		
-			server-id=170
-		
-		节点二添加以下内容：
-		
-			server-id=172
-		
-		节点三添加以下内容：
-		
-			server-id=173
-		
-		注意，在此可以加入其他参数，参考 Part1 单点配置的参数进行配置
+	节点一添加以下内容：
+	
+		server-id=170
+	
+	节点二添加以下内容：
+	
+		server-id=172
+	
+	节点三添加以下内容：
+	
+		server-id=173
+	
+	注意，在此可以加入其他参数，参考 Part01 单点配置的参数进行配置
 	
 	修改 PXC 节点配置，输入命令：
 		
 		vi /etc/percona-xtradb-cluster.conf.d/wsrep.cnf
 		
-		节点一添加以下内容：
-			
-			[mysqld]
-			
-			wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
-			wsrep_cluster_name=mrh-pxc-cluster
-			wsrep_cluster_address=gcomm://192.168.140.170,192.168.140.172,192.168.140.173
-			
-			wsrep_node_name=pxc170
-			wsrep_node_address=192.168.140.170
-			
-			wsrep_sst_method=xtrabackup-v2
-			wsrep_sst_auth=sstuser:123456
-			
-			pxc_strict_mode=ENFORCING
-			
-			binlog_format=ROW
-			default_storage_engine=InnoDB
-			innodb_autoinc_lock_mode=2
+	节点一添加以下内容：
 		
-		节点二添加以下内容：
-			
-			[mysqld]
-			
-			wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
-			wsrep_cluster_name=mrh-pxc-cluster
-			wsrep_cluster_address=gcomm://192.168.140.170,192.168.140.172,192.168.140.173
-			
-			wsrep_node_name=pxc172
-			wsrep_node_address=192.168.140.172
-			
-			wsrep_sst_method=xtrabackup-v2
-			wsrep_sst_auth=sstuser:123456
-			
-			pxc_strict_mode=ENFORCING
-			
-			binlog_format=ROW
-			default_storage_engine=InnoDB
-			innodb_autoinc_lock_mode=2
+		[mysqld]
 		
-		节点三添加以下内容：
-			
-			[mysqld]
-			
-			wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
-			wsrep_cluster_name=mrh-pxc-cluster
-			wsrep_cluster_address=gcomm://192.168.140.170,192.168.140.172,192.168.140.173
-			
-			wsrep_node_name=pxc173
-			wsrep_node_address=192.168.140.173
-			
-			wsrep_sst_method=xtrabackup-v2
-			wsrep_sst_auth=sstuser:123456
-			
-			pxc_strict_mode=ENFORCING
-			
-			binlog_format=ROW
-			default_storage_engine=InnoDB
-			innodb_autoinc_lock_mode=2
+		wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
+		wsrep_cluster_name=mrh-pxc-cluster
+		wsrep_cluster_address=gcomm://192.168.140.170,192.168.140.172,192.168.140.173
+		
+		wsrep_node_name=pxc170
+		wsrep_node_address=192.168.140.170
+		
+		wsrep_sst_method=xtrabackup-v2
+		wsrep_sst_auth=sstuser:123456
+		
+		pxc_strict_mode=ENFORCING
+		
+		binlog_format=ROW
+		default_storage_engine=InnoDB
+		innodb_autoinc_lock_mode=2
+	
+	节点二添加以下内容：
+		
+		[mysqld]
+		
+		wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
+		wsrep_cluster_name=mrh-pxc-cluster
+		wsrep_cluster_address=gcomm://192.168.140.170,192.168.140.172,192.168.140.173
+		
+		wsrep_node_name=pxc172
+		wsrep_node_address=192.168.140.172
+		
+		wsrep_sst_method=xtrabackup-v2
+		wsrep_sst_auth=sstuser:123456
+		
+		pxc_strict_mode=ENFORCING
+		
+		binlog_format=ROW
+		default_storage_engine=InnoDB
+		innodb_autoinc_lock_mode=2
+	
+	节点三添加以下内容：
+		
+		[mysqld]
+		
+		wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
+		wsrep_cluster_name=mrh-pxc-cluster
+		wsrep_cluster_address=gcomm://192.168.140.170,192.168.140.172,192.168.140.173
+		
+		wsrep_node_name=pxc173
+		wsrep_node_address=192.168.140.173
+		
+		wsrep_sst_method=xtrabackup-v2
+		wsrep_sst_auth=sstuser:123456
+		
+		pxc_strict_mode=ENFORCING
+		
+		binlog_format=ROW
+		default_storage_engine=InnoDB
+		innodb_autoinc_lock_mode=2
 
 #### 初次启动 PXC 集群
 
@@ -210,34 +212,32 @@
 		systemctl start mysql
 		
 		show status like 'wsrep%';
-	
-#### 正常关闭 PXC 集群
 
-	先确定节点是否为启动引导节点，输入命令：
-	
+#### 关闭 PXC 集群节点
+
+	确认是否引导启动节点（进程是否有--wsrep-new-cluster参数），输入命令：
+		
 		ps -ef | grep mysql
 		
-	如果 mysqld_safe 进程有 --wsrep-new-cluster 参数，该节点为启动引导节点
-	
-	关闭启动引导节点，输入命令：
-	
+	关闭引导启动节点，输入命令：
+		
 		systemctl stop mysql@bootstrap.service
-	
+		
 	关闭其他节点，输入命令：
-	
+		
 		systemctl stop mysql
 
 #### 重新启动 PXC 集群
 
-	1，集群未关闭全部节点
-	
-		直接启动关闭节点加入集群，输入命令：
+	1，集群未关闭全部节点，直接启动关闭节点加入集群
+		
+		输入命令：
 			
 			systemctl start mysql
 			
 			show status like 'wsrep%';
-			
-	2，集群被关闭全部节点
+	
+	2，集群被关闭全部节点，确认节点是否最后关闭节点：
 	
 		文件参数 safe_to_bootstrap=1 为最后关闭节点，查看是否最后关闭节点，输入命令：
 			
@@ -246,6 +246,8 @@
 		如果全部节点 safe_to_bootstrap=0，通过比对 seqno 值最大的为最后关闭节点，输入命令：
 		
 			mysqld_safe --wsrep-recover
+		
+	3，集群被关闭全部节点，启动所有节点：
 		
 		先启动最后关闭节点，输入命令：
 		

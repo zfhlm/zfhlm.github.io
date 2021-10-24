@@ -209,10 +209,8 @@
 		CREATE TABLE `test`.`test_user` (
 		  `id` INT NOT NULL,
 		  `name` VARCHAR(45) NULL,
-		  PRIMARY KEY (`id`))
-		ENGINE = ndbcluster
-		DEFAULT CHARACTER SET = utf8mb4
-		COLLATE = utf8mb4_bin;
+		  PRIMARY KEY (`id`)
+		) ENGINE = ndbcluster DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin;
 	
 	插入数据输入 SQL 语句：
 		
