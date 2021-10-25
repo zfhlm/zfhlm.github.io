@@ -23,6 +23,7 @@
 		
 		relay-log=mysql-relay-bin                                       #主从中继日志名称
 		relay_log_purge=1                                               #主从中继日志开启自动删除
+		relay_log_recovery=1                                            #主从中继日志损坏丢弃重新获取
 		max_relay_log_size=1024M                                        #主从中继日志文件最大值
 		log-slave-updates=1                                             #主从复制是否写入binlog
 

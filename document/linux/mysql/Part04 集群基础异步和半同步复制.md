@@ -41,6 +41,8 @@
 	
 	加入以下配置：
 		
+		[mysqld]
+		
 		loose-rpl_semi_sync_master_enabled=1                            #开启主节点半同步复制
 		loose-rpl_semi_sync_slave_enabled=1                             #开启从节点半同步复制
 		loose-rpl_semi_sync_master_timeout=5000                         #半同步复制等待超时时间(超时退化为异步复制)

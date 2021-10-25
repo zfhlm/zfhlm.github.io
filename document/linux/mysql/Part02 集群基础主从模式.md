@@ -11,24 +11,13 @@
 	
 	(根据 Part01 安装配置好三台服务器)
 
-#### 修改 mysql 主从配置
+#### 修改 mysql 配置
 
-	修改配置，输入命令：
-		
-		mysql -uroot -p
+	从节点修改配置，输入命令：
 		
 		vi /etc/my.cnf
 	
-	主节点修改以下配置：
-		
-		[mysqld]
-		
-		relay-log=mysql-relay-bin                                       #主从中继日志名称
-		relay_log_purge=1                                               #主从中继日志开启自动删除
-		max_relay_log_size=1024M                                        #主从中继日志文件最大值
-		log-slave-updates=1                                             #主从复制是否写入binlog
-		
-	从节点修改以下配置：
+	添加以下配置：
 		
 		[mysqld]
 		
@@ -36,12 +25,13 @@
 		
 		relay-log=mysql-relay-bin                                       #主从中继日志名称
 		relay_log_purge=1                                               #主从中继日志开启自动删除
+		relay_log_recovery=1                                            #主从中继日志损坏丢弃重新获取
 		max_relay_log_size=1024M                                        #主从中继日志文件最大值
 		log-slave-updates=1                                             #主从复制是否写入binlog
 
-#### 创建 mysql 主从同步账号
+#### 创建 mysql 主从账号
 
-	主节点和从节点，输入命令：
+	主节点创建主从账号，输入命令：
 		
 		mysql -uroot -p
 		
@@ -137,8 +127,10 @@
 		
 		show slave status\G
 
-#### 添加 mysql 主从复制新节点
-
+#### 添加 mysql 新从节点
+	
+	如果binlog完整的情况下，且数据量不多，可以直接建立主从同步
+	
 	使用 mysqldump 从主节点导出数据，输入命令：
 		
 		cd /usr/local/backup

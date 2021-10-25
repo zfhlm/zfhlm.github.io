@@ -14,6 +14,8 @@
 	MGR 多主模式，出现故障会自动进行节点临时剔除，客户端可以任意节点写入数据
 	
 	MGR 最少要3节点，一般添加为奇数个，最多只能存在9个节点
+	
+	注意，MGR 不是全同步复制，只保证数据最终一致性
 
 #### 服务器准备
 
@@ -25,24 +27,30 @@
 	
 	根据 Part1 安装配置好三台服务器，搭建一主二从 MGR 集群
 
-#### 修改服务器host配置，输入命令：
-	
-	vi /etc/hosts
-	
+#### 修改服务器host配置
+
+	修改host，输入命令：
+		
+		vi /etc/hosts
+		
 	添加以下配置：
-	
+		
 		192.168.140.164 node164
 		192.168.140.165 node165
 		192.168.140.166 node166
-	
-	hostname
-	
-	service network restart
+		
+	重启网络服务，输入命令：
+		
+		hostname
+		
+		service network restart
 
-#### 添加 mysql MGR配置，输入命令：
-	
-	vi /etc/my.cnf
-	
+#### 添加 mysql MGR配置
+
+	输入命令：
+		
+		vi /etc/my.cnf
+		
 	服务器一加入以下内容：
 		
 		[mysqld]
@@ -71,7 +79,7 @@
 		log-bin=mysql-bin                                                                         #binlog日志名称
 		binlog_format=ROW                                                                         #binlog格式
 		binlog_checksum=NONE                                                                      #binlog关闭日志校验
-				
+		
 		gtid_mode=ON                                                                              #开启全局事务GTID
 		enforce_gtid_consistency=ON                                                               #开启全局事务强一致性
 		master_info_repository=TABLE                                                              #使用表记录master信息
@@ -106,47 +114,55 @@
 		loose-group_replication_enforce_update_everywhere_checks=FALSE                            #关闭多主写验证
 		loose-group_replication_single_primary_mode=ON                                            #启用单主模式
 	
-	service mysqld restart
-
-#### 安装 mysql MGR 插件，输入命令：
+	重启数据库，输入命令：
 		
-	mysql -uroot -p
-	
-	INSTALL PLUGIN group_replication SONAME 'group_replication.so';
-	
-	SHOW PLUGINS;
-	
-#### mysql 创建 mysql MGR 账号，输入命令：
+		service mysqld restart
 
-	mysql -uroot -p
-	
-	CREATE USER 'replicator'@'host' IDENTIFIED BY '123456';
-	
-	GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'%' IDENTIFIED BY '123456';
-	
-	flush privileges;
+#### 安装 mysql MGR 插件
 
-#### 任意一台服务器创建 mysql MGR 组，输入命令：
-
-	mysql -uroot -p
-	
-	SET GLOBAL group_replication_bootstrap_group=ON;
-	
-	CHANGE MASTER TO MASTER_USER='replicator',MASTER_PASSWORD='123456' FOR CHANNEL 'group_replication_recovery';
-	
-	START GROUP_REPLICATION;
-	
-	SET GLOBAL group_replication_bootstrap_group=OFF;
-
-#### 其他两台服务器加入 mysql MGR 组，输入命令：
+	输入命令：
 		
-	mysql -uroot -p
+		mysql -uroot -p
+		
+		INSTALL PLUGIN group_replication SONAME 'group_replication.so';
+		
+		SHOW PLUGINS;
+
+#### mysql 创建 mysql MGR 账号
+
+	输入命令：
+		
+		mysql -uroot -p
+		
+		GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'%' IDENTIFIED BY '123456';
+		
+		flush privileges;
+
+#### 任意一台服务器创建 mysql MGR 组
+
+	输入命令：
 	
-	CHANGE MASTER TO MASTER_USER='replicator',MASTER_PASSWORD='123456' FOR CHANNEL 'group_replication_recovery';
-	
-	START GROUP_REPLICATION;
-	
-	SELECT * FROM performance_schema.replication_group_members;
+		mysql -uroot -p
+		
+		SET GLOBAL group_replication_bootstrap_group=ON;
+		
+		CHANGE MASTER TO MASTER_USER='replicator',MASTER_PASSWORD='123456' FOR CHANNEL 'group_replication_recovery';
+		
+		START GROUP_REPLICATION;
+		
+		SET GLOBAL group_replication_bootstrap_group=OFF;
+
+#### 其他两台服务器加入 mysql MGR 组
+
+	输入命令：
+		
+		mysql -uroot -p
+		
+		CHANGE MASTER TO MASTER_USER='replicator',MASTER_PASSWORD='123456' FOR CHANNEL 'group_replication_recovery';
+		
+		START GROUP_REPLICATION;
+		
+		SELECT * FROM performance_schema.replication_group_members;
 
 #### 测试 MGR 主从同步
 
@@ -207,7 +223,6 @@
 		mysql -uroot -p < ./fullback.sql
 	
 	4，修改所有节点的配置文件，加入新节点配置，然后按照正常的流程添加节点到 MGR 集群
-
 
 #### 集群 MGR 多主
 

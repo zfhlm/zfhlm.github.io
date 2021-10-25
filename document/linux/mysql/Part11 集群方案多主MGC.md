@@ -3,7 +3,7 @@
 
 	基于 Mysql 的  Mysql Galera Cluster，基于 MariaDB 的 MariaDB Galera Cluster，属于 Galera Cluster 两个版本之一，简称 MGC
 	
-	MGC 的特点：多主架构、同步复制、多线程复制、故障转移、节点自动加入等
+	MGC 的特点：多主架构、同步复制、多线程复制、故障转移、节点自动加入等，数据强一致性
 	
 	MGC 和 PXC 都同属 Galera Cluster
 

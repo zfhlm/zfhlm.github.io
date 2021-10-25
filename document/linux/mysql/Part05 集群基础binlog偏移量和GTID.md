@@ -25,7 +25,6 @@
 		
 		log-bin=mysql-bin                                               #binlog开启
 		binlog_format=row                                               #binlog格式
-		
 		log-slave-updates=1                                             #主从复制写入binlog
 		
 		gtid_mode=ON                                                    #开启GTID

@@ -205,10 +205,10 @@
 		| Update                  | Tables                                | To update existing rows                               |
 		| Usage                   | Server Admin                          | No privileges - allow connect only                    |
 		+-------------------------+---------------------------------------+-------------------------------------------------------+
-		
+	
 	如果是业务账号，不允许设置为超级管理员，并且要细化指定各项权限，防止出现数据问题和安全问题
 	
-	创建账号并授权，可输入以下任意一个命令：
+	创建账号并授权，常见语句：
 		
 		# 创建一个所有权限的账号admin，允许访问所有数据库，允许该账户授权给其他用户
 		GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
