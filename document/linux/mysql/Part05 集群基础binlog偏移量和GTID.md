@@ -62,4 +62,14 @@
 	
 		主节点人为干预追平从节点的 GTID；或解除主从关系，从节点清除数据，主节点全量备份之后导入从库
 
+#### 常见的 GTID 错误：Error 'Operation ALTER USER failed for 'root'@'localhost'' on query
+
+	错误原因：
+		
+		主服务器和从服务器都进行了更改root允许远程登录，在建立主从之后出现错误
+		
+	避免错误：
+		
+		基于GTID的主从，在从节点除了初始化更改root密码，建立主从关系之外，不能做其他更新操作
+
 
