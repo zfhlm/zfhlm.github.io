@@ -325,7 +325,11 @@
 		    "package" => "org.lushen.mrh.test.DemoService"
 		}
 	
-	ruby 官方文档：https://www.ruby-lang.org/zh_cn/documentation/
+	ruby文档参考:
+		
+		(官网文档)https://www.ruby-lang.org/zh_cn/documentation/
+		
+		(菜鸟教程)https://www.runoob.com/ruby/ruby-tutorial.html
 
 #### logstash elasticsearch模板
 		
