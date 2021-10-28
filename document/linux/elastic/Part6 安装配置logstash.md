@@ -77,7 +77,7 @@
 	
 		输出数据流到指定目标，如elasticsearch
 
-#### logstash 控制台输入输出
+#### logstash + stdin + stdout
 
 	修改配置文件，输入命令：
 	
@@ -112,7 +112,7 @@
 		    "message" => "hello"
 		}
 
-#### logstash filebeat输入控制台输出
+#### logstash + filebeat + elasticsearch
 
 	修改配置文件，输入命令：
 	
@@ -136,24 +136,18 @@
 		    }
 		    filter {
 		      mutate {
-		        remove_field => ['tags', '@timestamp', '@version']
+		        remove_field => ['tags', '@version']
 		      }
 		    }
 		    output {
-		      stdout {}
+		       elasticsearch {
+		         hosts => ["192.168.140.193:9200", "192.168.140.194:9200", "192.168.140.195:9200"]
+		         action => "index"
+		         index => "logstash-%{+YYYY.MM.dd}"
+		      }
 		    }
-	
-	配置 filebeat 采集 nginx 日志，投递到 logstash，可以看到输出：
-		
-		{
-			"server" => {
-				"from" => "nginx",
-				"ip" => "192.168.140.192"
-			},
-			"message" => "192.168.140.1 - - [27/Oct/2021:02:46:14 -0400] \"GET / HTTP/1.1\" 304 0 \"-......""
-		}
 
-#### logstash kafka输入控制台输出
+#### logstash + kafka + elasticsearch
 
 	修改配置文件，输入命令：
 	
@@ -181,18 +175,40 @@
 		      }
 		    }
 		    output {
-		      stdout {}
+		       elasticsearch {
+		         hosts => ["192.168.140.193:9200", "192.168.140.194:9200", "192.168.140.195:9200"]
+		         action => "index"
+		         index => "logstash-%{+YYYY.MM.dd}"
+		      }
 		    }
 
-#### logstash filebeat输入elasticsearch输出
+#### logstash 结构化日志
 
-	修改配置文件，输入命令：
-	
-		cd /usr/local/logstash
+	使用 filebeat 采集日志文件输出到 logstash 的日志格式：
 		
-		vi ./config/pipelines.yml
-	
-	修改以下配置内容：
+		#普通日志
+		{
+			"message": "2021-10-20 11:20:03.024 INFO org.lushen.mrh.test.Application - 普通应用日志信息"
+		}
+		
+		#微服务链路追踪日志
+		{
+			"message": "2021-10-20 11:20:03.024 INFO UserId TraceId SpanId org.lushen.mrh.test.DemoService - 微服务追踪日志信息"
+		}
+		
+	使用 logstash 结构化成如下格式，并存储到 elasticsearch 索引 logstash-2021-10-20 中(使用%{+YYYY.MM.dd}有时区问题)：
+		
+		{
+			"datetime": "2021-10-20 11:20:03.024",
+			"level": "INFO",
+			"package": "org.lushen.mrh.test.DemoService",
+			"user": "UserId",
+			"trace": "TraceId",
+			"span": "SpanId",
+			"message": "微服务追踪日志信息"
+		}
+		
+	通过 ruby filter 达成以上需求，添加 logstash 配置：
 		
 		- pipeline.id: filebeat
 		  pipeline.workers: 1
@@ -207,133 +223,80 @@
 		      }
 		    }
 		    filter {
-		      mutate {
-		        remove_field => ['tags', '@version']
-		      }
-		    }
-			 output {
-			   elasticsearch {
-			     hosts => ["192.168.140.193:9200", "192.168.140.194:9200", "192.168.140.195:9200"]
-			     action => "index"
-			     index => "logstash-%{+YYYY.MM.dd}"
-			   }
-			 }
-
-#### logstash 结构化日志
-	
-	如果直接将日志信息作为一个属性直接存储，不方便进行检索，可以在 logstash 结构化之后再存储到 elasticsearch
-	
-	普通应用和微服务应用日志都是如下：
-		
-		(格式： 输出时间 日志级别 类名 - 日志信息)
-		
-		2021-10-20 11:20:03.024 INFO org.lushen.mrh.test.Application - 普通应用日志信息
-		
-		(格式： 输出时间 日志级别 UserId TraceId SpanId 链路 类名 - 日志信息)
-		
-		2021-10-20 11:20:03.024 INFO aaaaa bbbbb ccccc org.lushen.mrh.test.DemoService - 微服务追踪日志一信息
-		
-		2021-10-20 11:20:03.024 INFO NaN ddddd eeeee org.lushen.mrh.test.DemoService - 微服务追踪日志二信息
-	
-	以上日志，可以格式化为以下格式：
-	
-		{
-			"date": 'xxxxxx',
-			"time": 'xxxxxx',
-			"level": 'xxxxxx',
-			"package": 'xxxxxx',
-			"user": 'xxxxxx',
-			"trace": 'xxxxxx',
-			"span": 'xxxxxx',
-			"message": 'xxxxxx'
-		}
-	
-	使用 ruby filter 进行结构化，添加 logstash 配置：
-		
-		- pipeline.id: console
-		  pipeline.workers: 1
-		  config.string: |
-		    input {
-		      stdin {}
-		    }
-		    filter {
 		      ruby {
 		        code => "
-		            
 		            message = event.get('message')
 		            position = message.index(' - ')
-		            
 		            if position != nil then
-		                
+		                # 根据空格符截取
 		                array = message[0, position].split(' ')
 		                message = message[position+3, message.length]
-		                
 		                if array.length == 4 then
-		                    event.set('date', array[0])
-		                    event.set('time', array[1])
-		                    event.set('level', array[2])
-		                    event.set('package', array[3])
-		                    event.set('message', message)
+		                    date = array[0]
+		                    time = array[1]
+		                    level = array[2]
+		                    package = array[3]
 		                elsif array.length == 7 then
-		                    event.set('date', array[0])
-		                    event.set('time', array[1])
-		                    event.set('level', array[2])
-		                    event.set('user', array[3])
-		                    event.set('trace', array[4])
-		                    event.set('span', array[5])
-		                    event.set('package', array[6])
-		                    event.set('message', message)
+		                    date = array[0]
+		                    time = array[1]
+		                    level = array[2]
+		                    user = array[3]
+		                    trace = array[4]
+		                    span = array[5]
+		                    package = array[6]
+		                end
+		                # 添加到属性
+		                if date != nil and time != nil then
+		                  event.set('date', date)
+		                  event.set('datetime', date+' '+time)
+		                end
+		                if level != nil then
+		                  event.set('level', level)
+		                end
+		                if package != nil then
+		                  event.set('package', package)
+		                end
+		                if message != nil then
+		                  event.set('message', message)
+		                end
+		                if user != nil then
+		                  event.set('user', user)
+		                end
+		                if trace != nil then
+		                  event.set('trace', trace)
+		                end
+		                if span != nil then
+		                  event.set('span', span)
 		                end
 		            end
-		            
 		        "
 		      }
 		      mutate {
-		        remove_field => ['@version', '@timestamp', 'host']
+		        add_field => { "[@metadata][date]" => "%{[date]}" }
+		        remove_field => ['@version', 'host', 'date']
 		      }
 		    }
 		    output {
-		      stdout {}
+		       elasticsearch {
+		         hosts => ["192.168.140.193:9200", "192.168.140.194:9200", "192.168.140.195:9200"]
+		         action => "index"
+		         index => "logstash-%{[@metadata][date]}"
+		      }
 		    }
 	
-	控制台输入 test，可以看到控制台输出：
+	使用 ruby 语法参考文档：
 		
-		{
-		    "message" => "test"
-		}
-	
-	控制台输入第一条示例日志信息，可以看到控制台输出：
+		https://www.ruby-lang.org/en/
 		
-		{
-		    "message" => "普通应用日志信息",
-		    "level" => "INFO",
-		    "package" => "org.lushen.mrh.test.Application",
-		    "date" => "2021-10-20",
-		    "time" => "11:20:03.024"
-		}
-	
-	控制台输入第二条示例日志信息，可以看到控制台输出：
-		
-		{
-		    "trace" => "bbbbb",
-		    "span" => "ccccc",
-		    "user" => "aaaaa",
-		    "date" => "2021-10-20",
-		    "time" => "11:20:03.024",
-		    "message" => "微服务追踪日志一信息",
-		    "level" => "INFO",
-		    "package" => "org.lushen.mrh.test.DemoService"
-		}
-	
-	ruby文档参考:
-		
-		(官网文档)https://www.ruby-lang.org/zh_cn/documentation/
-		
-		(菜鸟教程)https://www.runoob.com/ruby/ruby-tutorial.html
+		https://www.runoob.com/ruby/ruby-tutorial.html
 
 #### logstash elasticsearch模板
-		
 
+	假设文档属性：
+		
+		{
+			""
+		}
 
 
 
