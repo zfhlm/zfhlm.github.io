@@ -9,7 +9,7 @@
 	
 	192.168.140.195		#节点三
 	
-	三台服务器根据 Part1进行单点 配置
+	三台服务器根据 Part1 进行单点配置
 	
 	注意：elasticsearch 集群节点数一般三台以上，总服务器数应该配置为奇数
 
@@ -50,9 +50,12 @@
 		#内存锁定是否开启(服务器资源充足时开启，OOM也不允许内存交换)
 		bootstrap.memory_lock: false
 		
-		#自动创建索引
-		action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*,logstash*,app*
-	
+		#开启自动创建索引
+		action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*, logstash-*
+		
+		#禁用安全验证(收费)
+		xpack.security.enabled: false
+		
 	节点二加入以下配置：
 		
 		#集群名称
@@ -82,9 +85,12 @@
 		#内存锁定是否开启(服务器资源充足时开启，OOM也不允许内存交换)
 		bootstrap.memory_lock: false
 		
-		#自动创建索引
-		action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*,logstash*,app*
-	
+		#开启自动创建索引
+		action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*, logstash-*
+		
+		#禁用安全验证(收费)
+		xpack.security.enabled: false
+		
 	节点三加入以下配置：
 		
 		#集群名称
@@ -114,8 +120,11 @@
 		#内存锁定是否开启(服务器资源充足时开启，OOM也不允许内存交换)
 		bootstrap.memory_lock: false
 		
-		#自动创建索引
-		action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*,logstash*,app*
+		#开启自动创建索引
+		action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*, logstash-*
+		
+		#禁用安全验证(收费)
+		xpack.security.enabled: false
 
 #### 启动集群
 

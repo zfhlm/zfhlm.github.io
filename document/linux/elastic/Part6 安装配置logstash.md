@@ -220,9 +220,125 @@
 			 }
 
 #### logstash 结构化日志
-
 	
+	如果直接将日志信息作为一个属性直接存储，不方便进行检索，可以在 logstash 结构化之后再存储到 elasticsearch
+	
+	普通应用和微服务应用日志都是如下：
+		
+		(格式： 输出时间 日志级别 类名 - 日志信息)
+		
+		2021-10-20 11:20:03.024 INFO org.lushen.mrh.test.Application - 普通应用日志信息
+		
+		(格式： 输出时间 日志级别 UserId TraceId SpanId 链路 类名 - 日志信息)
+		
+		2021-10-20 11:20:03.024 INFO aaaaa bbbbb ccccc org.lushen.mrh.test.DemoService - 微服务追踪日志一信息
+		
+		2021-10-20 11:20:03.024 INFO NaN ddddd eeeee org.lushen.mrh.test.DemoService - 微服务追踪日志二信息
+	
+	以上日志，可以格式化为以下格式：
+	
+		{
+			"date": 'xxxxxx',
+			"time": 'xxxxxx',
+			"level": 'xxxxxx',
+			"package": 'xxxxxx',
+			"user": 'xxxxxx',
+			"trace": 'xxxxxx',
+			"span": 'xxxxxx',
+			"message": 'xxxxxx'
+		}
+	
+	使用 ruby filter 进行结构化，添加 logstash 配置：
+		
+		- pipeline.id: console
+		  pipeline.workers: 1
+		  config.string: |
+		    input {
+		      stdin {}
+		    }
+		    filter {
+		      ruby {
+		        code => "
+		            
+		            message = event.get('message')
+		            position = message.index(' - ')
+		            
+		            if position != nil then
+		                
+		                array = message[0, position].split(' ')
+		                message = message[position+3, message.length]
+		                
+		                if array.length == 4 then
+		                    event.set('date', array[0])
+		                    event.set('time', array[1])
+		                    event.set('level', array[2])
+		                    event.set('package', array[3])
+		                    event.set('message', message)
+		                elsif array.length == 7 then
+		                    event.set('date', array[0])
+		                    event.set('time', array[1])
+		                    event.set('level', array[2])
+		                    event.set('user', array[3])
+		                    event.set('trace', array[4])
+		                    event.set('span', array[5])
+		                    event.set('package', array[6])
+		                    event.set('message', message)
+		                end
+		            end
+		            
+		        "
+		      }
+		      mutate {
+		        remove_field => ['@version', '@timestamp', 'host']
+		      }
+		    }
+		    output {
+		      stdout {}
+		    }
+	
+	控制台输入 test，可以看到控制台输出：
+		
+		{
+		    "message" => "test"
+		}
+	
+	控制台输入第一条示例日志信息，可以看到控制台输出：
+		
+		{
+		    "message" => "普通应用日志信息",
+		    "level" => "INFO",
+		    "package" => "org.lushen.mrh.test.Application",
+		    "date" => "2021-10-20",
+		    "time" => "11:20:03.024"
+		}
+	
+	控制台输入第二条示例日志信息，可以看到控制台输出：
+		
+		{
+		    "trace" => "bbbbb",
+		    "span" => "ccccc",
+		    "user" => "aaaaa",
+		    "date" => "2021-10-20",
+		    "time" => "11:20:03.024",
+		    "message" => "微服务追踪日志一信息",
+		    "level" => "INFO",
+		    "package" => "org.lushen.mrh.test.DemoService"
+		}
+	
+	ruby 官方文档：https://www.ruby-lang.org/zh_cn/documentation/
+
+#### logstash elasticsearch模板
+		
 
 
-		
-		
+
+
+
+
+
+
+
+
+
+
+

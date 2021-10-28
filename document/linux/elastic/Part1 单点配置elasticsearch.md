@@ -193,8 +193,11 @@
 			#内存锁定是否开启(服务器资源充足时开启，OOM也不允许内存交换)
 			bootstrap.memory_lock: false
 			
-			#自动创建索引
-			action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*,logstash*,app*
+			#开启自动创建索引
+			action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*, logstash-*
+			
+			#禁用安全验证(收费)
+			xpack.security.enabled: false
 
 #### 设置索引分片和副本
 
@@ -219,5 +222,5 @@
 				"number_of_replicas": 2
 			}
 		}'
-	
+
 
