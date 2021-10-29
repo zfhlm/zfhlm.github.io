@@ -208,7 +208,7 @@
 			"message": "微服务追踪日志信息"
 		}
 		
-	通过 ruby filter 达成以上需求，添加 logstash 配置：
+	通过 ruby filter 达成以上需求，添加 logstash 配置（可以使用标准输入输出进行调试）：
 		
 		- pipeline.id: filebeat
 		  pipeline.workers: 1
@@ -283,29 +283,15 @@
 		         index => "logstash-%{[@metadata][date]}"
 		      }
 		    }
-	
+		
 	使用 ruby 语法参考文档：
 		
 		https://www.ruby-lang.org/en/
 		
 		https://www.runoob.com/ruby/ruby-tutorial.html
 
-#### logstash elasticsearch模板
+#### logstash 自定义模板
 
-	假设文档属性：
-		
-		{
-			""
-		}
-
-
-
-
-
-
-
-
-
-
+	// 待完善
 
 

@@ -199,28 +199,4 @@
 			#禁用安全验证(收费)
 			xpack.security.enabled: false
 
-#### 设置索引分片和副本
-
-	elasticsearch 默认分片数为1，副本数为1，在单节点的情形下创建索引，因为无法设置副本，查询节点状态会变为 yellow
-	
-	假如需要将名称匹配 logstash-* 的索引副本设置为0，发送http请求：
-		
-		curl -X PUT 192.168.140.193:9200/_template/log  -H 'Content-Type: application/json' -d '{
-			"template": "logstash-*",
-			"settings": {
-				"number_of_shards": 1,
-				"number_of_replicas": 0
-			}
-		}'
-		
-	假如需要将名称匹配 app-* 的索引副本设置为2，发送http请求：
-		
-		curl -X PUT 192.168.140.193:9200/_template/log  -H 'Content-Type: application/json' -d '{
-			"template": "app-*",
-			"settings": {
-				"number_of_shards": 1,
-				"number_of_replicas": 2
-			}
-		}'
-
 
