@@ -1,7 +1,7 @@
 
 # docker host networks
 
-	主机网络，启动加上 --net=host 参数
+	共享主机网络，启动加上 --net=host 参数
 	
 	每个容器都使用宿主机的网卡，网络隔离性弱化，不建议 docker 使用
 
@@ -76,7 +76,7 @@
 			inet6 fe80::42:eff:fe15:fa40/64 scope link 
 			  valid_lft forever preferred_lft forever
 	
-	可以看出，宿主机与容器的网络是一样的
+	可以看出，容器共享了宿主机的网络
 
 #### 容器ping
 
