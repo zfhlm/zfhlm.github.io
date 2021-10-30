@@ -9,6 +9,10 @@
 		
 		https://docs.docker.com/get-started/
 		
+	官方仓库地址：
+		
+		https://hub.docker.com/
+		
 	docker 基本概念:
 		
 		docker镜像： 用于创建 docker 容器的模板，可以类比虚拟机的镜像文件
@@ -33,10 +37,6 @@
 		
 		yum install docker-ce docker-ce-cli containerd.io
 		
-		systemctl start docker
-		
-		systemctl status docker
-		
 	一键安装最新版本 docker，使用官方提供的 shell 脚本，输入命令：
 		
 		cd /usr/local/software
@@ -45,11 +45,11 @@
 		
 		chmod 777 ./get-docker.sh && sh ./get-docker.sh
 		
+	启动 docker 并设置开机自启动，输入命令：
+		
 		systemctl start docker
 		
 		systemctl status docker
-		
-	配置 docker 开机自启动，输入命令：
 		
 		systemctl enable docker.service
 		
@@ -61,18 +61,12 @@
 		
 		passwd bizuser
 		
-		sudo usermod -aG docker bizuser
-
-#### docker 仓库
-
-	
+		usermod -aG docker bizuser
 		
-
-
-
-
-
-
-
+	运行 docker 测试镜像 hello-world，输入命令：
+		
+		docker images
+		
+		docker run hello-world
 
 
