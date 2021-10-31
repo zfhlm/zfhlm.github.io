@@ -65,13 +65,18 @@
 		docker network ls
 
 		->
-
-			NETWORK ID     NAME         DRIVER    SCOPE
-			53645a395719   bridge       bridge    local
-			ee8fd6692cdd   host         host      local
-			b020119e4d9e   my-overlay   overlay   global
-			adf9c8bdb9dc   none         null      local
-
+		+--------------+------------------+---------+-------+
+		|  NETWORK ID  |      NAME        |  DRIVER | SCOPE |
+		+--------------+------------------+---------+-------+
+		| 5217f2232b46 |  bridge          | bridge  | local |
+		+--------------+------------------+---------+-------+
+		| 1f514d9ef86b |  host            | host    | local |
+		+--------------+------------------+---------+-------+
+		| b020119e4d9e |  my-overlay      | overlay | global|
+		+--------------+------------------+---------+-------+
+		| 7c9f12689eb8 |  none            | null    | local |
+		+--------------+------------------+---------+-------+
+		
 	至此配置完成
 
 #### 容器网络
