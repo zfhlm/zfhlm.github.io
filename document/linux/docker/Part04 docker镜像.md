@@ -165,10 +165,10 @@
 			COPY ./apache-tomcat-8.5.72.tar.gz /usr/local/
 			WORKDIR /usr/local/
 			RUN tar -zxvf apache-tomcat-8.5.72.tar.gz \
-					&& mv apache-tomcat-8.5.72 tomcat \
-					&& rm -rf tomcat/webapps/* \
-					&& mkdir -p tomcat/webapps/ROOT \
-					&& echo "hello" >  tomcat/webapps/ROOT/index.html
+				&& mv apache-tomcat-8.5.72 tomcat \
+				&& rm -rf tomcat/webapps/* \
+				&& mkdir -p tomcat/webapps/ROOT \
+				&& echo "hello" >  tomcat/webapps/ROOT/index.html
 			EXPOSE 8080 8009 8005
 			CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
 
@@ -233,9 +233,9 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<configuration>
-							<layers>
-								<enabled>true</enabled>
-							</layers>
+						<layers>
+							<enabled>true</enabled>
+						</layers>
 					</configuration>
 				</plugin>
 			</plugins>
