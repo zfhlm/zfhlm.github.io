@@ -129,7 +129,7 @@
 
 		例如：
 
-			CMD ["java", "-jar", "springboot.jar"]
+				CMD ["java", "-jar", "springboot.jar"]
 
 	HEALTHCHECK
 
