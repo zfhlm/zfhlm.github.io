@@ -76,7 +76,7 @@
 		+--------------+------------------+---------+-------+
 		| 7c9f12689eb8 |  none            | null    | local |
 		+--------------+------------------+---------+-------+
-		
+
 	至此配置完成
 
 #### 容器网络
@@ -248,3 +248,7 @@
 			64 bytes from 10.0.0.3: icmp_seq=3 ttl=64 time=0.304 ms
 
 			3 packets transmitted, 3 received, 0% packet loss, time 2007ms
+
+#### 使用 docker swarm 创建 overlay 网络
+
+	(参考 Part13，docker swarm 默认网络模式为 overlay 无需额外进行配置)
