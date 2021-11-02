@@ -53,7 +53,7 @@
 
 		configs           # 定义容器可用的运行配置文件(可选)
 
-		secrets           # 定义容器可用的密码信息(可选)
+		secrets           # 定义容器可用的敏感信息，如密码、证书等(可选)
 
 		services          # 定义从打包镜像到运行容器的配置
 
@@ -88,6 +88,76 @@
 
 		version: '3.8'
 
+### yaml volumes
+
+	定义多个挂载目录参数格式：
+
+		volumes:
+		  <volume-name>:
+		    name: <name>
+		    driver: <driver>
+		    driver_opts:
+		      - <key>=<value>
+		      - ...
+		    external: <boolean>
+		    labels:
+		      - <key>=<value>
+		      - <key>=<value>
+		      - ...
+		      - <key>=<value>
+		  <volume-name>:
+		   ...
+
+	各个参数含义：
+
+		name              # 挂载目录引用名称
+
+		driver            # 挂载目录驱动
+
+		driver_opts       # 挂载目录驱动参数
+
+		external          # 挂载目录是否已存在
+
+		labels            # 挂载目录元数据
+
+### yaml configs
+
+	定义多个外部配置文件，整体参数格式：
+
+		configs:
+		  <config-name>:
+		    file: <path>
+		    external: <boolean>
+		    name: <name>
+		  ...
+
+	各个参数含义：
+
+		file              # 配置文件位置
+
+		external          # 配置文件是否已存在
+
+		name              # 配置文件引用名称
+
+### yaml secrets
+
+	定义多个外部敏感信息文件，整体参数格式：
+
+		secrets:
+		  <secret-name>:
+		    file: <path>
+		    external: <boolean>
+		    name: <name>
+		  ...
+
+	各个参数含义：
+
+		file              # 敏感信息文件位置
+
+		external          # 敏感信息文件是否已存在
+
+		name              # 敏感信息文件引用名称
+
 ### yaml networks
 
 	定义多个不同的网络，格式：
@@ -98,31 +168,11 @@
 		     ...
 		  <net-name>:
 
-		# 示例
-		networks:
-		  overlay:
-		  ipvlanl2:
-		  macvlan:
-		  my-net:
-
 	参数 driver 用于定义网络网卡 driver，必须为合法的 driver，格式：
 
 		networks:
 		  <net-name>:
 		    driver: <driver-name>
-
-		# 示例
-		networks:
-		  bridge-net:
-		    driver: bridge
-		  overlay-net:
-		    driver: overlay
-		  host-net:
-		    driver: host
-		  none-net:
-		    driver: none
-		  ipvlanl2-net:
-		    driver: ipvlan
 
 	参数 external、name 用于定义外部已存在的网络，格式：
 
@@ -131,27 +181,7 @@
 		    external: <boolean>
 		    name: <network>
 
-		# 示例
-		networks:
-		  overlay-net:
-		    external: true
-		    name: overlay
-		  ipvlanl2-net:
-		    external: true
-		    name: ipvlanl2
-		  macvlan-net:
-		    external: true
-		    name: macvlan
-
 	参数 driver_opts 定义传递给网卡驱动参数，格式：
-
-		networks:
-		  <net-name>:
-		    driver_opts:
-		      <name>: <value>
-		      <name>: <value>
-		        ...
-		      <name>: <value>
 
 		networks:
 		  <net-name>:
@@ -215,55 +245,6 @@
 		    - ...
 		    - <name>=<value>
 
-### yaml volumes
-
-	定义多个挂载目录，格式：
-
-		volumes:
-		  <volume-name>:
-		       ...
-		  <volume-name>:
-		  <volume-name>:
-
-		# 示例
-		volumes:
-		  mysql-data:
-		  mysql-logs:
-		  app-logs:
-
-	参数 driver、driver_opts 定义挂载目录驱动及其参数，格式：
-
-		volumes:
-		  <volume-name>:
-		    driver: <name>
-		    driver_opts:
-		      - <name>=<value>
-		      - <name>=<value>
-		      - ...
-		      - <name>=<value>
-
-	参数 external 定义是否允许自动创建挂载目录，格式：
-
-		volumes:
-		    <volume-name>:
-		      external: <boolean>
-
-	参数 labels 定义挂载目录元数据，格式：
-
-		volumes:
-		  <volume-name>:
-		    labels:
-		      - <name>=<value>
-		      - <name>=<value>
-		      - ...
-		      - <name>=<value>
-
-	参数 name 定义挂载目录引用名称，格式：
-
-		volumes:
-		  <volume-name>:
-		    name: <name>
-
-### yaml configs
+### yaml services
 
 	
