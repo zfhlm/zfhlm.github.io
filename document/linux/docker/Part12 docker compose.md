@@ -35,9 +35,9 @@
 
 		-> Docker Compose version v2.0.1
 
-### yaml
+### docker compose 配置
 
-	docker compose 配置文件命令：
+	docker compose 配置文件名称：
 
 		compose.yaml
 
@@ -47,19 +47,19 @@
 
 		version           # 定义验证配置文件版本号
 
-		networks          # 定义容器可用的网络配置(可选)
-
 		volumes           # 定义容器可用的挂载目录(可选)
 
 		configs           # 定义容器可用的运行配置文件(可选)
 
 		secrets           # 定义容器可用的敏感信息，如密码、证书等(可选)
 
+		networks          # 定义容器可用的网络配置(可选)
+
 		services          # 定义从打包镜像到运行容器的配置
 
-	以上配置，networks、volumes、configs、secrets 定以后，供给最核心配置 services 引用
+	以上配置，networks、volumes、configs、secrets 定义以后，供给最核心配置 services 引用
 
-### yaml version
+### docker compose version 配置
 
 	根据 docker 引擎的版本填写，对应的关系如下：
 
@@ -88,7 +88,7 @@
 
 		version: '3.8'
 
-### yaml volumes
+### docker compose volumes 配置
 
 	定义多个挂载目录参数格式：
 
@@ -120,7 +120,7 @@
 
 		labels            # 挂载目录元数据
 
-### yaml configs
+### docker compose configs 配置
 
 	定义多个外部配置文件，整体参数格式：
 
@@ -139,7 +139,7 @@
 
 		name              # 配置文件引用名称
 
-### yaml secrets
+### docker compose secrets 配置
 
 	定义多个外部敏感信息文件，整体参数格式：
 
@@ -158,7 +158,7 @@
 
 		name              # 敏感信息文件引用名称
 
-### yaml networks
+### docker compose networks 配置
 
 	定义多个不同的网络，格式：
 
@@ -174,11 +174,10 @@
 		  <net-name>:
 		    driver: <driver-name>
 
-	参数 external、name 用于定义外部已存在的网络，格式：
+	参数 name 用于定义网络名称，格式：
 
 		networks:
 		  <net-name>:
-		    external: <boolean>
 		    name: <network>
 
 	参数 driver_opts 定义传递给网卡驱动参数，格式：
@@ -214,24 +213,25 @@
 
 		networks:
 		  <net-name>:
-		    driver: <driver>
-		    config:
-		      subnet: <subnet>
-		      ip_range: <ip_range>
-		      gateway: <gateway>
-		      aux_addresses: <aux_addresses>
+		    ipam:
+		      driver: <driver>
+		      config:
+		        - subnet: <subnet>
+		          ip_range: <ip_range>
+		          gateway: <gateway>
+		          aux_addresses: <aux_addresses>
 		      options:
-		        - <name>=<value>
-		        - <name>=<value>
-		        - ...
-		        - <name>=<value>
+		        <name>: <value>
+		        <name>: <value>
+		        ...
+		        <name>: <value>
 
-	参数 internal 定义是否允许创建外部网络，格式：
+	参数 internal 定义是否允许创建内部隔离网络，格式：
 
 		networks:
 		  internal: <boolean>
 
-	参数 external 定义是否不允许创建外部网络，格式：
+	参数 external 定义是否已存在的外部网络，格式：
 
 		networks:
 		  external: <boolean>
@@ -247,4 +247,209 @@
 
 ### yaml services
 
-	
+	定义多个编排服务，格式：
+
+		services:
+		  <service-name>:
+		  <service-name>:
+			...
+
+		# 示例
+		services:
+		  mysql:
+			redis:
+			application:
+			nginx:
+
+	参数 build 定义 Dockerfile 文件位置，格式：
+
+		services:
+		  <service-name>:
+			  build: <path>
+
+		services:
+		  <service-name>:
+		    build:
+		      context: <path>
+		      dockerfile: <Dockerfile-name>
+		      args:
+		        <key>: <value>
+		        <key>: <value>
+						...
+		      labels:
+		        <key>: <value>
+		        <key>: <value>
+						...
+		      target: <taget>
+
+		# 示例
+		service:
+		  springboot:
+			  build: .
+
+	参数 image 定义镜像名称，格式：
+
+		services:
+			<service-name>:
+				image: <image-name>
+
+	参数 container_name 定义容器名称，格式：
+
+		services:
+		  <service-name>:
+			  container_name: <container_name>
+
+	参数 depends_on 定义启动依赖服务，格式：
+
+		services:
+			<service-name>:
+				depends_on:
+				  - <other-service-name>
+				  - <other-service-name>
+					...
+
+	参数 networks 定义容器网络，引用 networks 配置，格式：
+
+		services:
+		  <service-name>:
+			  networks:
+				  - <network>
+				  - <network>
+					...
+
+	参数 restart 定义容器在 docker 重启后的行为，格式：
+
+		services:
+		  <service-name>:
+			  restart: <restart>
+
+		可用参数值：no、always、on-failure、unless-stopped
+
+	参数 volumes 定义容器挂载目录，格式：
+
+		services:
+			<service-name>:
+				- <volume>
+				- <volume>
+				...
+
+	参数 ulimits 定义容器文件句柄和线程限制，格式：
+
+			services:
+				<service-name>:
+					ulimits:
+						nproc: <limit>
+						nofile:
+							soft: <limit>
+							hard: <limit>
+
+	更多配置信息，参考 GitHub 官方文档
+
+### docker compose 使用
+
+	使用 docker compose 编排两个容器：redis、springboot
+
+	springboot 启动类：
+
+		@Controller
+		@RequestMapping
+		@SpringBootApplication
+		public class Application {
+
+			public static void main(String[] args) {
+				SpringApplication.run(Application.class, args);
+			}
+
+			@Autowired
+			private RedisTemplate<String, String> redisTemplate;
+
+			@GetMapping(path="/")
+			@ResponseBody
+			public String index() {
+				redisTemplate.opsForValue().set("key", UUID.randomUUID().toString());
+				return redisTemplate.opsForValue().get("key");
+			}
+
+		}
+
+	springboot 配置文件 application.properties：
+
+		server.port=8888
+		spring.redis.host=redis
+		spring.redis.port=6379
+
+	springboot maven 配置 pom.xml：
+
+		<parent>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-parent</artifactId>
+			<version>2.5.5</version>
+		</parent>
+
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-redis</artifactId>
+			</dependency>
+		</dependencies>
+
+		<build>
+			<finalName>application</finalName>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<configuration>
+						<layers>
+							<enabled>true</enabled>
+						</layers>
+					</configuration>
+				</plugin>
+			</plugins>
+		</build>
+
+	springboot 项目根目录创建 Dockerfile，填写以下指令：
+
+		FROM openjdk
+		WORKDIR /usr/local/application/
+		COPY target/application.jar application.jar
+		EXPOSE 8888
+		ENTRYPOINT ["java", "-jar","/usr/local/application/application.jar"]
+
+	将 springboot 项目命名为 test 上传到 /usr/local/compose/ 目录，执行打包命令：
+
+		cd test
+
+		mvn clean package
+
+	编写 docker compose 配置文件：
+
+		cd /usr/local/compose/
+
+		vi compose.yml
+
+	添加以下内容：
+
+		version: '3.8'
+		services:
+		  redis:
+		    image: redis
+		    container_name: redis
+		  application:
+		    build: ./test/
+		    image: application:1.0
+		    container_name: application
+
+	执行编排任务，输入命令：
+
+		docker-compose up -d
+
+		docker inspect application
+
+	访问 springboot 接口，输入命令：
+
+		curl http://hostname:8888
