@@ -1,7 +1,7 @@
 
 # kubernetes
 
-### 服务器配置
+	使用 kubeadm 安装 k8s 集群：命令行工具 kubectl、集群运行代理 kubelet、集群初始化工具 kubeadm
 
 	三台服务器：
 
@@ -11,51 +11,79 @@
 
 		192.168.140.205(运行节点)
 
-	更改 hostname，输入命令：
+#### 配置 hostname
 
-		echo '192.168.140.203 k8s-203' >> /etc/hosts
+	输入命令：
 
-		echo '192.168.140.204 k8s-204' >> /etc/hosts
+		echo '192.168.140.203 k8s203' >> /etc/hosts
 
-		echo '192.168.140.205 k8s-205' >> /etc/hosts
+		echo '192.168.140.204 k8s204' >> /etc/hosts
 
-	禁用 firewalld，输入命令：
+		echo '192.168.140.205 k8s205' >> /etc/hosts
+
+		hostnamectl set-hostname k8s203
+
+		hostnamectl set-hostname k8s204
+
+		hostnamectl set-hostname k8s205
+
+#### 禁用 firewalld
+
+	输入命令：
 
 		systemctl stop firewalld
 
 		systemctl disable firewalld
 
-	禁用 selinux，输入命令：
+#### 禁用 selinux
+
+	输入命令：
 
 		sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
-	禁用 swap，输入命令：
+#### 禁用 swap
+
+	输入命令：
 
 		sed -i 's/.*swap.*/#&/' /etc/fstab
 
-	安装 docker，输入命令：
+#### 配置 docker
+
+	输入命令：
 
 		curl -fsSL https://get.docker.com -o get-docker.sh
 
 		chmod 777 ./get-docker.sh && sh ./get-docker.sh
 
-		systemctl enable docker.service
-
-		systemctl enable containerd.service
+		systemctl enable docker.service && systemctl enable containerd.service
 
 		vi /etc/docker/daemon.json
 
-		=> {"exec-opts": ["native.cgroupdriver=systemd"]}
+	更改以下内容：
 
-		systemctl daemon-reload
+		{
+			"exec-opts": ["native.cgroupdriver=systemd"]
+		}
 
-	重启服务器，输入命令：
+#### 配置 ipv4 转发
+
+	输入命令：
+
+		vi /etc/sysctl.conf
+
+		=> net.ipv4.ip_forward=1
+
+		sysctl -p
 
 		reboot
 
-### 集群节点配置
+#### 配置 k8s 网桥
 
-	所有节点更改 linux ipatbles 内核参数，输入命令：
+	输入命令：
+
+		lsmod | grep br_netfilter
+
+		modprobe br_netfilter
 
 		cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 		br_netfilter
@@ -68,7 +96,9 @@
 
 		sysctl --system
 
-	所有节点使用 yum 安装，输入命令：
+#### 安装 bukeadm
+
+	输入命令：
 
 		cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 		[kubernetes]
@@ -84,7 +114,9 @@
 
 		systemctl enable kubelet
 
-	控制节点初始化，输入命令：
+#### 初始化集群
+
+	控制节点输入命令：
 
 		kubeadm version
 
@@ -97,26 +129,21 @@
 
 		export KUBECONFIG=/etc/kubernetes/admin.conf
 
+		ll /etc/kubernetes/
+
 	运行节点初始化，输入命令：
 
 		kubeadm join 192.168.140.203:6443 --token 54rtf9.tdmelsgqc2nkhj1b \
 			--discovery-token-ca-cert-hash sha256:59e3c3f335df6baec05676244102b6c67294450d71f36486574cf4a3214e6ae6
 
-	控制节点查看所有节点，输入命令：
+		ll /etc/kubernetes/
 
-		kubectl get nodes
+#### 配置集群网络
 
-		->
-			NAME      STATUS     ROLES                  AGE    VERSION
-			k8s-203   NotReady   control-plane,master   9m7s   v1.22.3
-			k8s-204   NotReady   <none>                 55s    v1.22.3
-			k8s-205   NotReady   <none>                 27s    v1.22.3
+	控制节点输入命令：
 
-### 集群网络配置
+		cd /etc/kubernetes/
 
-	控制节点配置 flannel 网络，输入命令：
-
-			# 无法下载的情况下可以通过 GitHub 项目源码获取
 		wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 		kubectl apply -f kube-flannel.yml
@@ -125,39 +152,48 @@
 
 		kubectl get pod -n kube-system
 
-### 可视工作台配置
+		->
 
-	控制节点配置 dashboard，输入命令：
+			NAME                             READY   STATUS    RESTARTS   AGE
+			coredns-7f6cbbb7b8-jtmxf         1/1     Running   0          54m
+			coredns-7f6cbbb7b8-ql4z2         1/1     Running   0          54m
+			etcd-k8s203                      1/1     Running   1          54m
+			kube-apiserver-k8s203            1/1     Running   1          54m
+			kube-controller-manager-k8s203   1/1     Running   1          54m
+			kube-flannel-ds-k2mn6            1/1     Running   0          11m
+			kube-flannel-ds-k66s2            1/1     Running   0          11m
+			kube-flannel-ds-x6w57            1/1     Running   0          11m
+			kube-proxy-5qblm                 1/1     Running   0          54m
+			kube-proxy-t5fnc                 1/1     Running   0          48m
+			kube-proxy-tk5qr                 1/1     Running   0          48m
+			kube-scheduler-k8s203            1/1     Running   1          54m
 
-		# 无法下载的情况下可以通过 GitHub 项目源码获取
-		wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
+#### 发布容器任务
 
-		kubectl apply -f recommended.yaml
+	发布容器，输入命令：
 
-		kubectl get pods -n kubernetes-dashboard
+		kubectl create deployment nginx --image nginx --port=80 --replicas=3
 
-		kubectl get svc -n kubernetes-dashboard
+		kubectl get pod -o wide -w
 
-		kubectl patch svc kubernetes-dashboard -p '{"spec":{"type":"NodePort"}}' -n kubernetes-dashboard
+		curl $(kubectl get pod -o wide | grep nginx |  awk -F ' ' '{print $6}')
 
-		kubectl get svc -n kubernetes-dashboard
+	模拟故障删除一个 pod，输入命令：
 
-		-> 输出信息获取端口
+		kubectl delete pod nginx-7848d4b86f-d9hkj
 
-		curl https://192.168.140.203:port
+		kubectl get pod -o wide
 
-	控制节点配置 dashboard token，输入命令：
+	创建 svc 负载均衡 nginx，输入命令：
 
-		kubectl create serviceaccount dashboard -n kubernetes-dashboard
+		kubectl expose deployment nginx --port=8080 --target-port=80
 
-		kubectl create rolebinding def-ns-admin --clusterrole=admin --serviceaccount=default:def-ns-admin
+		kubectl get svc
 
-		kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard
+		curl $(kubectl get svc | grep nginx |  awk -F ' ' '{print $3}'):8080
 
-		kubectl describe sa dashboard -n kubernetes-dashboard
+	移除 nginx 服务，输入命令：
 
-		-> 输出信息作为下面的参数
+		kubectl delete svc nginx
 
-		kubectl describe secret dashboard-token-54h7c -n kubernetes-dashboard
-
-		-> 输出 token 作为登录 token
+		kubectl delete deployment nginx
