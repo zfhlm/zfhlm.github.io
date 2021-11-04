@@ -1,30 +1,6 @@
 
 # kubernetes
 
-	Kubernetes 是一个可移植的、可扩展的开源平台，用于管理容器化的工作负载和服务，可促进声明式配置和自动化
-
-	Kubernetes 主要组件：
-
-		Node                             集群主机，每一台加入集群的物理机或虚拟机都是一个 Node
-
-		Pod                              集群逻辑主机，k8s 调度的最小单元，一个 Pod 包含一组容器，Pod 内的容器共享相同的ip和端口空间
-
-		kube-apiserver                   集群操作入口，提供访问控制、资源操作API
-
-		etcd                             集群数据存储，保存集群状态数据
-
-		kube-scheduler                   集群资源调度，根据调度策略将 Pod 调度到对应的 Node
-
-		kube-controller-manager          集群状态维护，如故障检测、自动扩展、滚动更新等
-
-		kubelet                          集群运行代理，保证容器都运行在 Pod 中，管理容器 Volume 和 Network
-
-		kube-proxy                       集群网络代理，提供服务发现和负载均衡等
-
-		Container Runtime                集群容器服务，提供容器运行环境
-
-		Addons                           可选插件，例如 DNS插件、可视化管理界面插件、网络插件、资源监控插件、集群日志插件等
-
 ### 服务器配置
 
 	三台服务器：
