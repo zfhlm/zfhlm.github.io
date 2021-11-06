@@ -106,6 +106,8 @@
 
 		curl 10.1.237.254
 
+		-> 无法访问，非集群内部
+
 	移除 nginx service，输入命令：
 
 		kubectl delete -f nginx-service-config.yaml
