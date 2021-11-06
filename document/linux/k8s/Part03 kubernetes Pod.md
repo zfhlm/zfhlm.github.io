@@ -46,7 +46,7 @@
 		    image: nginx
 		    ports:
 		    - containerPort: 80
-          hostPort: 80
+		      hostPort: 80
 
 	运行 Pod，输入命令：
 

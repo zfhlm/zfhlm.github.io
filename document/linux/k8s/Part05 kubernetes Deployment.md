@@ -66,23 +66,23 @@
 		spec:
 		replicas: 3
 		strategy:
-			type: RollingUpdate
-			rollingUpdate:
-				maxSurge: 1
-				maxUnavailable: 1
+		  type: RollingUpdate
+		  rollingUpdate:
+		    maxSurge: 1
+		    maxUnavailable: 1
 		selector:
-			matchLabels:
-				app: nginx
+		  matchLabels:
+		    app: nginx
 		template:
-			metadata:
-				labels:
-					app: nginx
-			spec:
-				containers:
-				- name: nginx
-					image: nginx
-					ports:
-						- containerPort: 80
+		  metadata:
+		    labels:
+		      app: nginx
+		  spec:
+		    containers:
+		    - name: nginx
+		      image: nginx
+		      ports:
+		      - containerPort: 80
 
 	运行 nginx，输入命令：
 

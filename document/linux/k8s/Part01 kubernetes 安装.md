@@ -140,7 +140,7 @@
 
 		sysctl --system
 
-#### 安装 bukeadm
+#### 安装 kubeadm
 
 	输入命令：
 

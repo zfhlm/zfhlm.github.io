@@ -24,18 +24,18 @@
 		spec:
 		replicas: 3
 		selector:
-			matchLabels:
-				app: nginx
+		  matchLabels:
+		    app: nginx
 		template:
-			metadata:
-				labels:
-					app: nginx
-			spec:
-				containers:
-				- name: nginx
-					image: nginx
-					ports:
-						- containerPort: 80
+		  metadata:
+		    labels:
+		      app: nginx
+		  spec:
+		    containers:
+		    - name: nginx
+		      image: nginx
+		      ports:
+		      - containerPort: 80
 
 	发布 ReplicaSet，输入命令：
 
@@ -59,7 +59,7 @@
 		kubectl get pod -o wide -w
 
 		-> 可以看到又创建新的 Pod 来维持三个副本数
-			
+
 			NAME          READY   STATUS              RESTARTS   AGE     IP            NODE     NOMINATED NODE   READINESS GATES
 			nginx-n22mg   1/1     Running             0          2m41s   10.244.1.4    k8s207   <none>           <none>
 			nginx-qhlzd   1/1     Running             0          2m41s   10.244.2.13   k8s208   <none>           <none>
