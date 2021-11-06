@@ -1,7 +1,40 @@
 
-# kubernetes
+# kubernetes 安装
+
+	官网地址：https://kubernetes.io/
 
 	使用 kubeadm 安装 k8s 集群：命令行工具 kubectl、集群运行代理 kubelet、集群初始化工具 kubeadm
+
+	k8s组件：
+
+		kube-apiserver                   集群操作入口，负责提供 HTTP API，以供用户、集群中的不同部分和集群外部组件相互通信
+
+		etcd                             集群数据存储，保存集群状态数据
+
+		kube-scheduler                   集群资源调度，根据调度策略将 Pod 调度到对应的 Node
+
+		kube-controller-manager          集群状态维护，如故障检测、自动扩展、滚动更新等
+
+		kubelet                          集群运行代理，保证容器都运行在 Pod 中，管理容器 Volume 和 Network
+
+		kube-proxy                       集群网络代理，提供服务发现和负载均衡等
+
+		Container Runtime                集群容器服务，提供容器运行环境
+
+		Addons                           可选或默认插件，例如 DNS插件、可视化管理界面插件、网络插件、资源监控插件、集群日志插件等
+
+	k8s组件交互流程：
+
+		+--------------------------------------+   +------------------+
+		| Control Plane                        |   |       Node       |
+		|                                      |   |                  |
+		|        etcd <---------- apiserver <---------+               |
+		|                          |    |      |   |  |               |
+		| controller-manager <-----+    |      |   |  +-- kubelet     |
+		|                               |      |   |  |               |
+		|    scheduler <----------------+      |   |  +-- kube-proxy  |
+		|                                      |   |                  |
+		+--------------------------------------+   +------------------+
 
 #### 服务器：
 
@@ -57,7 +90,7 @@
 
 		systemctl enable docker.service && systemctl enable containerd.service
 
-		vi /etc/docker/daemon.json
+		mkdir /etc/docker && vi /etc/docker/daemon.json
 
 	更改以下内容：
 
@@ -195,70 +228,24 @@
 			kube-proxy-tk5qr                 1/1     Running   0          48m
 			kube-scheduler-k8s203            1/1     Running   1          54m
 
-#### 指令式命令
+#### 重置集群
 
-	发布容器，输入命令：
+	如果需要重置集群，执行以下操作
 
-		kubectl create deployment nginx --image nginx --port=80 --replicas=3
+	控制节点输入命令：
 
-		kubectl get pod -o wide -w
+		kubectl delete node --all
 
-		curl $(kubectl get pod -o wide | grep nginx |  awk -F ' ' '{print $6}')
+		rm -rf /etc/kubernetes/*
 
-	模拟故障删除一个 pod，输入命令：
+		rm -rf ~/.kube/*
 
-		kubectl delete pod nginx-7848d4b86f-d9hkj
+		rm -rf /var/lib/etcd/*
 
-		kubectl get pod -o wide
+		kubeadm reset
 
-	创建 svc 负载均衡 nginx，输入命令：
+	运行节点输入命令：
 
-		kubectl expose deployment nginx --port=8080 --target-port=80
+		rm -rf /etc/kubernetes/*
 
-		kubectl get svc
-
-		curl $(kubectl get svc | grep nginx |  awk -F ' ' '{print $3}'):8080
-
-	移除 nginx 服务，输入命令：
-
-		kubectl delete svc nginx
-
-		kubectl delete deployment nginx
-
-#### 指令式对象配置
-
-	创建 nginx deployment 配置文件，输入命令：
-
-		kubectl explain deployment
-
-		vi /usr/local/application/nginx-deployment.yaml
-
-	添加以下内容：
-
-		apiVersion: apps/v1
-		kind: Deployment
-		metadata:
-			name: nginx
-		spec:
-			replicas: 3
-			selector:
-				matchLabels:
-					app: nginx
-			template:
-				metadata:
-					labels:
-						app: nginx
-				spec:
-					containers:
-						- name: nginx
-							image: nginx
-							ports:
-								- containerPort: 80
-
-	发布 nginx deployment 任务，输入命令：
-
-		kubectl apply -f nginx-deployment.yaml
-
-	移除 nginx deployment 任务，输入命令：
-
-		kubectl delete -f nginx-deployment.yaml
+		kubeadm reset
