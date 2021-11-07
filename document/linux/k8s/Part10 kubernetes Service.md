@@ -7,7 +7,7 @@
 
         ClusterIP     通过集群的内部 IP 暴露服务，默认类型，只能在集群内部访问
 
-        NodePort      通过集群的每个 Node 上的 IP 和 port 暴露服务，可以对外访问
+        NodePort      通过集群的每个 Node 上的 IP 和 port 暴露服务，允许设置 kube-proxy 过滤 NodeIP,可以对外访问
 
         LoadBalancer  使用云提供商的负载均衡器向外部暴露服务，可以对外访问
 
@@ -106,7 +106,7 @@
 
         curl 10.1.237.254
 
-        -> 无法访问，非集群内部
+        -> Welcome to nginx!
 
     移除 nginx service，输入命令：
 
@@ -142,11 +142,11 @@
 
     浏览器访问 nginx service：
 
-        curl 192.168.140.206:30000
+        192.168.140.206:30000
 
-        curl 192.168.140.207:30000
+        192.168.140.207:30000
 
-        curl 192.168.140.208:30000
+        192.168.140.208:30000
 
         -> Welcome to nginx!
 
