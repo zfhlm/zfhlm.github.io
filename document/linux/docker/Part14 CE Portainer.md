@@ -5,14 +5,22 @@
 
 #### 下载安装
 
-	输入命令：
+    初始化 docker 和 docker swarm，输入命令：
 
-		curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
+        (略)
 
-		docker stack deploy -c portainer-agent-stack.yml portainer
+    安装 portainer，输入命令：
 
-		docker ps
+        cd /usr/local
 
-	访问页面：
+        mkdir portainer && cd portainer
 
-		https://ipaddress:9443
+        curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
+
+        docker stack deploy -c portainer-agent-stack.yml portainer
+
+        docker ps
+
+    访问页面：
+
+        https://ipaddress:9443
