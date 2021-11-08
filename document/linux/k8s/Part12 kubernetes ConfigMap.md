@@ -47,7 +47,6 @@
 
           Events:  <none>
 
-
 #### 引用 ConfigMap
 
     创建 centos Pod，输入命令：
