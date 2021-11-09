@@ -4,70 +4,70 @@
 #### 下载安装包
 
 	相关信息：
-		
+
 		下载地址：https://downloads.mysql.com/archives/community/
-		
+
 		下载安装包：Compressed TAR Archive mysql-5.7.35-linux-glibc2.12-x86_64.tar.gz
-		
+
 		上传到服务器目录：/usr/local/software
 
 #### 解压到安装目录
 
 	输入命令：
-	
+
 		yum -y remove mariadb*
-		
+
 		cd /usr/loca/software
-		
+
 		tar -zxvf ./mysql-5.7.35-linux-glibc2.12-x86_64.tar.gz
-		
+
 		mv mysql-5.7.35-linux-glibc2.12-x86_64 ../mysql-5.7.35
-		
+
 		cd ..
-		
+
 		ln -s mysql-5.7.35 mysql
 
 #### 配置数据库启动账号
 
 	输入命令：
-		
+
 		groupadd mysql
-		
+
 		useradd -r -s /sbin/nologin -g mysql mysql -d /usr/local/mysql/
-		
+
 		chown -R mysql:mysql /usr/local/mysql
-		
+
 		chown -R mysql:mysql /usr/local/mysql/
 
 #### 配置数据库启动参数
 
 	输入命令：
-		
+
 		cd /usr/local/mysql
-		
+
 		mkdir log && touch ./log/mysql.log
-		
+
 		chown -R mysql:mysql ./log
 		
-		vi /ect/my.cnf
-		
+		vi /etc/my.cnf
+
 	添加以下配置：
-		
+
 		[client]
-		
+
 		port=3306                                                       #连接端口
 		default_character_set=utf8mb4                                   #客户端默认字符集
-		
+
 		[mysqld_safe]
-		
+
 		log_error=/usr/local/mysql/log/mysql.log                        #错误日志位置
-		
+
 		[mysqld]
-		
+
 		basedir=/usr/local/mysql/                                       #安装目录
 		datadir=/usr/local/mysql/data                                   #存储目录
 		socket=/tmp/mysql.sock                                          #套接字文件位置
-		
+
 		user=mysql                                                      #启动用户
 		server_id=1                                                     #服务器ID
 		read_only=0                                                     #是否开启只读
@@ -87,7 +87,7 @@
 		interactive_timeout=7200                                        #交互连接最大等待时间
 		wait_timeout=7200                                               #非交互连接最大等待时间
 		log_slow_admin_statements=ON                                    #是否记录管理日志
-		
+
 		log_bin=mysql-bin                                               #binlog日志名称
 		binlog_format=ROW                                               #binlog格式
 		sync_binlog=0                                                   #binlog是否每次刷盘
@@ -100,11 +100,11 @@
 		binlog_ignore_db=sys                                            #binlog忽略指定数据库
 		#binlog_do_db=test                                              #binlog开启指定数据库
 		#binlog_do_db=business                                          #binlog开启指定数据库
-		
+
 		slow_query_log=ON                                               #慢查询日志是否开启
 		slow_query_log_file=/usr/local/mysql/log/mysql-slow.log         #慢查询日志文件
 		long_query_time=2                                               #慢查询最小时间秒
-		
+
 		innodb_open_files=4096                                          #innodb打开文件句柄最大数
 		innodb_buffer_pool_size=512M                                    #innodb缓冲池大小，根据服务器内存分配设置
 		innodb_buffer_pool_chunk_size=128M                              #innodb缓冲池每次增减大小
@@ -119,57 +119,57 @@
 #### 初始化并启动数据库
 
 	输入命令：
-		
+
 		cd /usr/local/mysql
-		
+
 		# 执行完毕控制台会输出初始密码，需要记住密码文本
 		./bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql/ --datadir=/usr/local/mysql/data/
-		
+
 		cp -a ./support-files/mysql.server /etc/init.d/mysqld
-		
+
 		service mysqld start
 
 #### 配置数据库shell环境变量
 
 	添加环境变量，输入命令：
-				
+
 		vi /etc/profile
-	
+
 	添加以下配置：
-		
+
 		export MYSQL_HOME="/usr/local/mysql/"
-		
+
 		export PATH="$PATH:$MYSQL_HOME/bin"
-		
+
 	刷新环境变量，输入命令：
-		
+
 		source /etc/profile
 
 #### 初始化超管账号
 
 	输入命令：
-		
+
 		# 初始化登录，使用控制台输出的初始密码登录
 		mysql -uroot -p
-				
+
 		set PASSWORD = PASSWORD('123456');
-		
+
 		update mysql.user set host='%' where user='root';
-		
+
 		grant all privileges on *.* to 'root'@'%' identified by '123456' with grant option;
-		
+
 		flush privileges;
 
 #### 账号授权管理
 
 	查看有哪些权限，输入命令：
-		
+
 		mysql -uroot -p
-		
+
 		SHOW PRIVILEGES;
-		
+
 	可以看到以下权限列表：
-		
+
 		+-------------------------+---------------------------------------+-------------------------------------------------------+
 		| Privilege               | Context                               | Comment                                               |
 		+-------------------------+---------------------------------------+-------------------------------------------------------+
@@ -205,17 +205,15 @@
 		| Update                  | Tables                                | To update existing rows                               |
 		| Usage                   | Server Admin                          | No privileges - allow connect only                    |
 		+-------------------------+---------------------------------------+-------------------------------------------------------+
-	
+
 	如果是业务账号，不允许设置为超级管理员，并且要细化指定各项权限，防止出现数据问题和安全问题
-	
+
 	创建账号并授权，常见语句：
-		
+
 		# 创建一个所有权限的账号admin，允许访问所有数据库，允许该账户授权给其他用户
 		GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
-		
+
 		# 创建一个指定权限的账号test，只允许访问数据库test
 		GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, ALTER, DROP, INDEX, EXECUTE, CREATE VIEW, SHOW VIEW on test.* TO 'test'@'%' IDENTIFIED BY '123456';
-		
+
 		FLUSH PRIVILEGES;
-
-
