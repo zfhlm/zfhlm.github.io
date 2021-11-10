@@ -36,6 +36,11 @@
             <artifactId>canal.common</artifactId>
             <version>1.1.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.6.3</version>
+        </dependency>
 
 #### 客户端消费接口
 
@@ -65,155 +70,165 @@
      */
     public class CanalProperties {
 
-    	protected String zkServers;            // canal zookeeper连接地址
+        protected String zkServers;            // canal zookeeper连接地址
 
-    	protected List<Address> addresses;     // canal 集群连接地址
+        protected List<Address> addresses;     // canal 集群连接地址
 
-    	protected String host = "localhost";   // canal host
+        protected String host = "localhost";   // canal host
 
-    	protected int port = 11111;            // canal port
+        protected int port = 11111;            // canal port
 
-    	protected String destination;          // canal instance
+        protected String destination;          // canal instance
 
-    	protected String username;             // canal username
+        protected String username;             // canal username
 
-    	protected String password;             // canal password
+        protected String password;             // canal password
 
-    	protected String subscribe;            // canal subscribe
+        protected String subscribe;            // canal subscribe
 
-    	protected int batchSize = 1;           // canal batchSize
+        protected int batchSize = 1;           // canal batchSize
 
-    	public String getZkServers() {
-    		return zkServers;
-    	}
+        public String getZkServers() {
+            return zkServers;
+        }
 
-    	public void setZkServers(String zkServers) {
-    		this.zkServers = zkServers;
-    	}
+        public void setZkServers(String zkServers) {
+            this.zkServers = zkServers;
+        }
 
-    	public List<Address> getAddresses() {
-    		return addresses;
-    	}
+        public List<Address> getAddresses() {
+            return addresses;
+        }
 
-    	public void setAddresses(List<Address> addresses) {
-    		this.addresses = addresses;
-    	}
+        public void setAddresses(List<Address> addresses) {
+            this.addresses = addresses;
+        }
 
-    	public String getHost() {
-    		return host;
-    	}
+        public String getHost() {
+            return host;
+        }
 
-    	public void setHost(String host) {
-    		this.host = host;
-    	}
+        public void setHost(String host) {
+            this.host = host;
+        }
 
-    	public int getPort() {
-    		return port;
-    	}
+        public int getPort() {
+            return port;
+        }
 
-    	public void setPort(int port) {
-    		this.port = port;
-    	}
+        public void setPort(int port) {
+            this.port = port;
+        }
 
-    	public String getDestination() {
-    		return destination;
-    	}
+        public String getDestination() {
+            return destination;
+        }
 
-    	public void setDestination(String destination) {
-    		this.destination = destination;
-    	}
+        public void setDestination(String destination) {
+            this.destination = destination;
+        }
 
-    	public String getUsername() {
-    		return username;
-    	}
+        public String getUsername() {
+            return username;
+        }
 
-    	public void setUsername(String username) {
-    		this.username = username;
-    	}
+        public void setUsername(String username) {
+            this.username = username;
+        }
 
-    	public String getPassword() {
-    		return password;
-    	}
+        public String getPassword() {
+            return password;
+        }
 
-    	public void setPassword(String password) {
-    		this.password = password;
-    	}
+        public void setPassword(String password) {
+            this.password = password;
+        }
 
-    	public String getSubscribe() {
-    		return subscribe;
-    	}
+        public String getSubscribe() {
+            return subscribe;
+        }
 
-    	public void setSubscribe(String subscribe) {
-    		this.subscribe = subscribe;
-    	}
+        public void setSubscribe(String subscribe) {
+            this.subscribe = subscribe;
+        }
 
-    	public int getBatchSize() {
-    		return batchSize;
-    	}
+        public int getBatchSize() {
+            return batchSize;
+        }
 
-    	public void setBatchSize(int batchSize) {
-    		this.batchSize = batchSize;
-    	}
+        public void setBatchSize(int batchSize) {
+            this.batchSize = batchSize;
+        }
 
-    	@Override
-    	public String toString() {
-    		StringBuilder builder = new StringBuilder();
-    		builder.append("[zkServers=");
-    		builder.append(zkServers);
-    		builder.append(", addresses=");
-    		builder.append(addresses);
-    		builder.append(", host=");
-    		builder.append(host);
-    		builder.append(", port=");
-    		builder.append(port);
-    		builder.append(", destination=");
-    		builder.append(destination);
-    		builder.append(", username=");
-    		builder.append(username);
-    		builder.append(", password=");
-    		builder.append(password);
-    		builder.append(", subscribe=");
-    		builder.append(subscribe);
-    		builder.append(", batchSize=");
-    		builder.append(batchSize);
-    		builder.append("]");
-    		return builder.toString();
-    	}
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("[zkServers=");
+            builder.append(zkServers);
+            builder.append(", addresses=");
+            builder.append(addresses);
+            builder.append(", host=");
+            builder.append(host);
+            builder.append(", port=");
+            builder.append(port);
+            builder.append(", destination=");
+            builder.append(destination);
+            builder.append(", username=");
+            builder.append(username);
+            builder.append(", password=");
+            builder.append(password);
+            builder.append(", subscribe=");
+            builder.append(subscribe);
+            builder.append(", batchSize=");
+            builder.append(batchSize);
+            builder.append("]");
+            return builder.toString();
+        }
 
-    	public class Address {
+        public static class Address {
 
-    		private String host;
+            private String host;
 
-    		private int port;
+            private int port;
 
-    		public String getHost() {
-    			return host;
-    		}
+            public Address() {
+                super();
+            }
 
-    		public void setHost(String host) {
-    			this.host = host;
-    		}
+            public Address(String host, int port) {
+                super();
+                this.host = host;
+                this.port = port;
+            }
 
-    		public int getPort() {
-    			return port;
-    		}
+            public String getHost() {
+                return host;
+            }
 
-    		public void setPort(int port) {
-    			this.port = port;
-    		}
+            public void setHost(String host) {
+                this.host = host;
+            }
 
-    		@Override
-    		public String toString() {
-    			StringBuilder builder = new StringBuilder();
-    			builder.append("(host=");
-    			builder.append(host);
-    			builder.append(", port=");
-    			builder.append(port);
-    			builder.append(")");
-    			return builder.toString();
-    		}
+            public int getPort() {
+                return port;
+            }
 
-    	}
+            public void setPort(int port) {
+                this.port = port;
+            }
+
+            @Override
+            public String toString() {
+                StringBuilder builder = new StringBuilder();
+                builder.append("(host=");
+                builder.append(host);
+                builder.append(", port=");
+                builder.append(port);
+                builder.append(")");
+                return builder.toString();
+            }
+
+        }
 
     }
 
@@ -226,127 +241,127 @@
      */
     public class CanalRetryConnector extends CanalProperties implements InitializingBean, DisposableBean {
 
-    	private final Log log = LogFactory.getLog(getClass().getSimpleName());
+        private final Log log = LogFactory.getLog(getClass().getSimpleName());
 
-    	// 线程池
-    	private final ExecutorService executor = Executors.newSingleThreadExecutor();
+        // 线程池
+        private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    	// 连接重试次数
-    	private final AtomicLong retries = new AtomicLong(0);
+        // 连接重试次数
+        private final AtomicLong retries = new AtomicLong(0);
 
-    	// 是否运行中
-    	private boolean isRunning = true;
+        // 是否运行中
+        private boolean isRunning = true;
 
-    	// canal 连接对象
-    	private CanalConnector connector;
+        // canal 连接对象
+        private CanalConnector connector;
 
-    	// canal 消费对象
-    	private List<CanalSubscriber> subscribers;
+        // canal 消费对象
+        private List<CanalSubscriber> subscribers;
 
-    	public CanalRetryConnector(CanalSubscriber subscriber) {
-    		this(Arrays.asList(subscriber));
-    	}
+        public CanalRetryConnector(CanalSubscriber subscriber) {
+            this(Arrays.asList(subscriber));
+        }
 
-    	public CanalRetryConnector(List<CanalSubscriber> subscribers) {
-    		super();
-    		this.subscribers = subscribers;
-    	}
+        public CanalRetryConnector(List<CanalSubscriber> subscribers) {
+            super();
+            this.subscribers = subscribers;
+        }
 
-    	@Override
-    	public void afterPropertiesSet() throws Exception {
+        @Override
+        public void afterPropertiesSet() throws Exception {
 
-    		// 创建连接对象
-    		if(zkServers != null) {
-    			this.connector = CanalConnectors.newClusterConnector(zkServers, destination, username, password);
-    		}
-    		if(addresses != null) {
-    			List<InetSocketAddress> socketAddresses = addresses.stream().map(e -> new InetSocketAddress(e.getHost(), e.getPort())).collect(Collectors.toList());
-    			this.connector = CanalConnectors.newClusterConnector(socketAddresses, destination, username, password);
-    		}
-    		if(this.connector == null) {
-    			this.connector = CanalConnectors.newSingleConnector(new InetSocketAddress(host, port), destination, username, password);
-    		}
+            // 创建连接对象
+            if(zkServers != null) {
+                this.connector = CanalConnectors.newClusterConnector(zkServers, destination, username, password);
+            }
+            if(addresses != null) {
+                List<InetSocketAddress> socketAddresses = addresses.stream().map(e -> new InetSocketAddress(e.getHost(), e.getPort())).collect(Collectors.toList());
+                this.connector = CanalConnectors.newClusterConnector(socketAddresses, destination, username, password);
+            }
+            if(this.connector == null) {
+                this.connector = CanalConnectors.newSingleConnector(new InetSocketAddress(host, port), destination, username, password);
+            }
 
-    		// 开始执行订阅
-    		this.executor.execute(() -> doRun());
+            // 开始执行订阅
+            this.executor.execute(() -> doRun());
 
-    	}
+        }
 
-    	private void doRun() {
+        private void doRun() {
 
-    		try {
+            try {
 
-    			// 重试先断开连接
-    			if(retries.getAndIncrement() > 0) {
-    				connector.disconnect();
-    				Thread.sleep(retries.get()>20? 5000L:100L);
-    			}
+                // 重试先断开连接
+                if(retries.getAndIncrement() > 0) {
+                    connector.disconnect();
+                    Thread.sleep(retries.get()>20? 5000L:100L);
+                }
 
-    			// 初始化连接
-    			connector.connect();
-    			if(subscribe != null) {
-    				connector.subscribe(subscribe);
-    			} else {
-    				connector.subscribe();
-    			}
-    			connector.rollback();
+                // 初始化连接
+                connector.connect();
+                if(subscribe != null) {
+                    connector.subscribe(subscribe);
+                } else {
+                    connector.subscribe();
+                }
+                connector.rollback();
 
-    			while(isRunning) {
+                while(isRunning) {
 
-    				// 拉取数据
-    				Message message = connector.getWithoutAck(batchSize);
+                    // 拉取数据
+                    Message message = connector.getWithoutAck(batchSize);
 
-    				// 无数据休眠
-    				if(message.getId() == -1) {
-    					Thread.sleep(50L);
-    					continue;
-    				}
+                    // 无数据休眠
+                    if(message.getId() == -1) {
+                        Thread.sleep(50L);
+                        continue;
+                    }
 
-    				// 消费数据
-    				try {
-    					for(CanalSubscriber subscriber : subscribers) {
-    						subscriber.subscribe(message);
-    					}
-    					connector.ack(message.getId());
-    				} catch (Exception e) {
-    					connector.rollback(message.getId());
-    				}
+                    // 消费数据
+                    try {
+                        for(CanalSubscriber subscriber : subscribers) {
+                            subscriber.subscribe(message);
+                        }
+                        connector.ack(message.getId());
+                    } catch (Exception e) {
+                        connector.rollback(message.getId());
+                    }
 
-    			}
+                }
 
-    		} catch (Exception ex) {
+            } catch (Exception ex) {
 
-    			// 非退出异常，重新执行订阅
-    			if(isRunning) {
-    				log.warn("Retry to execute method doRun(), cause by: " + ex.getMessage(), ex);
-    				executor.execute(() -> doRun());
-    			} else {
-    				log.warn("Canal has been stopped and will not retry to execute method doRun()");
-    			}
+                // 非退出异常，重新执行订阅
+                if(isRunning) {
+                    log.warn("Retry to execute method doRun(), cause by: " + ex.getMessage(), ex);
+                    executor.execute(() -> doRun());
+                } else {
+                    log.warn("Canal has been stopped and will not retry to execute method doRun()");
+                }
 
-    		}
+            }
 
-    	}
+        }
 
-    	@Override
-    	public void destroy() throws Exception {
+        @Override
+        public void destroy() throws Exception {
 
-    		try {
+            try {
 
-    			// 关闭线程池
-    			if( ! executor.isTerminated() ) {
-    				isRunning = false;
-    				executor.shutdownNow();
-    			}
+                // 关闭线程池
+                if( ! executor.isTerminated() ) {
+                    isRunning = false;
+                    executor.shutdownNow();
+                }
 
-    		} finally {
+            } finally {
 
-    			// 关闭连接
-    			connector.disconnect();
+                // 关闭连接
+                connector.disconnect();
 
-    		}
+            }
 
-    	}
+        }
 
     }
 
@@ -402,21 +417,33 @@
 
         public static void main(String[] args) throws Exception {
 
-            // canal单点连接
-            // connector.setHost(...);
-            // connector.setPort(...);
-
-            // canal集群连接
-            // connector.setAddresses(...);
-
-            // zookeeper连接
-            // connector.setZkServers(...);
-
             CanalSubscriber subscriber = new CanalPrintSubscriber();
 
+            //单点连接
+            //CanalRetryConnector connector = new CanalRetryConnector(subscriber);
+            //connector.setHost("192.168.140.210");
+            //connector.setPort(11111);
+            //connector.setDestination("example");
+            //connector.setSubscribe(".*\\..*");
+            //connector.setBatchSize(1);
+            //connector.afterPropertiesSet();
+
+            //集群连接
+            //List<Address> address = new ArrayList<Address>();
+            //address.add(new Address("192.168.140.210", 11111));
+            //address.add(new Address("192.168.140.211", 11111));
+            //address.add(new Address("192.168.140.212", 11111));
+            //
+            //CanalRetryConnector connector = new CanalRetryConnector(subscriber);
+            //connector.setAddresses(address);
+            //connector.setDestination("example");
+            //connector.setSubscribe(".*\\..*");
+            //connector.setBatchSize(1);
+            //connector.afterPropertiesSet();
+
+            //zookeeper连接
             CanalRetryConnector connector = new CanalRetryConnector(subscriber);
-            connector.setHost("192.168.140.210");
-            connector.setPort(11111);
+            connector.setZkServers("192.168.140.210:2181,192.168.140.211:2181,192.168.140.212:2181");
             connector.setDestination("example");
             connector.setSubscribe(".*\\..*");
             connector.setBatchSize(1);

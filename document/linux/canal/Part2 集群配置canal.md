@@ -49,8 +49,3 @@
         cd /usr/local/canal
 
         ./bin/startup.sh
-
-    客户端连接集群示例：
-
-        String zkServers = "192.168.140.210:2181,192.168.140.211:2181,192.168.140.212:2181";
-        CanalConnectors.newClusterConnector(zkServers, destination, username, password);
