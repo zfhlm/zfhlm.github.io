@@ -1,14 +1,40 @@
 
 # canal
 
+    客户端文档地址：
+
+        https://github.com/alibaba/canal/wiki/ClientExample
+
+        https://github.com/alibaba/canal/wiki/ClientAPI
+
+        https://github.com/alibaba/canal/wiki/ClientAdapter
+
+    示例代码和相关对象信息，查看官方文档
+
+#### 客户端
+
+    如果消费逻辑耗时时间短，消费速度能够赶上binlog生产速度，直接消费；否则投递到消息队列再进行处理
+
+    以下基于 canal client 进行包装，方便集成到 springboot
+
 #### 创建 maven 项目
 
     依赖配置：
 
         <dependency>
-          <groupId>com.alibaba.otter</groupId>
-          <artifactId>canal.client</artifactId>
-          <version>1.1.5</version>
+            <groupId>com.alibaba.otter</groupId>
+            <artifactId>canal.client</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.otter</groupId>
+            <artifactId>canal.protocol</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.otter</groupId>
+            <artifactId>canal.common</artifactId>
+            <version>1.1.4</version>
         </dependency>
 
 #### 客户端消费接口
@@ -20,13 +46,13 @@
     */
     public interface CanalSubscriber {
 
-    /**
-     * canal 消息处理
-     *
-     * @param message
-     * @throws Exception
-     */
-    public void subscribe(Message message) throws Exception;
+        /**
+         * canal 消息处理
+         *
+         * @param message
+         * @throws Exception
+         */
+        public void subscribe(Message message) throws Exception;
 
     }
 
@@ -370,11 +396,21 @@
 
     }
 
-#### 订阅测试
+#### 执行测试
 
     public class TestCanal {
 
         public static void main(String[] args) throws Exception {
+
+            // canal单点连接
+            // connector.setHost(...);
+            // connector.setPort(...);
+
+            // canal集群连接
+            // connector.setAddresses(...);
+
+            // zookeeper连接
+            // connector.setZkServers(...);
 
             CanalSubscriber subscriber = new CanalPrintSubscriber();
 
