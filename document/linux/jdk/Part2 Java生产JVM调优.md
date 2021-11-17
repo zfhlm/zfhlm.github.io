@@ -81,3 +81,27 @@
             -XX:+HeapDumpOnOutOfMemoryError
             -XX:HeapDumpPath=/usr/local/logs/heap.dump
         application.jar > /dev/null 2>&1 &
+
+#### 实时监控工具 jvisualvm
+
+    Windows 系统直接启动 JDK 目录下的可执行文件 bin/jvisualvm.exe
+
+    Linux 系统无法通过图形化界面查看，可开启 JMX 后远程连接查看，加入启动参数：
+
+        -Dcom.sun.management.jmxremote=true
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.ssl=false
+        -Djava.rmi.server.hostname=192.168.140.200
+        -Dcom.sun.management.jmxremote.port=8060
+
+    然后本地打开 jvisualvm 客户端，添加远程 JMX 连接：
+
+        192.168.140.200:8060
+
+#### GC 日志分析工具
+
+    可以使用以下两种类型的工具：
+
+        gceasy，web在线分析工具，访问地址：https://gceasy.io/
+
+        gcplot，离线分析工具，GitHub地址：https://github.com/GCPlot/gcplot
