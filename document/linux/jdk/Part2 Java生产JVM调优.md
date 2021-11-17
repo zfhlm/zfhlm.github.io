@@ -55,7 +55,13 @@
 
         -XX:+PrintHeapAtGC                            #打印GC前后堆信息
 
-        -Xloggc:/usr/local/logs/gc.log                #打印GC日志位置
+        -XX:+UseGCLogFileRotation                     #打印GC日志启用分割
+
+        -XX:NumberOfGCLogFiles=15                     #打印GC日志文件数量限制
+
+        -XX:GCLogFileSize=100M                        #打印GC日志文件大小限制
+
+        -Xloggc:/usr/local/logs/gc-%t.log             #打印GC日志位置，名称携带时间戳
 
         -XX:+HeapDumpOnOutOfMemoryError               #打印内存溢出错误日志
 
@@ -77,7 +83,10 @@
             -XX:+PrintGCDetails
             -XX:+PrintGCDateStamps
             -XX:+PrintHeapAtGC
-            -Xloggc:/usr/local/logs/gc.log
+            -XX:+UseGCLogFileRotation
+            -XX:NumberOfGCLogFiles=15
+            -XX:GCLogFileSize=100M
+            -Xloggc:/usr/local/logs/gc-%t.log
             -XX:+HeapDumpOnOutOfMemoryError
             -XX:HeapDumpPath=/usr/local/logs/heap.dump
         application.jar > /dev/null 2>&1 &
