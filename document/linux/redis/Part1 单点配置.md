@@ -45,8 +45,6 @@
 
 ### 生产环境优化配置
 
-    不建议单服务器大内存，使用多个服务器集群会更优，启动加载快照更快
-
     服务器开启内存 swap 用于 RDB bgsave，输入命令：
 
         vi /etc/sysctl.conf
@@ -86,6 +84,8 @@
         dbfilename dump.rdb                                #RDB配置，文件名
 
         rdbcompression yes                                 #RDB配置，是否启用压缩
+
+        #save ""                                           #RDB配置，关闭RDB
 
         save 900 1                                         #RDB配置，每900秒至少有1个key发生变化，dump内存快照
 
