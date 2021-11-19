@@ -1,7 +1,7 @@
 
 # Portainer
 
-	一个开源的可以使用在 docker standalone 和 docker swarm 上的界面化工具
+    一个开源的可以使用在 docker standalone 和 docker swarm 上的界面化工具
 
 #### 下载安装
 

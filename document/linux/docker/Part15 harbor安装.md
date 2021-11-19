@@ -99,7 +99,7 @@
           The push refers to repository [192.168.140.209/dev/redis]
           146262eb3841: Pushed
           0bd13b42de4d: Pushed
-          6b01cc47a390: Pushed 
+          6b01cc47a390: Pushed
           8b9770153666: Pushed
           b43651130521: Pushed
           e8b689711f21: Pushed
