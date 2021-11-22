@@ -57,7 +57,7 @@
         ./bin/logstash
 
         # 守护进程启动
-        nohup ./filebeat -e > /dev/null 2>&1 &
+        nohup ./logstash -e > /dev/null 2>&1 &
 
 #### logstash 主要配置
 
@@ -292,4 +292,46 @@
 
 #### logstash 自定义模板
 
-    // 待完善
+    基于 logstash 默认模板进行修改，添加优先级更高的模板进行覆盖配置：
+
+        PUT _template/logstash-template
+        {
+          "order" : 1,
+          "index_patterns" : [
+            "logstash-*"
+          ],
+          "mappings" : {
+            "dynamic" : "strict",
+            "properties" : {
+              "@timestamp" : {
+                "type" : "date"
+              },
+              "datetime" : {
+                "type" : "keyword",
+                "index" : false
+              },
+              "level" : {
+                "type" : "keyword",
+                "index" : false
+              },
+              "package" : {
+                "type" : "keyword",
+                "index" : false
+              },
+              "span" : {
+                "type" : "keyword"
+              },
+              "trace" : {
+                "type" : "keyword"
+              },
+              "user" : {
+                "type" : "keyword"
+              },
+              "message" : {
+                "type" : "keyword",
+                "index" : false
+              }
+            }
+          },
+          "aliases" : { }
+        }
