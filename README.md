@@ -40,6 +40,52 @@
 
 [Part6 集群之Twemproxy](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/redis/Part6%20%E9%9B%86%E7%BE%A4%E4%B9%8BTwemproxy.md)
 
+## linux/ftp
+
+[Part1 安装ftp](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/ftp/Part1%20%E5%AE%89%E8%A3%85ftp.md)
+
+## linux/fastdfs
+
+[Part1 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/fastdfs/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
+
+[Part2 集群配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/fastdfs/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
+
+## linux/keepalived
+
+[Part1 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/keepalived/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
+
+[Part2 主备配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/keepalived/Part2%20%E4%B8%BB%E5%A4%87%E9%85%8D%E7%BD%AE.md)
+
+## linux/lvs
+
+[Part1 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/lvs/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
+
+[Part2 NAT模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/lvs/Part2%20NAT%E6%A8%A1%E5%BC%8F.md)
+
+[Part3 DR模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/lvs/Part3%20DR%E6%A8%A1%E5%BC%8F.md)
+
+[Part4 多VIP热备(keepalived)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/lvs/Part4%20%E5%A4%9AVIP%E7%83%AD%E5%A4%87(keepalived).md)
+
+## linux/nginx
+
+[Part1 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/nginx/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
+
+[Part2 主备模式(keepalived)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/nginx/Part2%20%E4%B8%BB%E5%A4%87%E6%A8%A1%E5%BC%8F(keepalived).md)
+
+[Part3 双主模式(keepalived)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/nginx/Part3%20%E5%8F%8C%E4%B8%BB%E6%A8%A1%E5%BC%8F(keepalived).md)
+
+## linux/haproxy
+
+[Part1 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/haproxy/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
+
+[Part2 开启日志](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/haproxy/Part2%20%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97.md)
+
+[Part3 七层http负载均衡](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/haproxy/Part3%20%E4%B8%83%E5%B1%82http%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.md)
+
+[Part4 四层tcp负载均衡](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/haproxy/Part4%20%E5%9B%9B%E5%B1%82tcp%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.md)
+
+[Part5 双主热备(keepalived)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/haproxy/Part5%20%E5%8F%8C%E4%B8%BB%E7%83%AD%E5%A4%87(keepalived).md)
+
 ## linux/system
 
 [Part1 创建VMware虚拟机](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/system/Part1%20%E5%88%9B%E5%BB%BAVMware%E8%99%9A%E6%8B%9F%E6%9C%BA.md)
