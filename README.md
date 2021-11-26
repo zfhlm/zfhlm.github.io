@@ -82,9 +82,31 @@
 
 [Part13 备份之xtrabackup](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/mysql/Part13%20%E5%A4%87%E4%BB%BD%E4%B9%8Bxtrabackup.md)
 
+## linux/canal
+
+[Part1 单点配置canal](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/canal/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEcanal.md)
+
+[Part2 集群配置canal](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/canal/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AEcanal.md)
+
+[Part3 客户端连接canal](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/canal/Part3%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5canal.md)
+
 ## linux/oracle
 
 [Part1 安装oracle](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/oracle/Part1%20%E5%AE%89%E8%A3%85oracle.md)
+
+## linux/elasticsearch
+
+[Part1 单点配置elasticsearch](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEelasticsearch.md)
+
+[Part2 集群配置elasticsearch](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AEelasticsearch.md)
+
+[Part3 基本操作elasticsearch](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part3%20%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9Celasticsearch.md)
+
+[Part4 安装配置kibana](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part4%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEkibana.md)
+
+[Part5 安装配置filebeat](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part5%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEfilebeat.md)
+
+[Part6 安装配置logstash](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part6%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AElogstash.md)
 
 ## linux/fastdfs
 
@@ -154,19 +176,41 @@
 
 [Part4 自动化部署](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/jenkins/Part4%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2.md)
 
-## linux/elasticsearch
+## linux/docker
 
-[Part1 单点配置elasticsearch](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEelasticsearch.md)
+[Part01 docker安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part01%20docker%E5%AE%89%E8%A3%85.md)
 
-[Part2 集群配置elasticsearch](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AEelasticsearch.md)
+[Part02 docker命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part02%20docker%E5%91%BD%E4%BB%A4.md)
 
-[Part3 基本操作elasticsearch](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part3%20%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9Celasticsearch.md)
+[Part03 registry安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part03%20registry%E5%AE%89%E8%A3%85.md)
 
-[Part4 安装配置kibana](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part4%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEkibana.md)
+[Part04 docker镜像](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part04%20docker%E9%95%9C%E5%83%8F.md)
 
-[Part5 安装配置filebeat](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part5%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEfilebeat.md)
+[Part05 bridge networks](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part05%20bridge%20networks.md)
 
-[Part6 安装配置logstash](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/elastic/Part6%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AElogstash.md)
+[Part06 host networks](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part06%20host%20networks.md)
+
+[Part07 none networks](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part07%20none%20networks.md)
+
+[Part08 container networks](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part08%20container%20networks.md)
+
+[Part09 overlay networks](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part09%20overlay%20networks.md)
+
+[Part10 ipvlan networks](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part10%20ipvlan%20networks.md)
+
+[Part11 macvlan networks](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part11%20macvlan%20networks.md)
+
+[Part12 docker compose](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part12%20docker%20compose.md)
+
+[Part13 docker swarm](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part13%20docker%20swarm.md)
+
+[Part14 CE Portainer](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part14%20CE%20Portainer.md)
+
+[Part15 harbor安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/linux/docker/Part15%20harbor%E5%AE%89%E8%A3%85.md)
+
+## linux/kubernetes
+
+(待添加)
 
 ## linux/system
 
