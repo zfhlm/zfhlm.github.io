@@ -47,6 +47,8 @@
 
         ./config && make && make install
 
+        yum install -y openssl-devel
+
         cd /usr/local/backup
 
         tar -zxvf pcre-8.41.tar.gz
