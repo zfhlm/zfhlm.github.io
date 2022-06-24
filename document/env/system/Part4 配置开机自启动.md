@@ -1,20 +1,47 @@
 
 #### 配置开机自启动
 
-    1，脚本前三行格式：
+    centos7 以上版本使用 systemd 对开启启动进行管理，systemd 存在目录：
 
-        #!/bin/sh
-        #chkconfig: 2345 80 90
-        #description:开机自动启动的脚本程序
+        /lib/systemd/system/    系统存放目录
 
-    2，赋予权限，执行命令：
+        /etc/systemd/system/    用户存放目录
 
-        cd /etc/rc.d/init.d/
+    2，创建自启动脚本，以下配置基于 nginx 进行示例：
 
-        chmod +x autostart.sh
+        cd /etc/systemd/system
 
-    3，添加到开机启动项，执行命令：
+        vi nginx.service
 
-        chkconfig --add autostart.sh
+        =>
 
-        chkconfig autostart.sh on
+            [Unit]
+            Description=The NGINX HTTP and reverse proxy server
+            After=syslog.target network-online.target remote-fs.target nss-lookup.target
+            Wants=network-online.target
+
+            [Service]
+            Type=forking
+            PIDFile=/usr/local/nginx/logs/nginx.pid
+            ExecStartPre=/usr/local/nginx/sbin/nginx -t
+            ExecStart=/usr/local/nginx/sbin/nginx
+            ExecReload=/usr/local/nginx/sbin/nginx -s reload
+            ExecStop=/bin/kill -s QUIT $MAINPID
+            PrivateTmp=true
+
+            [Install]
+            WantedBy=multi-user.target
+
+        systemctl daemon-reload
+
+        systemctl start nginx
+
+        systemctl reload nginx
+
+        systemctl stop nginx
+
+    3，配置开启自启动，输入命令：
+
+        systemctl enable nginx.service
+
+        reboot
