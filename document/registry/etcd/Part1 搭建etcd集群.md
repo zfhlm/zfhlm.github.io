@@ -63,7 +63,7 @@
             initial-cluster-token: mrh-etcd-cluster
             initial-cluster-state: new
 
-    节点二配置，输入命令：
+    节点三配置，输入命令：
 
         cd /usr/local/etcd
 
