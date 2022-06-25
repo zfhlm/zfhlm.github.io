@@ -21,13 +21,15 @@
             Wants=network-online.target
 
             [Service]
+            # 目标命令以 daemon 方式运行，使用 Type=forking，例如 nginx、zookeeper等
+            # 目标命令以前台进程方式运行，使用 Type=simple
             Type=forking
-            PIDFile=/usr/local/nginx/logs/nginx.pid
             ExecStartPre=/usr/local/nginx/sbin/nginx -t
             ExecStart=/usr/local/nginx/sbin/nginx
             ExecReload=/usr/local/nginx/sbin/nginx -s reload
-            ExecStop=/bin/kill -s QUIT $MAINPID
-            PrivateTmp=true
+            ExecStop=/usr/local/nginx/sbin/nginx -s stop
+            Restart=always
+            RestartSec=10s
 
             [Install]
             WantedBy=multi-user.target
