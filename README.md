@@ -118,7 +118,7 @@
     * [svn 安装](https://github.com/zfhlm/zfhlm.github.io/tree/main/document/version/svn)
     * [git 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/version/git/Part1%20%E5%AE%89%E8%A3%85git.md)
     * [yapi 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/version/yapi/Part1%20%E5%AE%89%E8%A3%85yapi.md)
-  * 源码构建
+  * 构建与自动化部署
     * [jenkins 初始化安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/construct/jenkins/Part1%20%E5%88%9D%E5%A7%8B%E5%8C%96.md)
     * [jenkins 自由化构建](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/construct/jenkins/Part2%20%E8%87%AA%E7%94%B1%E5%8C%96%E6%9E%84%E5%BB%BA.md)
     * [jenkins 参数化构建](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/construct/jenkins/Part3%20%E5%8F%82%E6%95%B0%E5%8C%96%E6%9E%84%E5%BB%BA.md)
