@@ -78,6 +78,7 @@
     * [postgresql 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/postgresql/Part01%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [postgresql 客户端](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/postgresql/Part02%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%B7%A5%E5%85%B7.md)
     * [mongodb 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mongodb/Part1%20%E5%8D%95%E7%82%B9%E5%AE%89%E8%A3%85mongodb.md)
+    * [neo4j 社区版单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/neo4j/Part1%2520%E5%AE%89%E8%A3%85%E7%A4%BE%E5%8C%BA%E7%89%88neo4j.md)
   * 反向代理中间件
     * [keepalived 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/loadbalance/keepalived/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [keepalived 主备](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/loadbalance/keepalived/Part2%20%E4%B8%BB%E5%A4%87%E9%85%8D%E7%BD%AE.md)
