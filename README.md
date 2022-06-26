@@ -1,6 +1,10 @@
 
 ## [我的主页](https://zfhlm.github.io)
 
+## 我的博客
+
+  //TODO
+
 ## 我的项目
 
   * [mrh-id-generator](https://github.com/zfhlm/mrh-id-generator)
@@ -9,31 +13,10 @@
   * [mrh-crypto-spring-boot-autoconfigure](https://github.com/zfhlm/mrh-crypto-spring-boot-autoconfigure)
   * [mrh-http-spider](https://github.com/zfhlm/mrh-http-spider)
   * [mrh-example](https://github.com/zfhlm/mrh-example)
-    * [mrh-canal-client](https://github.com/zfhlm/mrh-example/tree/main/mrh-canal-client)
-    * [mrh-ddd](https://github.com/zfhlm/mrh-example/tree/main/mrh-ddd)
-    * [mrh-elasticjob](https://github.com/zfhlm/mrh-example/tree/main/mrh-elasticjob)
-    * [mrh-elasticsearch](https://github.com/zfhlm/mrh-example/tree/main/mrh-elasticsearch)
-    * [mrh-log4j2](https://github.com/zfhlm/mrh-example/tree/main/mrh-log4j2)
-    * [mrh-mybatis-generator](https://github.com/zfhlm/mrh-example/tree/main/mrh-mybatis-generator)
-    * [mrh-netty-http-server](https://github.com/zfhlm/mrh-example/tree/main/mrh-netty-http-server)
-    * [mrh-netty-protobuf](https://github.com/zfhlm/mrh-example/tree/main/mrh-netty-protobuf)
-    * [mrh-prometheus-springboot](https://github.com/zfhlm/mrh-example/tree/main/mrh-prometheus-springboot)
-    * [mrh-prometheus-springcloud](https://github.com/zfhlm/mrh-example/tree/main/mrh-prometheus-springcloud)
-    * [mrh-seata](https://github.com/zfhlm/mrh-example/tree/main/mrh-seata)
-    * [mrh-sharding-jdbc](https://github.com/zfhlm/mrh-example/tree/main/mrh-sharding-jdbc)
-    * [mrh-spring-boot-admin-client-boot](https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-boot-admin-client-boot)
-    * [mrh-spring-boot-admin-client-cloud](https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-boot-admin-client-cloud)
-    * [mrh-spring-boot-admin-server](https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-boot-admin-server)
-    * [mrh-spring-boot-cache-redis](https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-boot-cache-redis)
-    * [mrh-springdoc](https://github.com/zfhlm/mrh-example/tree/main/mrh-springdoc)
 
-## 我的博客
+## 我的笔记
 
-  //TODO
-
-## 搭建笔记
-
-&nbsp;&nbsp; ( 基于 centos7 操作系统 )
+&nbsp;&nbsp; ( 基于 centos7 操作系统进行各种中间件应用搭建 )
 
   * 消息中间件
     * [kafka 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/mq/kafka/Part1%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
