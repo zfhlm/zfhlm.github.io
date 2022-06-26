@@ -33,7 +33,7 @@
 
 ## 搭建笔记
 
-&nbsp;&nbsp; (基于 centos7 操作系统)
+&nbsp;&nbsp; ( 基于 centos7 操作系统 )
 
   * 消息中间件
     * [kafka 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/mq/kafka/Part1%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
