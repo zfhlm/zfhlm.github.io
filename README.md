@@ -16,7 +16,7 @@
 
 ## 我的笔记
 
-&nbsp;&nbsp; ( 基于 centos7 操作系统进行各种中间件应用搭建 )
+&nbsp;&nbsp; ( 基于 centos7 操作系统搭建各种服务 )
 
   * 消息中间件
     * [kafka 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/mq/kafka/Part1%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
@@ -146,14 +146,16 @@
     * [filebeat 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part5%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEfilebeat.md)
     * [logstash 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part6%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AElogstash.md)
     * [kibana 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part4%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEkibana.md)
-  * 版本控制
-    * [svn 安装](https://github.com/zfhlm/zfhlm.github.io/tree/main/document/version/svn)
-    * [git 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/version/git/Part1%20%E5%AE%89%E8%A3%85git.md)
-    * [yapi 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/version/yapi/Part1%20%E5%AE%89%E8%A3%85yapi.md)
-  * 构建与自动化部署
+  * 源码构建部署
+    * [svn 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/svn/Part1%20%E5%AE%89%E8%A3%85svn.md)
+    * [git 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/git/Part1%20%E5%AE%89%E8%A3%85git.md)
+    * [maven 构建环境配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/maven/Part1%20%E9%85%8D%E7%BD%AEmaven%E6%9E%84%E5%BB%BA%E7%8E%AF%E5%A2%83.md)
     * [jenkins 初始化安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part1%20%E5%88%9D%E5%A7%8B%E5%8C%96.md)
     * [jenkins 自由化构建](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part2%20%E8%87%AA%E7%94%B1%E5%8C%96%E6%9E%84%E5%BB%BA.md)
     * [jenkins 参数化构建](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part3%20%E5%8F%82%E6%95%B0%E5%8C%96%E6%9E%84%E5%BB%BA.md)
     * [jenkins 自动化部署](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part4%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2.md)
-    * [maven 构建环境配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/maven/Part1%20%E9%85%8D%E7%BD%AEmaven%E6%9E%84%E5%BB%BA%E7%8E%AF%E5%A2%83.md)
     * [nexus 私库配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/maven/Part2%20%E5%AE%89%E8%A3%85maven%E7%A7%81%E5%BA%93nexus.md)
+  * 运行环境配置
+    * [Java 运行环境]()
+    * [golang 运行环境]()
+    * [nodejs 运行环境]()
