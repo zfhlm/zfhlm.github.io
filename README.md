@@ -89,7 +89,7 @@
     * [ftp 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/ftp/Part1%20%E5%AE%89%E8%A3%85ftp.md)
     * [fastdfs 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/fastdfs/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [fastdfs 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/fastdfs/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
-    * [nfs 挂载]()
+    * [nfs 挂载](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/nfs/Part1%20%E7%BD%91%E7%BB%9C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9Fnfs.md)
   * 容器与编排
     * [docker 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part01%20docker%E5%AE%89%E8%A3%85.md)
     * [docker 命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part02%20docker%E5%91%BD%E4%BB%A4.md)
