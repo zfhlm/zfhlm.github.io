@@ -1,5 +1,5 @@
 
-# Mr.H 的个人主页
+## [我的主页](https://zfhlm.github.io)
 
 ## 我的项目
 
@@ -32,6 +32,8 @@
   //TODO
 
 ## 搭建笔记
+
+&nbsp;&nbsp; (基于 centos7 操作系统)
 
   * 消息中间件
     * [kafka 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/mq/kafka/Part1%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
