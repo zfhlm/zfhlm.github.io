@@ -89,6 +89,7 @@
     * [ftp 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/ftp/Part1%20%E5%AE%89%E8%A3%85ftp.md)
     * [fastdfs 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/fastdfs/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [fastdfs 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/fastdfs/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
+    * [nfs 挂载]()
   * 容器与编排
     * [docker 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part01%20docker%E5%AE%89%E8%A3%85.md)
     * [docker 命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part02%20docker%E5%91%BD%E4%BB%A4.md)
@@ -142,6 +143,10 @@
     * [prometheus 集成 springcloud actuator](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part9%20%E9%9B%86%E6%88%90springcloud.md)
     * [grafana 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/grafana/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEgrafana.md)
     * [alertmanager 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/alertmanager/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEalertmanager.md)
+  * 运行环境配置
+    * [Java 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part1%20Java%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
+    * [golang 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part2%20golang%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
+    * [nodejs 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part3%20nodejs%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
   * 日志采集
     * [filebeat 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part5%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEfilebeat.md)
     * [logstash 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part6%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AElogstash.md)
@@ -150,12 +155,8 @@
     * [svn 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/svn/Part1%20%E5%AE%89%E8%A3%85svn.md)
     * [git 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/git/Part1%20%E5%AE%89%E8%A3%85git.md)
     * [maven 构建环境配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/maven/Part1%20%E9%85%8D%E7%BD%AEmaven%E6%9E%84%E5%BB%BA%E7%8E%AF%E5%A2%83.md)
+    * [nexus 私库配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/maven/Part2%20%E5%AE%89%E8%A3%85maven%E7%A7%81%E5%BA%93nexus.md)
     * [jenkins 初始化安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part1%20%E5%88%9D%E5%A7%8B%E5%8C%96.md)
     * [jenkins 自由化构建](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part2%20%E8%87%AA%E7%94%B1%E5%8C%96%E6%9E%84%E5%BB%BA.md)
     * [jenkins 参数化构建](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part3%20%E5%8F%82%E6%95%B0%E5%8C%96%E6%9E%84%E5%BB%BA.md)
     * [jenkins 自动化部署](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part4%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2.md)
-    * [nexus 私库配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/maven/Part2%20%E5%AE%89%E8%A3%85maven%E7%A7%81%E5%BA%93nexus.md)
-  * 运行环境配置
-    * [Java 运行环境]()
-    * [golang 运行环境]()
-    * [nodejs 运行环境]()
