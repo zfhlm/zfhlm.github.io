@@ -16,11 +16,12 @@
 
 ## 我的笔记
 
-&nbsp;&nbsp; ( 基于 centos7 操作系统搭建各种服务 )
-
   * 系统配置
-    * [centos vmware虚拟机](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part1%20%E5%88%9B%E5%BB%BAVMware%E8%99%9A%E6%8B%9F%E6%9C%BA.md)
-    * [centos 服务开机启动](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part2%20%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8.md)
+    * [centos vmware 创建虚拟机](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part1%20%E5%88%9B%E5%BB%BAVMware%E8%99%9A%E6%8B%9F%E6%9C%BA.md)
+    * [centos systemd 服务开机启动](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part2%20%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8.md)
+    * [centos tcpdump 网络抓包工具](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part3%20%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7.md)
+    * [centos firewalld 防火墙配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part4%20%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%98%B2%E7%81%AB%E5%A2%99.md)
+    * [centos kernel 内核版本升级](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part6%20%E5%8D%87%E7%BA%A7%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC.md)
   * 运行环境
     * [java 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part1%20Java%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
     * [golang 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part2%20golang%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
