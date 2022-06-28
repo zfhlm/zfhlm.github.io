@@ -203,7 +203,7 @@
 
     mrh-spring-cloud-gateway 添加 application.yml 配置：
 
-        # /admin/** 路由到 mrh-spring-cloud-api-admin 服务的 http://ip/port/**
+        # /admin/** 路由到 mrh-spring-cloud-api-admin 服务的 http://ip:port/**
         spring:
           cloud:
             # 注册中心配置
