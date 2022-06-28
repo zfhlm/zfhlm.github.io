@@ -92,7 +92,7 @@
 
         GolbalFilter 的 order 根据实现接口 Ordered 定义
 
-        GatewayFilter 的 order 根据包装类 OrderedGatewayFilter 定义
+        GatewayFilter 的 order 根据包装类 OrderedGatewayFilter 定义，即 GatewayFilterFactory 返回一个实现的包装类
 
         如果未根据以上规则定义 order，则从 1 ... n 根据顺序指定其 order
 
@@ -155,7 +155,7 @@
 
     注意，过滤器 name 为实现类去除 "GatewayFilterFactory" 后缀，或重写 public String name() 方法返回一个指定的 name
 
-    配置自定义过滤器：
+    在 application.yml 中配置自定义过滤器：
 
         spring:
           cloud:
