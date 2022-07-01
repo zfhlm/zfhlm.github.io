@@ -1,13 +1,9 @@
 
 # spring cloud gateway 简单集成与配置
 
-    相关依赖及其版本号：
+### 项目源码地址
 
-        spring cloud 版本号：2021.0.3
-
-        spring boot 版本号：2.6.9
-
-        spring cloud 注册中心：zookeeper
+    https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
 
 ### 路由配置
 
@@ -173,9 +169,9 @@
         @RequestMapping("api/welcome")
         public class WelcomeController {
 
-            @GetMapping(path="")
-            public String welcome() {
-                return "welcome";
+            @RequestMapping(path="")
+            public ViewResult index(HttpServletResponse response) {
+                return ViewResult.create(0, "success");
             }
 
         }
@@ -235,4 +231,4 @@
 
         http://localhost:8081/admin/api/welcome
 
-        -> (显示接口响应内容 welcome)
+        -> {"errcode":0, "errmsg": "success"}

@@ -1,66 +1,51 @@
 
 # spring cloud gateway 自定义过滤器
 
-### 创建网关 mrh-spring-cloud-gateway 和服务 mrh-spring-cloud-api-admin
+### 项目源码地址
 
-    ( 延用 Part01 创建的网关和服务 )
+    https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
 
-### 自定义网关过滤器
+### mrh-spring-cloud-gateway 自定义过滤器
 
-    mrh-spring-cloud-gateway 创建一个打印请求报文 line 的过滤器，实现代码：
+    创建 example filter factory，实现代码：
 
-        public class LogLineGatewayFilterFactory extends AbstractGatewayFilterFactory<Config>  {
+        public class ExampleGatewayFilterFactory extends AbstractGatewayFilterFactory<NameConfig> {
 
-            private final Log log = LogFactory.getLog("log-line-filter");
+            private final Log log = LogFactory.getLog("ExampleFilter");
 
-            public LogLineGatewayFilterFactory() {
-                super(Config.class);
+            public ExampleGatewayFilterFactory() {
+                super(NameConfig.class);
             }
 
             // 过滤器名称，不重写默认为当前类名去除“GatewayFilterFactory”之后作为过滤器名称
             @Override
             public String name() {
-                return "LogLine";
+                return "Example";
             }
 
             @Override
-            public GatewayFilter apply(Config config) {
-                return new GatewayFilter() {
-                    @Override
-                    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-                        ServerHttpRequest originRequest = exchange.getRequest();
-                        String method = originRequest.getMethodValue();
-                        String path = originRequest.getPath().value();
-                        String query = originRequest.getURI().getRawQuery();
-                        if(query != null) {
-                            log.info(String.format("%s %s - %s", method, path, query));
-                        } else {
-                            log.info(String.format("%s %s", method, path));
-                        }
-                        return chain.filter(exchange.mutate().request(originRequest).build());
-                    }
-                    @Override
-                    public String toString() {
-                        return filterToStringCreator(LogLineGatewayFilterFactory.this).toString();
-                    }
+            public GatewayFilter apply(NameConfig config) {
+                return (exchange, chain) -> {
+                    log.info("example");
+                    return chain.filter(exchange);
                 };
             }
 
-            public static class Config {}
-
         }
+
+    注入 bean 配置：
 
         @Configuration
         public class GatewayFilterConfiguration {
 
             @Bean
-            public LogLineGatewayFilterFactory logLineGatewayFilterFactory() {
-                return new LogLineGatewayFilterFactory();
+            public ExampleGatewayFilterFactory exampleGatewayFilterFactory() {
+                return new ExampleGatewayFilterFactory();
             }
 
         }
 
-    mrh-spring-cloud-gateway 配置文件 application.yml 添加自定义过滤器：
+    application.yml 添加自定义过滤器：
 
         spring:
           cloud:
@@ -70,7 +55,7 @@
                 predicates:
                   - Path=/admin/**
                 filters:
-                  - LogLine
+                  - Example
                   - StripPrefix=1
                 uri: lb://mrh-spring-cloud-api-admin
 
@@ -78,9 +63,9 @@
 
         http://localhost:8081/admin/api/welcome
 
-        -> (接口响应内容：welcome)
+        -> (接口响应内容：{"errcode":0, "errmsg": "success"})
 
-        -> (控制台输出：log-line-filter - GET /admin/api/welcome)
+        -> (控制台输出：ExampleFilter - example)
 
 ### 过滤器执行顺序
 
@@ -98,7 +83,7 @@
           [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilter@23da79eb}, order = -2147482648],
           [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.NettyWriteResponseFilter@2007435e}, order = -1],
           [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ForwardPathFilter@4d157493}, order = 0],
-          [[LogLine], order = 1],
+          [[Example], order = 1],
           [[StripPrefix parts = 1], order = 2],
           [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.RouteToRequestUrlFilter@ebda593}, order = 10000],
           [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ReactiveLoadBalancerClientFilter@485caa8f}, order = 10150],
