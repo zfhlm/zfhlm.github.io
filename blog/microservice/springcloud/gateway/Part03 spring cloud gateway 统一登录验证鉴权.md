@@ -23,9 +23,9 @@
 
     自定义过滤器：
 
-        PrintRequestEnabledGatewayFilterFactory             # order = -301
+        PrintCircuitGatewayFilterFactory                    # order = -301
 
-        DeployApiGatewayFilterFactory                       # order = -201
+        PrintCircuitBaseOnApiGatewayFilterFactory           # order = -201
 
         PrintRequestLineGatewayFilterFactory                # order = -101
 
@@ -36,7 +36,5 @@
         ModifyLoginResponseBodyGatewayFilterFactory         # order = -51
 
         AuthenticateGatewayFilterFactory                    # 未指定 order
-
-        CreateLoginTokenGatewayFilterFactory                # 未指定 order
 
     其他具体信息查看源码
