@@ -7,34 +7,36 @@
 
     项目模块：
 
-        网关 mrh-spring-cloud-gateway                 延用 Part01 创建的网关
+        网关 mrh-spring-cloud-gateway                       # 延用 Part01 创建的网关
 
-        服务 mrh-spring-cloud-api-admin               延用 Part01 创建的服务
+        服务 mrh-spring-cloud-api-admin                     # 延用 Part01 创建的服务
 
-        模块 mrh-spring-cloud-reference               存放服务共享定义
+        模块 mrh-spring-cloud-reference                     # 存放服务共享定义
 
     引入组件：
 
-        spring cloud bus amqp                         用于网关与服务之间的数据交换，降低网关与其他服务的耦合度
+        spring cloud bus amqp                               # 用于网关与服务之间的数据交换，降低网关与其他服务的耦合度
 
-        spring boot redis                             用户登录令牌的存储
+        json web token                                      # 用户登录令牌生成工具
 
-        json web token                                用户登录令牌生成工具
+        spring boot redis                                   # 用户登录令牌的存储
 
     自定义过滤器：
 
-        DeployApiGatewayFilterFactory
+        PrintRequestEnabledGatewayFilterFactory             # order = -301
 
-        PrintRequestLineGatewayFilterFactory
+        DeployApiGatewayFilterFactory                       # order = -201
 
-        PrintRequestJsonBodyGatewayFilterFactory
+        PrintRequestLineGatewayFilterFactory                # order = -101
 
-        PrintResponseJsonBodyGatewayFilterFactory
+        PrintRequestJsonBodyGatewayFilterFactory            # order = -100
 
-        ModifyLoginResponseBodyGatewayFilterFactory
+        PrintResponseJsonBodyGatewayFilterFactory           # order = -100
 
-        AuthenticateGatewayFilterFactory
+        ModifyLoginResponseBodyGatewayFilterFactory         # order = -51
 
-        CreateLoginTokenGatewayFilterFactory
+        AuthenticateGatewayFilterFactory                    # 未指定 order
+
+        CreateLoginTokenGatewayFilterFactory                # 未指定 order
 
     其他具体信息查看源码
