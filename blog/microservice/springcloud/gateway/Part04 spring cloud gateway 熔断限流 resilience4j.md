@@ -243,7 +243,7 @@
 
         }
 
-    默认的限流过滤器只返回异常状态码(目前版本)，考虑抛出异常修饰为提示信息，继承重写过滤器部分逻辑：
+    默认的限流过滤器只返回异常状态码(目前版本)，考虑抛出异常修饰为提示信息，继承重写过滤器部分逻辑，并配置为 bean：
 
         public class RequestRateLimiterGatewayFilterFactoryAdapter extends RequestRateLimiterGatewayFilterFactory {
 
@@ -298,6 +298,11 @@
 
         }
 
+        @Bean
+        public RequestRateLimiterGatewayFilterFactoryAdapter requestRateLimiterGatewayFilterFactoryAdapter(RateLimiter<?> rateLimiter, KeyResolver resolver) {
+            return new RequestRateLimiterGatewayFilterFactoryAdapter(rateLimiter, resolver);
+        }
+
     以上配置方式一致，只需把限流过滤器名称换成 RequestRateLimiterAdapter 即可：
 
         spring:
@@ -315,3 +320,11 @@
                       redis-rate-limiter.requestedTokens: 1
                   - StripPrefix=1
                 uri: https://www.baidu.com
+
+    当前版本的限流器存在问题(不太建议使用，可以考虑自己重写所有实现)：
+
+        redis 无法连接的时候，限流不生效，也不报错
+
+        redis 版本过低不支持逻辑命令，限流不生效，也不报错
+
+        只返回状态码，不允许配置化抛出异常
