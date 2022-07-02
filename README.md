@@ -11,6 +11,7 @@
       * [spring cloud gateway 熔断 resilience4j](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part04%20spring%20cloud%20gateway%20%E7%86%94%E6%96%AD%20resilience4j.md)
       * [spring cloud gateway 限流 ratelimiter](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part05%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20ratelimiter.md)
       * [spring cloud gateway 限流 sentinel](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part06%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20sentinel.md)
+      * [spring cloud gateway 限流 guava](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part07%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20guava.md)
     * spring cloud config
     * spring cloud discovery
     * spring cloud openfeign

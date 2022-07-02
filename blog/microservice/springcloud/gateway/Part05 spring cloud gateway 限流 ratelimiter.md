@@ -1,5 +1,5 @@
 
-# spring cloud gateway 熔断限流 ratelimiter
+# spring cloud gateway 限流 ratelimiter
 
 ### 项目源码地址
 
@@ -9,17 +9,21 @@
 
     https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-requestratelimiter-gatewayfilter-factory
 
-### 限流器 RequestRateLimiter
+### 存在问题
 
-    官方自带的限流器底层基于 redis 令牌桶实现，当前版本的限流器存在问题，不太建议使用：
+    官方当前版本的限流器存在问题：
 
-        redis 无法连接的时候，限流不生效，也不报错
+        限流器仅支持 redis 令牌桶实现
 
-        redis 版本过低不支持逻辑命令，限流不生效，也不报错
+        限流成功，只返回状态码，不允许配置化抛出异常
 
-        只返回状态码，不允许配置化抛出异常
+        redis 无法连接的时候，请求创建连接阻塞，限流不生效，也不报错
 
-    引入 maven 配置：
+        redis 版本过低不支持逻辑命令，请求不阻塞，限流不生效，也不报错
+
+### RequestRateLimiter 多维度集群级别限流
+
+    引入 maven 依赖：
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -60,7 +64,9 @@
 
         requestedTokens                 # 每次请求消耗令牌数，一般都是设置为 1 个
 
-    必须自定义 KeyResolver 获取当前用户的限流标识(默认的实现基本不可用)：
+    必须自定义 KeyResolver 获取限流标识(默认的实现基本不可用)：
+
+        // 自定义限流维度，比如根据路由、用户IP、用户唯一标识等
 
         @Component
         public class GatewayRateLimiterKeyResolver implements KeyResolver {
