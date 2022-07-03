@@ -5,13 +5,15 @@
 
   * spring cloud
     * spring cloud gateway
-      * [spring cloud gateway 简单集成与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part01%20spring%20cloud%20gateway%20%E7%AE%80%E5%8D%95%E9%9B%86%E6%88%90%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
+      * [spring cloud gateway 简单集成与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part01%20spring%20cloud%20gateway%20%80%E5%8D%95%E9%9B%86%E6%88%90%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
       * [spring cloud gateway 自定义过滤器](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part02%20spring%20cloud%20gateway%20%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4%E5%99%A8.md)
       * [spring cloud gateway 登录验证鉴权](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part03%20spring%20cloud%20gateway%20%E7%99%BB%E5%BD%95%E9%AA%8C%E8%AF%81%E9%89%B4%E6%9D%83.md)
       * [spring cloud gateway 熔断 resilience4j](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part04%20spring%20cloud%20gateway%20%E7%86%94%E6%96%AD%20resilience4j.md)
       * [spring cloud gateway 限流 ratelimiter](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part05%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20ratelimiter.md)
       * [spring cloud gateway 限流 sentinel](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part06%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20sentinel.md)
       * [spring cloud gateway 限流 guava](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part07%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20guava.md)
+      * [spring cloud gateway 链路追踪 sleuth](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part08%20spring%20cloud%20gateway%20%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%20sleuth.md)
+      * [spring cloud gateway 链路追踪 skywalking](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part09%20spring%20cloud%20gateway%20%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%20skywalking.md)
     * spring cloud config
     * spring cloud discovery
     * spring cloud openfeign
