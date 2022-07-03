@@ -1,17 +1,19 @@
 
 # spring cloud gateway 限流 ratelimiter
 
-### 项目源码地址
+### 相关文档
 
-    https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
+  * 官方文档地址：
 
-### 官方文档地址
+        https://docs.spring.io/spring-cloud/docs/current/reference/html/
 
-    https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-requestratelimiter-gatewayfilter-factory
+        https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/
 
-### 存在问题
+  * 示例源码地址：
 
-    官方当前版本的限流器存在问题：
+        https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
+
+  * 直至当前最新版本(spring cloud 2021.0.3)，存在的问题：
 
         限流器仅支持 redis 令牌桶实现
 
@@ -21,18 +23,34 @@
 
         redis 版本过低不支持逻辑命令，请求不阻塞，限流不生效，也不报错
 
-### RequestRateLimiter 多维度集群级别限流
+### 网关 RequestRateLimiter 限流配置
 
-    引入 maven 依赖：
+  * 引入 maven 依赖：
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
         </dependency>
 
-    配置示例：
+  * 限流配置参数含义：
+
+        replenishRate                   # 每秒产生的令牌数
+
+        burstCapacity                   # 令牌桶大小
+
+        requestedTokens                 # 每次请求消耗令牌数，一般都是设置为 1 个
+
+  * 自定义 KeyResolver 获取限流标识，这里定义为客户端 IP 地址：
+
+        @Bean("hostKeyResolver")
+        public KeyResolver hostKeyResolver() {
+            return exchange -> Mono.just(exchange.getRequest().getRemoteAddress().getAddress().getHostAddress());
+        }
+
+  * 添加 application.yml 配置：
 
         spring:
+          # redis 配置，默认基于 redis 实现
           redis:
             host: 192.168.140.144
             port: 6379
@@ -41,6 +59,7 @@
             pool:
               max-active: 1000
               max-idle: 8
+          # 网关配置
           cloud:
             gateway:
               routes:
@@ -48,110 +67,10 @@
                 predicates:
                   - Path=/baidu/**
                 filters:
+                  # 引入限流过滤器
                   - name: RequestRateLimiter
                     args:
-                      redis-rate-limiter.replenishRate: 1
-                      redis-rate-limiter.burstCapacity: 1
-                      redis-rate-limiter.requestedTokens: 1
-                  - StripPrefix=1
-                uri: https://www.baidu.com
-
-    参数含义：
-
-        replenishRate                   # 每秒产生的令牌数
-
-        burstCapacity                   # 令牌桶大小
-
-        requestedTokens                 # 每次请求消耗令牌数，一般都是设置为 1 个
-
-    必须自定义 KeyResolver 获取限流标识(默认的实现基本不可用)：
-
-        // 自定义限流维度，比如根据路由、用户IP、用户唯一标识等
-
-        @Component
-        public class GatewayRateLimiterKeyResolver implements KeyResolver {
-
-            @Override
-            public Mono<String> resolve(ServerWebExchange exchange) {
-                return Mono.just(exchange.getRequest().getRemoteAddress().getAddress().getHostAddress());
-            }
-
-        }
-
-    默认的限流过滤器只返回异常状态码(目前版本)，考虑抛出异常修饰为提示信息，可以继承重写过滤器部分逻辑：
-
-        public class RequestRateLimiterGatewayFilterFactoryAdapter extends RequestRateLimiterGatewayFilterFactory {
-
-            public RequestRateLimiterGatewayFilterFactoryAdapter(RateLimiter<?> defaultRateLimiter, KeyResolver defaultKeyResolver) {
-                super(defaultRateLimiter, defaultKeyResolver);
-            }
-
-            @Override
-            public String name() {
-                return "RequestRateLimiterAdapter";
-            }
-
-            private <T> T getOrDefault(T configValue, T defaultValue) {
-                return (configValue != null) ? configValue : defaultValue;
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public GatewayFilter apply(Config config) {
-
-                KeyResolver resolver = getOrDefault(config.getKeyResolver(), getDefaultKeyResolver());
-                RateLimiter<Object> limiter = getOrDefault(config.getRateLimiter(), getDefaultRateLimiter());
-                boolean denyEmpty = getOrDefault(config.getDenyEmptyKey(), isDenyEmptyKey());
-
-                return (exchange, chain) -> resolver.resolve(exchange).defaultIfEmpty(KEY_RESOLVER_KEY).flatMap(key -> {
-                    if (KEY_RESOLVER_KEY.equals(key)) {
-                        if (denyEmpty) {
-                            throw new StatusCodeException(StatusCode.API_NOT_ACCEPTABLE);
-                        }
-                        return chain.filter(exchange);
-                    }
-                    String routeId = config.getRouteId();
-                    if (routeId == null) {
-                        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-                        routeId = route.getId();
-                    }
-                    return limiter.isAllowed(routeId, key).flatMap(response -> {
-
-                        for (Map.Entry<String, String> header : response.getHeaders().entrySet()) {
-                            exchange.getResponse().getHeaders().add(header.getKey(), header.getValue());
-                        }
-
-                        if (response.isAllowed()) {
-                            return chain.filter(exchange);
-                        } else {
-                            throw new StatusCodeException(StatusCode.USER_FREQUENCY_TOO_QUICKLY);
-                        }
-
-                    });
-                });
-            }
-
-        }
-
-    将重写部分逻辑的实现配置为 bean：
-
-        @Bean
-        public RequestRateLimiterGatewayFilterFactoryAdapter requestRateLimiterGatewayFilterFactoryAdapter(RateLimiter<?> rateLimiter, KeyResolver resolver) {
-            return new RequestRateLimiterGatewayFilterFactoryAdapter(rateLimiter, resolver);
-        }
-
-    把限流过滤器名称换成 RequestRateLimiterAdapter：
-
-        spring:
-          cloud:
-            gateway:
-              routes:
-              - id: baidu
-                predicates:
-                  - Path=/baidu/**
-                filters:
-                  - name: RequestRateLimiterAdapter
-                    args:
+                      key-resolver: "#{@hostKeyResolver}"
                       redis-rate-limiter.replenishRate: 1
                       redis-rate-limiter.burstCapacity: 1
                       redis-rate-limiter.requestedTokens: 1

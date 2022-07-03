@@ -1,20 +1,28 @@
 
 # spring cloud gateway 限流 guava
 
-### 项目源码地址
+### 相关文档
 
-    https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
+  * 官方文档地址：
 
-### guava 路由应用级别限流
+        https://docs.spring.io/spring-cloud/docs/current/reference/html/
 
-    引入 maven 依赖：
+        https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/
+
+  * 示例源码地址：
+
+        https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
+
+### 网关 guava 限流配置
+
+  * 引入 maven 依赖：
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
 
-    编写过滤器工厂：
+  * 编写过滤器工厂：
 
         public class GuavaRateLimiterGatewayFilterFactory extends AbstractGatewayFilterFactory<Config> {
 
@@ -69,14 +77,14 @@
 
         }
 
-    注册过滤器工厂 bean：
+  * 注册过滤器工厂 bean：
 
         @Bean
         public GuavaRateLimiterGatewayFilterFactory guavaRateLimiterGatewayFilterFactory() {
             return new GuavaRateLimiterGatewayFilterFactory();
         }
 
-    过滤器配置示例：
+  * 添加 application.yml 配置：
 
         # 每秒允许最大 10 个请求
         spring:

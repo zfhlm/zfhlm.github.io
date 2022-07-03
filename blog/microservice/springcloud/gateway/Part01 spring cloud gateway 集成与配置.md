@@ -3,19 +3,19 @@
 
 ### 相关文档
 
-* 官方文档地址：
+  * 官方文档地址：
 
         https://docs.spring.io/spring-cloud/docs/current/reference/html/
 
         https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/
 
-* 示例源码地址：
+  * 示例源码地址：
 
         https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
 
 ### 网关配置项
 
-* 网关 routes 路由配置，主要包含以下四个部分：
+  * 网关 routes 路由配置，主要包含以下四个部分：
 
         id                              # 路由唯一ID
 
@@ -25,7 +25,7 @@
 
         uri                             # 路由转发目标地址
 
-* 网关 routes predicates 官方提供了以下几种规则：
+  * 网关 routes predicates 官方提供了以下几种规则：
 
         After                           # 匹配时间之后
 
@@ -49,7 +49,7 @@
 
         (注意，可以配合使用一个到多个，多个匹配条件为 and 逻辑，必须满足这些条件才使用此路由)
 
-* 网关 routes filters 官方提供的常用过滤器(查看官方文档)：
+  * 网关 routes filters 官方提供的常用过滤器(查看官方文档)：
 
         AddRequestHeader                # 添加请求头
 
@@ -77,7 +77,7 @@
 
         StripPrefix                     # 移除请求路径
 
-* 网关 routes uri 可以指定以下路由转发规则：
+  * 网关 routes uri 可以指定以下路由转发规则：
 
         ws://<websocket-service>        # 转发到指定 websocket 地址服务
 
@@ -87,14 +87,14 @@
 
 ### 创建网关 mrh-spring-cloud-gateway 项目
 
-* 引入 maven 依赖：
+  * 引入 maven 依赖：
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
 
-* 添加 application.yml 配置：
+  * 添加 application.yml 配置：
 
         server:
           port: 8081
@@ -104,7 +104,7 @@
           application:
             name: mrh-spring-cloud-gateway
 
-* 创建启动类：
+  * 创建启动类：
 
         @SpringBootApplication
         @ComponentScan(basePackageClasses=GatewayStarter.class)
@@ -116,7 +116,7 @@
 
 ### 配置网关静态路由
 
-* 添加 application.yml 配置：
+  * 添加 application.yml 配置：
 
         # /baidu/** 路由到 https://www.baidu.com/**
         spring:
@@ -130,7 +130,7 @@
                   - StripPrefix=1
                 uri: https://www.baidu.com
 
-* 启动网关，使用浏览器发起请求：
+  * 启动网关，使用浏览器发起请求：
 
         http://localhost:8081/baidu/s
 
@@ -138,7 +138,7 @@
 
 ### 配置网关动态路由
 
-* 创建路由目标服务：
+  * 创建路由目标服务：
 
         引入 maven 依赖：
 
@@ -193,7 +193,7 @@
                 }
             }
 
-* 配置网关动态路由
+  * 配置网关动态路由
 
         添加 maven 配置：
 
@@ -233,7 +233,7 @@
                       - StripPrefix=1
                     uri: lb://mrh-spring-cloud-api-admin
 
-* 启动测试
+  * 启动测试
 
         启动网关和路由目标服务，使用浏览器发起请求：
 

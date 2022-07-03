@@ -1,26 +1,32 @@
 
 # spring cloud gateway 限流 sentinel
 
-### 项目源码地址
+### 相关文档
 
-    https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
+  * 官方文档地址：
 
-### 官方文档地址
+        https://docs.spring.io/spring-cloud/docs/current/reference/html/
 
-    https://sentinelguard.io/zh-cn/docs/flow-control.html
+        https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/
 
-    https://github.com/alibaba/Sentinel/wiki/API-Gateway-Flow-Control
+        https://sentinelguard.io/zh-cn/docs/flow-control.html
 
-### sentinel 路由应用级别限流
+        https://github.com/alibaba/Sentinel/wiki/API-Gateway-Flow-Control
 
-    引入 maven 依赖（别引入其他的包，最新版本 2021.1 跟 spring cloud gateway 有冲突）：
+  * 示例源码地址：
+
+        https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
+
+### 网关 sentinel 限流配置
+
+  * 引入 maven 依赖：
 
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
         </dependency>
 
-    重写过滤器(自定义顺序和配置注入)：
+  * 重写过滤器(自定义顺序和配置注入)：
 
         public class SentinelGatewayFilterFactory extends AbstractGatewayFilterFactory<NameConfig> implements InitializingBean {
 
@@ -50,7 +56,7 @@
 
         }
 
-    注册工厂 bean：
+  * 注册过滤器工厂 bean：
 
         @Bean
         @ConfigurationProperties(prefix="sentinel.gateway.flow")
@@ -58,7 +64,7 @@
             return new SentinelGatewayFilterFactory();
         }
 
-    配置文件 application.yml 添加限流配置：
+  * 添加 application.yml 限流配置：
 
         spring:
           cloud:
@@ -79,7 +85,7 @@
                 count: 1
                 interval-sec: 1
 
-    更改 sentinel 输出日志目录，添加启动参数，或者使用代码进行配置：
+  * 更改 sentinel 输出日志目录，二选一配置：
 
         // 添加 java 启动参数
         -Dcsp.sentinel.log.dir=/usr/local/logs/csp/
