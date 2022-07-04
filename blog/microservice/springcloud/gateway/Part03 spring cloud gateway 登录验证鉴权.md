@@ -17,36 +17,60 @@
 
         https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
 
-### 简单说明(其他查看源码)
+### 网关鉴权
 
-  * 项目模块：
+  * 权限服务发布权限信息包括：
 
-        网关 mrh-spring-cloud-gateway                       # 延用 Part01 创建的网关
+        接口信息 GatewayApi
 
-        服务 mrh-spring-cloud-api-admin                     # 延用 Part01 创建的服务
+        角色信息 GatewayRole
 
-        模块 mrh-spring-cloud-reference                     # 存放服务共享定义
+        角色可调用接口信息 GatewayRole.Apis
 
-  * 引入组件：
+  * 网关启动获取权限信息流程
 
-        spring cloud bus amqp                               # 用于网关与服务之间的数据交换，降低网关与其他服务的耦合度
+        网关                               消息总线                            权限服务
+        |   publish started event             |                                     |
+        |------------------------------------>|       receive started event         |
+        |                                     |------------------------------------>|
+        |                                     |                                     |
+        |                                     |       publish permission event      |
+        |   receive permission event          |<------------------------------------|
+        |<------------------------------------|                                     |
+        |refresh api and role cache           |                                     |
 
-        json web token                                      # 用户登录令牌生成工具
+  * 权限服务启动、权限更改，发布权限流程
 
-        spring data redis reactive                          # 用户登录令牌的存储
+        权限服务                           消息总线                                网关
+        |   publish permission event          |                                     |
+        |------------------------------------>|    receive permission event         |
+        |                                     |------------------------------------>|
+        |                                     |           refresh api and role cache|
 
-  * 自定义过滤器：
+  * 用户登录验证、权限验证、令牌生成流程：
 
-        PrintCircuitGatewayFilterFactory                    # order = -301 输出日志开关
+        (令牌先获取、解析、鉴权，最后才验证是否已废弃，考虑到如果 token 使用 redis 存储有网络开销，所以放到最后进行)
 
-        PrintCircuitBaseOnApiGatewayFilterFactory           # order = -201 输出日志开关(根据GatewayApi动态配置)
-
-        PrintRequestLineGatewayFilterFactory                # order = -101 输出请求line日志
-
-        PrintRequestJsonBodyGatewayFilterFactory            # order = -100 输出请求json日志
-
-        PrintResponseJsonBodyGatewayFilterFactory           # order = -100 输出响应json日志
-
-        ModifyLoginResponseBodyGatewayFilterFactory         # order = -51  移动响应头登录令牌，移动到json body
-
-        AuthenticateGatewayFilterFactory                    # 无 order 用户登录与权限验证、登录令牌生成到响应头、登录令牌存储和验证
+        网关                                                                                                            目标服务
+        |request    allow anonymous                                                                                          |
+        |-------->|--------------------------------------------------------------------------------------------------------->|
+        |         |                                                                                                          |
+        |         | not allow anonymous                                                                                      |
+        |         |--------------------->| get token                                                                         |
+        | token not exist                |---------->|                                                                       |
+        |<-------------------------------------------| parse token                                                           |
+        | wrong or expired token                     |------------>|                                                         |
+        |<---------------------------------------------------------| permission valid                                        |
+        | no permission                                            |----------------->|                                      |
+        |<----------------------------------------------------------------------------| token discard valid                  |
+        | discarded token                                                             |------------>|                        |
+        |<------------------------------------------------------------------------------------------|add user info to header |
+        |                                                                                           |----------------------->|
+        |                                                                                                                    |
+        |                                                                                                   is login api     |
+        |                                                                   get user info from header |<---------------------|
+        |                                generate token and add to header |<--------------------------|                      |
+        |  add token to response body  |<---------------------------------|                                                  |
+        |<-----------------------------| store token                                                                         |
+        |                                                                                                   not login api    |
+        |<-------------------------------------------------------------------------------------------------------------------|

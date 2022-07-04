@@ -19,13 +19,13 @@
 
   * 总共有四种类型：
 
-        DECORATE_QUEUES         # 根据 reactor 运算符队列进行包装，有日志 traceId 丢失问题
+        DECORATE_QUEUES         # 根据 reactor 运算符队列进行包装，有日志 traceId 丢失问题，对性能影响很大
 
         DECORATE_ON_EACH        # 对 reactor 所有运算符进行包装，对性能影响很大
 
-        DECORATE_ON_LAST        # 对 reactor 最后一个运算符进行包装，有日志 traceId 丢失问题
+        DECORATE_ON_LAST        # 对 reactor 最后一个运算符进行包装，有日志 traceId 丢失问题，对性能影响较大
 
-        MANUAL                  # 手动控制日志打印，如果不使用指定的方式进行打印日志 traceId 丢失，性能影响最小
+        MANUAL                  # 使用指定的方式手动控制日志打印，性能影响最小
 
         (一般选择 DECORATE_ON_EACH 或者 MANUAL，网关日志埋点处相对较少，选择 MANUAL 类型更合适)
 
@@ -256,14 +256,14 @@
 
         }
 
-  * 实例化 sleuth bean holder：
+  * 容器启动时对 sleuth bean holder 进行配置：
 
         @Bean
         public ApplicationContextAware sleuthTracerInitializer() {
             return context -> GatewayExchangeUtils.Sleuth.initialize(context);
         }
 
-  * 在自定义过滤器、异常处理器、断路异常failback 等处，将 Log 替换为 自定义 Logger 即可：
+  * 在自定义过滤器、异常处理器、断路异常fallback 等处，将 Log 替换为 自定义 Logger 即可：
 
         // 创建 Logger 对象
         private final GatewayLogger log = GatewayLoggerFactory.getLog(getClass());

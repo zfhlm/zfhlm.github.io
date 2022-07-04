@@ -15,6 +15,9 @@
       * [spring cloud gateway 链路追踪 sleuth](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part08%20spring%20cloud%20gateway%20%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%20sleuth.md)
       * [spring cloud gateway 链路追踪 skywalking](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part09%20spring%20cloud%20gateway%20%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%20skywalking.md)
     * spring cloud config
+      * [spring cloud config 配置中心]()
+      * [spring cloud consul 配置中心]()
+      * [spring cloud alibaba nacos 配置中心]()
     * spring cloud discovery
     * spring cloud openfeign
     * spring cloud circuit breaker
