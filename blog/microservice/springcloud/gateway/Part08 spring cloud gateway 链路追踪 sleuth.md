@@ -47,7 +47,11 @@
 
   * 更改 log4j2 日志输出格式：
 
+        {% raw %}
+
         %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} [%equals{%X{traceId}}{}{N/A},%equals{%X{spanId}}{}{N/A}] - %msg%n
+
+        {% endraw %}
 
   * 启动网关即可看到日志输出，以下为截取片段：
 
