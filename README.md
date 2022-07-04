@@ -18,6 +18,10 @@
       * [spring cloud consul 配置中心](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/config/Part02%20spring%20cloud%20consul%20%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83.md)
       * [spring cloud alibaba nacos 配置中心](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/config/Part03%20spring%20cloud%20alibaba%20nacos%20%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83.md)
     * spring cloud discovery
+      * [spring cloud discovery 注册中心 zookeeper]()
+      * [spring cloud discovery 注册中心 consul]()
+      * [spring cloud discovery 注册中心 nacos]()
+      * [spring cloud discovery 注册中心 eureka]()
     * spring cloud openfeign
     * spring cloud circuit breaker
     * spring cloud prometheus
