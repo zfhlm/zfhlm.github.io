@@ -51,6 +51,8 @@
             db.pool.config.maximumPoolSize=20
             db.pool.config.minimumIdle=2
 
+            nacos.core.auth.enabled=true
+
     修改 JVM 内存限制（根据实际资源调整），输入命令：
 
         cd /usr/local/nacos/bin
