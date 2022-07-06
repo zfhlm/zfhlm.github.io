@@ -94,7 +94,7 @@
 
             org.springframework.cloud.gateway.handler.FilteringWebHandler
 
-        网关日志调整为 debug 级别，并发起一次网关请求，日志输出过滤器排序顺序：
+        网关日志调整为 debug 级别，并发起一次网关请求，日志输出过滤器排序顺序示例：
 
             2022-06-28 10:55:50.351 DEBUG org.springframework.cloud.gateway.handler.FilteringWebHandler - Sorted gatewayFilterFactories:
             [

@@ -7,12 +7,13 @@
     * spring cloud gateway
       * [spring cloud gateway 集成与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part01%20spring%20cloud%20gateway%20%E9%9B%86%E6%88%90%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
       * [spring cloud gateway 自定义过滤器](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part02%20spring%20cloud%20gateway%20%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4%E5%99%A8.md)
-      * [spring cloud gateway 登录验证鉴权](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part03%20spring%20cloud%20gateway%20%E7%99%BB%E5%BD%95%E9%AA%8C%E8%AF%81%E9%89%B4%E6%9D%83.md)
-      * [spring cloud gateway 熔断 resilience4j](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part04%20spring%20cloud%20gateway%20%E7%86%94%E6%96%AD%20resilience4j.md)
-      * [spring cloud gateway 限流 ratelimiter](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part05%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20ratelimiter.md)
-      * [spring cloud gateway 限流 sentinel](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part06%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20sentinel.md)
-      * [spring cloud gateway 限流 guava](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part07%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20guava.md)
-      * [spring cloud gateway 链路追踪 sleuth](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part08%20spring%20cloud%20gateway%20%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%20sleuth.md)
+      * [spring cloud gateway 自定义路由断言](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part03%20spring%20cloud%20gateway%20%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B7%AF%E7%94%B1%E6%96%AD%E8%A8%80.md)
+      * [spring cloud gateway 登录验证鉴权](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part04%20spring%20cloud%20gateway%20%E7%99%BB%E5%BD%95%E9%AA%8C%E8%AF%81%E9%89%B4%E6%9D%83.md)
+      * [spring cloud gateway 熔断 resilience4j](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part05%20spring%20cloud%20gateway%20%E7%86%94%E6%96%AD%20resilience4j.md)
+      * [spring cloud gateway 限流 ratelimiter](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part06%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20ratelimiter.md)
+      * [spring cloud gateway 限流 sentinel](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part07%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20sentinel.md)
+      * [spring cloud gateway 限流 guava](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part08%20spring%20cloud%20gateway%20%E9%99%90%E6%B5%81%20guava.md)
+      * [spring cloud gateway 链路追踪 sleuth](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part09%20spring%20cloud%20gateway%20%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%20sleuth.md)
     * spring cloud config
       * [spring cloud config 配置中心](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/config/Part01%20spring%20cloud%20config%20%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83.md)
       * [spring cloud consul 配置中心](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/config/Part02%20spring%20cloud%20consul%20%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83.md)
@@ -22,7 +23,11 @@
       * [spring cloud discovery 注册中心 consul](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/discovery/Part02%20spring%20cloud%20discovery%20%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%20consul.md)
       * [spring cloud discovery 注册中心 nacos](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/discovery/Part03%20spring%20cloud%20discovery%20%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%20nacos.md)
       * [spring cloud discovery 注册中心 eureka](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/discovery/Part04%20spring%20cloud%20discovery%20%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%20eureka.md)
+      * [spring cloud discovery 无注册中心](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/discovery/Part05%20spring%20cloud%20discovery%20%E6%97%A0%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.md)
     * spring cloud openfeign
+      * [spring cloud openfeign 集成与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part01%20spring%20cloud%20openfeign%20%E9%9B%86%E6%88%90%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
+      * [spring cloud openfeign 服务调用熔断](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part02%20spring%20cloud%20openfeign%20%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%86%94%E6%96%AD.md)
+      * [spring cloud openfeign 异常解码器](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part03%20spring%20cloud%20openfeign%20%E5%BC%82%E5%B8%B8%E8%A7%A3%E7%A0%81%E5%99%A8.md)
     * spring cloud circuit breaker
     * spring cloud prometheus
 
