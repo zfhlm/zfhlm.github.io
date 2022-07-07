@@ -37,7 +37,7 @@
 
   * 创建 openfeign 客户端接口：
 
-        @FeignClient(name="${feign.clients.organ}", contextId="organClient", fallbackFactory=OrganClientFallbackFactory.class)
+        @FeignClient(name="${feign.clients.organ}", contextId="organ-client", fallbackFactory=OrganClientFallbackFactory.class)
         public interface OrganClient {
 
             @GetMapping(path="/api/organ/{id}")
@@ -297,12 +297,14 @@
 
         http://localhost:9528/api/v1/organ/add
 
-### 失败重试
+### 开启失败重试
 
-  * openfeign 默认为失败不重试，如果需要开启重试，查看以下官方实现，注册为 bean 即可：
+  * openfeign 默认为失败不重试，如果需要开启重试，查看以下官方实现：
 
         feign.Retryer
 
         feign.Retryer.Default
 
         Retryer feign.Retryer.NEVER_RETRY
+
+  * 注册 Retryer bean 即可覆盖默认重试策略

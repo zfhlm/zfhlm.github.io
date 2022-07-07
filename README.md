@@ -29,7 +29,7 @@
       * [spring cloud openfeign 自定义错误解码器](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part02%20spring%20cloud%20openfeign%20%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E8%A7%A3%E7%A0%81%E5%99%A8.md)
       * [spring cloud openfeign 自定义请求拦截器](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part03%20spring%20cloud%20openfeign%20%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%E5%99%A8.md)
       * [spring cloud openfeign 服务熔断限时](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part04%20spring%20cloud%20openfeign%20%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD%E9%99%90%E6%97%B6.md)
-      * [spring cloud openfeign 服务流量控制](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part05%20spring%20cloud%20openfeign%20%E6%9C%8D%E5%8A%A1%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6.md)
+      * [spring cloud openfeign 服务容错隔离](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part05%20spring%20cloud%20openfeign%20%E6%9C%8D%E5%8A%A1%E5%AE%B9%E9%94%99%E9%9A%94%E7%A6%BB.md)
     * spring cloud sleuth
     * spring cloud alibaba
 

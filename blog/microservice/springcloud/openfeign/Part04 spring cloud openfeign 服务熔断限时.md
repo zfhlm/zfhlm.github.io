@@ -21,6 +21,8 @@
 
 ### 服务熔断限时
 
+  * 服务限时，限制请求最大等待时间，超过则中断请求并抛出异常
+
   * 服务熔断，考虑到多层依赖：
 
             service-A                                   service-B                                service-C
@@ -47,8 +49,6 @@
 
         ③，熔断异常应该在服务内部被处理完成，不宜再往上传递，否则会导致调用链每层都触发熔断
 
-  * 服务限时，限制请求最大等待时间，超过则中断请求并抛出异常
-
 ### 服务调用开启熔断限时
 
   * 引入 maven 依赖：
@@ -58,7 +58,7 @@
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
 
-  * 手动注册 FallbackFactory (也可以使用自动扫描注入)：
+  * 手动注册 FallbackFactory：
 
         @Configuration
         public class FallbackConfiguration {
@@ -80,13 +80,13 @@
 
 ### 熔断限时默认配置
 
-  * 默认的熔断、限时配置不一定合理，复用 resilience4j 注入配置，从中读取以下两个配置，作为熔断、限时默认配置：
+  * 使用 resilience4j 的注入配置，从中读取以下两个配置，作为熔断、限时默认配置：
 
         resilience4j.circuitbreaker.configs.default
 
         resilience4j.timelimiter.configs.default
 
-  * 创建覆盖默认配置 bean 实现：
+  * 读取配置并添加到熔断限时默认配置，创建 Customizer 实现类：
 
         public class ConfigureDefaultCircuitBreakerFactoryCustomizer implements Customizer<Resilience4JCircuitBreakerFactory> {
 
@@ -126,7 +126,7 @@
 
         }
 
-  * 注入覆盖默认配置 bean 实现：
+  * 将 Customizer 实现类注册为 bean：
 
         @Bean
         public ConfigureDefaultCircuitBreakerFactoryCustomizer configureDefaultCircuitBreakerFactoryCustomizer(
@@ -158,83 +158,101 @@
                 timeoutDuration: 5s
                 cancelRunningFuture: true
 
-### 熔断实例配置
+  * 熔断限时默认每个 client 的 method 单独一个实例，实例之间互不影响，可查看源码：
 
-  * 熔断自动配置类，可以看到使用了 resilience4j 的 circuitBreaker、timeLimiter 和 Bulkhead(非必须，限流相关)：
-
-        org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JAutoConfiguration
-
-  * 熔断默认基于方法级别，每个方法作为一个熔断实例，实例名称解析实现，可查看源码：
+        org.springframework.cloud.openfeign.FeignCircuitBreakerInvocationHandler
 
         org.springframework.cloud.openfeign.FeignAutoConfiguration.CircuitBreakerPresentFeignTargeterConfiguration.DefaultCircuitBreakerNameResolver
 
-        org.springframework.cloud.openfeign.FeignAutoConfiguration.CircuitBreakerPresentFeignTargeterConfiguration.AlphanumericCircuitBreakerNameResolver
+### 使用 alphanumeric-ids 更改熔断限时实例配置
 
-        (因为 resilience4j 配置文件注入不支持非字母、数字、横杠连接符之外字符，所以提供了 alphanumeric-ids 实例名称解析器，具体查看官方文档)
+  * 需要开启 alphanumeric-ids 添加以下配置：
 
-  * 创建自定义熔断实例名称解析器，例如每个 openfeign remote service 作为一个熔断实例：
+        feign.circuitbreaker.alphanumeric-ids.enabled: true
+
+  * 添加 application.yml 熔断限流配置：
+
+        # 这里不再解释参数，查看 resilience4j 官方文档，或查看博客 [spring cloud gateway 熔断 resilience4j]
+        resilience4j:
+          circuitbreaker:
+            configs:
+              default:
+                failureRateThreshold: 50
+                slowCallRateThreshold: 100
+                slowCallDurationThreshold: 60s
+                waitDurationInOpenState: 60s
+                permittedNumberOfCallsInHalfOpenState: 10
+                slidingWindowType: COUNT_BASED
+                slidingWindowSize: 100
+                minimumNumberOfCalls: 10
+                ignoreExceptions:
+                  - org.lushen.mrh.cloud.reference.supports.ServiceBusinessException
+            instances:
+              OrganClientget:
+                baseConfig: default
+              OrganClientadd:
+                baseConfig: default
+          timelimiter:
+            configs:
+              default:
+                timeoutDuration: 5s
+                cancelRunningFuture: true
+            instances:
+              OrganClientget:
+                baseConfig: default
+              OrganClientadd:
+                baseConfig: default
+
+### 扩展熔断限时实例名称生成方式
+
+  * 基于官方提供的接口 CircuitBreakerNameResolver，我们可以调整实例名称生成方式，进而达到更改实例的范围：
+
+        // 每个 openfeign 订阅的服务 作为一个实例，服务级别的熔断，粒度比较粗糙
 
         public class ServiceNameCircuitBreakerNameResolver implements CircuitBreakerNameResolver {
-
             @Override
             public String resolveCircuitBreakerName(String feignClientName, Target<?> target, Method method) {
                 return target.name();
             }
-
         }
 
-  * 创建自定义熔断实例名称解析器，例如每个 openfeign client 作为一个熔断实例：
+        // 每个 openfeign client 作为一个实例，client 级别的熔断，粒度中等
 
         public class ClientNameCircuitBreakerNameResolver implements CircuitBreakerNameResolver {
-
-            private final Map<String, String> mappings = new ConcurrentHashMap<>();
-
             @Override
             public String resolveCircuitBreakerName(String feignClientName, Target<?> target, Method method) {
-                return mappings.computeIfAbsent(feignClientName, k -> {
-                    // guava 库
-                    return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, feignClientName.replaceAll("[^a-zA-Z0-9\\-]", ""));
-                });
+                return feignClientName;
             }
-
         }
 
-  * 创建自定义熔断实例名称解析器，例如每个 openfeign method 作为一个熔断实例(自定义名称生成方式)：
+        // 每个 openfeign client method 作为一个实例，自定义的名称生成方式，method 级别的熔断，粒度最小
 
         public class MethodNameCircuitBreakerNameResolver implements CircuitBreakerNameResolver {
-
             @Override
             public String resolveCircuitBreakerName(String feignClientName, Target<?> target, Method method) {
-
                 StringBuilder builder = new StringBuilder();
-
                 // 客户端名称
                 for(char ch : feignClientName.toCharArray()) {
                     if(Character.isLetter(ch) || Character.isDigit(ch) || ch == '-') {
                         builder.append(ch);
                     }
                 }
-
                 // 连接符
                 if(builder.charAt(builder.length()-1) != '-') {
                     builder.append('-');
                 }
-
                 // 方法名称
                 for(char ch : method.getName().toCharArray()) {
                     if(Character.isLetter(ch) || Character.isDigit(ch)) {
                         builder.append(ch);
                     }
                 }
-
                 // guava 库，统一转换
                 return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, builder.toString());
-
             }
-
         }
 
-  * 注册自定义解析器 bean (注册一个即可，这里使用 每个 openfeign client 作为一个熔断实例)：
+  * 选择一个自定义实例名称解析器：
 
         @Bean
         public ClientNameCircuitBreakerNameResolver clientNameCircuitBreakerNameResolver() {
@@ -259,6 +277,7 @@
                 ignoreExceptions:
                   - org.lushen.mrh.cloud.reference.supports.ServiceBusinessException
             instances:
+              # 名称要与解析器生成名称一致
               organ-client:
                 baseConfig: default
           timelimiter:
@@ -267,5 +286,6 @@
                 timeoutDuration: 5s
                 cancelRunningFuture: true
             instances:
+              # 名称要与解析器生成名称一致
               organ-client:
                 baseConfig: default

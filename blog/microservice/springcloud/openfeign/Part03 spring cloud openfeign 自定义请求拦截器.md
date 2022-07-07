@@ -15,13 +15,13 @@
 
         https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
 
-### 自定义请求拦截器
+### 标识 openfeign 请求
 
   * 创建自定义拦截器：
 
         public class FromFeignRequestInterceptor implements RequestInterceptor {
 
-            public static final String REQUEST_FROM_FEIGN_HEADER = "Rquest-From-Feign";
+            public static final String REQUEST_FROM_FEIGN_HEADER = "Request-From-Feign";
 
             public static final String REQUEST_FROM_FEIGN_VALUE = "true";
 
@@ -32,7 +32,7 @@
 
         }
 
-  * 注册为 spring bean：
+  * 注册为 spring bean 即完成配置：
 
         @Bean
         public FromFeignRequestInterceptor fromFeignRequestInterceptor() {
