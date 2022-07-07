@@ -54,7 +54,7 @@
 
         ③，如果实例生效范围是 method 级别，仍然是每个 client 作为一个隔离仓
 
-        隔离仓的名称 = @FeignClient#name()
+        隔离仓的名称 = @FeignClient#contextId()
 
   * 线程池隔离必须考虑的问题：
 
