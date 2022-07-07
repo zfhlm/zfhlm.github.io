@@ -3,6 +3,7 @@
 
 ## 我的博客
 
+  * spring boot
   * spring cloud
     * spring cloud gateway
       * [spring cloud gateway 集成与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/gateway/Part01%20spring%20cloud%20gateway%20%E9%9B%86%E6%88%90%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
@@ -30,8 +31,12 @@
       * [spring cloud openfeign 自定义请求拦截器](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part03%20spring%20cloud%20openfeign%20%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%E5%99%A8.md)
       * [spring cloud openfeign 服务熔断限时](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part04%20spring%20cloud%20openfeign%20%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD%E9%99%90%E6%97%B6.md)
       * [spring cloud openfeign 服务容错隔离](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part05%20spring%20cloud%20openfeign%20%E6%9C%8D%E5%8A%A1%E5%AE%B9%E9%94%99%E9%9A%94%E7%A6%BB.md)
+    * spring cloud bus
+      * [spring cloud bus 消息总线 amqp](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/bus/Part01%20spring%20cloud%20bus%20%E6%B6%88%E6%81%AF%E6%80%BB%E7%BA%BF%20amqp.md)
+      * [spring cloud bus 消息总线 kafka](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/bus/Part02%20spring%20cloud%20bus%20%E6%B6%88%E6%81%AF%E6%80%BB%E7%BA%BF%20kafka.md)
+      * [spring cloud bus 自定义事件通知](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/bus/Part03%20spring%20cloud%20bus%20%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%E9%80%9A%E7%9F%A5.md)
     * spring cloud sleuth
-    * spring cloud alibaba
+    * spring cloud alibaba dubbo
 
 ## 我的项目
 
