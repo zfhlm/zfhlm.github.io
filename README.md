@@ -36,7 +36,9 @@
       * [spring cloud bus 消息总线 kafka](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/bus/Part02%20spring%20cloud%20bus%20%E6%B6%88%E6%81%AF%E6%80%BB%E7%BA%BF%20kafka.md)
       * [spring cloud bus 自定义事件通知](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/bus/Part03%20spring%20cloud%20bus%20%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%E9%80%9A%E7%9F%A5.md)
     * spring cloud sleuth
-    * spring cloud alibaba dubbo
+      * [spring cloud sleuth 集成与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/sleuth/Part01%20spring%20cloud%20sleuth%20%E9%9B%86%E6%88%90%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
+      * [spring cloud sleuth 接入 zipkin](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/sleuth/Part02%20spring%20cloud%20sleuth%20%E6%8E%A5%E5%85%A5%20zipkin.md)
+    * spring cloud alibaba
 
 ## 我的项目
 
