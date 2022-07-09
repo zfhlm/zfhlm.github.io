@@ -1,13 +1,29 @@
 
-# prometheus 集成 springcloud 应用
+# spring cloud 服务监控 prometheus
 
-### 搭建注册中心
+### 相关文档
 
-    (任意类型注册中心，代码示例使用的是zookeeper)
+  * 官方文档地址：
 
-### 创建 springcloud 应用
+        https://docs.spring.io/spring-cloud/docs/current/reference/html/
 
-    maven 配置：
+        https://prometheus.io/docs/introduction/overview/
+
+  * 示例源码地址：
+
+        https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-cloud
+
+### 集成说明
+
+  * 默认的 prometheus 只支持 consul 服务自动发现，使用其他注册中心需要额外扩展并部署一个转换程序，需要额外维护，且开源不一定有实现
+
+  * 当前扩展方式，创建 controller 读取注册中心所有节点信息，暴露给 prometheus 抓取，支持任何 spring cloud 设配的注册中心
+
+  * 抓取接口放到可以放到任意服务中
+
+### 集成步骤
+
+  * 添加 maven 依赖：
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -23,44 +39,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zookeeper-discovery</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-httpclient</artifactId>
-        </dependency>
 
-    application.yml 配置：
+  * 添加 application.yml 配置：
 
-        # 容器配置
-        server:
-          port: 8889
-
-        # spring boot 配置
-        spring:
-          application:
-            name: prometheus-springcloud
-          profile:
-            active: default
-        management:
-          endpoints:
-            jmx:
-              exposure:
-                include: "*"
-            web:
-              exposure:
-                include: '*'
-          metrics:
-            tags:
-              application: ${spring.application.name}
-
-        # springcloud配置
+        # 注册中心配置
         spring.cloud:
           zookeeper:
             enabled: true
@@ -75,25 +57,23 @@
               metadata:
                 cluster: mrh-cluster
                 service: ${spring.application.name}
-        feign:
-          client:
-            config:
-              default:
-                connectTimeout: 5000
-                readTimeout: 30000
-          compression:
-            request:
-              enabled: true
-              mime-types: application/json
-              min-request-size: 1024
-            response:
-              enabled: true
-
+          # 非注册中心，可以采用静态地址配置
+          discovery:
+            client:
+              simple:
+                instances:
+                  mrh-spring-cloud-api-simple:
+                  - uri: http://localhost:9529
+                  - uri: http://localhost:9530
+                  - uri: http://localhost:9531
+                  mrh-spring-cloud-api-admin:
+                  - uri: http://localhost:9550
+                  - uri: http://localhost:9551
+                  - uri: http://localhost:9552
     启动类：
 
         @SpringBootApplication
         @ComponentScan(basePackageClasses=Application.class)
-        @EnableDiscoveryClient
         @EnableFeignClients(basePackageClasses={Application.class})
         public class Application {
 
@@ -103,31 +83,8 @@
 
         }
 
-    启动两个 springcloud 进程，输入命令：
+  * 创建 prometheus http_sd_configs 抓取接口
 
-        cd /usr/local/app/
-
-        nohup java -jar -Dserver.port=8889 cloud.jar &
-
-        nohup java -jar -Dserver.port=8890 cloud.jar &
-
-### 集成 prometheus 服务自动发现
-
-    controller 说明：
-
-        1，默认的 prometheus 只支持 consul 服务自动发现，使用其他注册中心需要额外扩展并部署一个转换程序，需要额外维护，且开源不一定有实现
-
-        2，当前扩展方式，采用 http 接口去暴露集群的所有服务信息，添加一个 controller 读取注册中心所有节点信息，暴露给 prometheus 抓取，支持任何 spring cloud 设配的注册中心
-
-        3，这里为了速度，把抓取接口放到了 spring cloud 示例应用中，实际应用可以发布在网关，然后使用 nginx 把接口代理暴露出去
-
-    controller 代码：
-
-        /**
-         * prometheus http_sd_configs 抓取接口
-         *
-         * @author hlm
-         */
         @RestController
         @RequestMapping(path="")
         public class PrometheusHttpSdConfigController {
@@ -181,23 +138,11 @@
 
         }
 
-    注意，controller 添加完成之后，重新打包发布，重启应用
+  * 添加 prometheus 抓取配置，输入命令：
 
-### 集成到 prometheus
-
-    修改 prometheus 配置文件，输入命令：
-
-        cd /usr/local/prometheus
-
-        vi prometheus.yml
-
-        =>
-
-            scrape_configs:
-              - job_name: "springcloud"
-                metrics_path: /actuator/prometheus
-                scheme: http
-                http_sd_configs:
-                  - url: http://192.168.140.130:8889/prometheus/config/sd
-
-    重启 prometheus 进程，即完成所有配置
+        scrape_configs:
+          - job_name: "springcloud"
+            metrics_path: /actuator/prometheus
+            scheme: http
+            http_sd_configs:
+              - url: http://192.168.140.130:8889/prometheus/config/sd

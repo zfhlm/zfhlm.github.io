@@ -43,6 +43,9 @@
       * [spring cloud bus 消息总线 amqp](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/bus/Part01%20spring%20cloud%20bus%20%E6%B6%88%E6%81%AF%E6%80%BB%E7%BA%BF%20amqp.md)
       * [spring cloud bus 消息总线 kafka](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/bus/Part02%20spring%20cloud%20bus%20%E6%B6%88%E6%81%AF%E6%80%BB%E7%BA%BF%20kafka.md)
       * [spring cloud bus 自定义事件通知](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/bus/Part03%20spring%20cloud%20bus%20%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%E9%80%9A%E7%9F%A5.md)
+    * spring cloud monitor
+      * [spring cloud 服务监控 spring boot admin](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/monitor/Part01%20spring%20cloud%20%E6%9C%8D%E5%8A%A1%E7%9B%91%E6%8E%A7%20springbootadmin.md)
+      * [spring cloud 服务监控 prometheus](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/monitor/Part02%20spring%20cloud%20%E6%9C%8D%E5%8A%A1%E7%9B%91%E6%8E%A7%20prometheus.md)
     * spring cloud alibaba
     * spring cloud kubernetes
 
@@ -179,8 +182,6 @@
     * [skywalking backend 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/skywalking/Part2%20%E9%9B%86%E7%BE%A4backend%E9%85%8D%E7%BD%AE.md)
     * [skywalking agent 接入](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/skywalking/Part3%20%E5%BA%94%E7%94%A8agent%E9%85%8D%E7%BD%AE.md)
     * [skywalking 监控告警](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/skywalking/Part4%20%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AE.md)
-    * [springbootadmin 监控 springboot 应用](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/springbootadmin/Part1%20%E7%9B%91%E6%8E%A7%20springboot%20%E6%9C%8D%E5%8A%A1.md)
-    * [springbootadmin 监控 springcloud 应用](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/springbootadmin/Part2%20%E7%9B%91%E6%8E%A7%20springcloud%20%E6%9C%8D%E5%8A%A1.md)
     * [prometheus 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEprometheus.md)
     * [prometheus 联邦集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part2%20%E8%81%94%E9%82%A6%E9%9B%86%E7%BE%A4prometheus.md)
     * [prometheus 告警配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part3%20%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AEprometheus.md)
@@ -188,8 +189,6 @@
     * [prometheus 集成 node exporter](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part5%20%E9%9B%86%E6%88%90node%20exporter.md)
     * [prometheus 集成 nginx vts exporter](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part6%20%E9%9B%86%E6%88%90nginx%20vts%20exporter.md)
     * [prometheus 集成 mysql exporter](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part7%20%E9%9B%86%E6%88%90mysql%20exporter.md)
-    * [prometheus 集成 springboot actuator](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part8%20%E9%9B%86%E6%88%90springboot.md)
-    * [prometheus 集成 springcloud actuator](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part9%20%E9%9B%86%E6%88%90springcloud.md)
     * [grafana 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/grafana/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEgrafana.md)
     * [alertmanager 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/alertmanager/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEalertmanager.md)
   * 日志采集
