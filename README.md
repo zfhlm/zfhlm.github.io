@@ -48,7 +48,7 @@
       * [spring cloud 服务监控 prometheus](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/monitor/Part02%20spring%20cloud%20%E6%9C%8D%E5%8A%A1%E7%9B%91%E6%8E%A7%20prometheus.md)
     * spring cloud kubernetes
   * apache dubbo
- 
+
 ## 我的项目
 
   * [mrh-id-generator](https://github.com/zfhlm/mrh-id-generator)
@@ -190,6 +190,8 @@
     * [prometheus 集成 nginx vts exporter](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part6%20%E9%9B%86%E6%88%90nginx%20vts%20exporter.md)
     * [prometheus 集成 mysql exporter](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part7%20%E9%9B%86%E6%88%90mysql%20exporter.md)
     * [grafana 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/grafana/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEgrafana.md)
+    * [grafana 集群配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/grafana/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AEgrafana.md)
+    * [grafana 自定义显示面板](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/grafana/Part3%20%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%9F%E8%AE%A1%E9%9D%A2%E6%9D%BFgrafana.md)
     * [alertmanager 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/alertmanager/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEalertmanager.md)
   * 日志采集
     * [filebeat 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part5%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEfilebeat.md)

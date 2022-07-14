@@ -1,5 +1,5 @@
 
-# 界面展示 grafana
+# 单点配置 grafana
 
 ### 相关文档
 

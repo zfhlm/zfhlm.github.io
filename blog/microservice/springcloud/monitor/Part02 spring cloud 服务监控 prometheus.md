@@ -17,9 +17,9 @@
 
   * 默认的 prometheus 只支持 consul 服务自动发现，使用其他注册中心需要额外扩展并部署一个转换程序，需要额外维护，且开源不一定有实现
 
-  * 当前扩展方式，创建 controller 读取注册中心所有节点信息，暴露给 prometheus 抓取，支持任何 spring cloud 设配的注册中心
+  * 当前扩展方式，创建 controller 读取注册中心所有节点信息，暴露给 prometheus 抓取，支持任何 spring cloud 适配的注册中心
 
-  * 抓取接口放到可以放到任意服务中
+  * 抓取接口放到可以放到任意服务中(网关/子服务)
 
 ### 集成步骤
 
@@ -138,7 +138,7 @@
 
         }
 
-  * 添加 prometheus 抓取配置，输入命令：
+  * 添加 prometheus 抓取配置：
 
         scrape_configs:
           - job_name: "springcloud"
