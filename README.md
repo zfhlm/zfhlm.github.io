@@ -25,6 +25,7 @@
       * [spring cloud discovery 注册中心 nacos](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/discovery/Part03%20spring%20cloud%20discovery%20%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%20nacos.md)
       * [spring cloud discovery 注册中心 eureka](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/discovery/Part04%20spring%20cloud%20discovery%20%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%20eureka.md)
       * [spring cloud discovery 无注册中心](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/discovery/Part05%20spring%20cloud%20discovery%20%E6%97%A0%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.md)
+      * [spring cloud discovery 自定义负载均衡策略](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/discovery/Part06%20spring%20cloud%20discovery%20%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5.md)
     * spring cloud openfeign
       * [spring cloud openfeign 集成与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part01%20spring%20cloud%20openfeign%20%E9%9B%86%E6%88%90%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
       * [spring cloud openfeign 自定义错误解码器](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/openfeign/Part02%20spring%20cloud%20openfeign%20%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E8%A7%A3%E7%A0%81%E5%99%A8.md)
