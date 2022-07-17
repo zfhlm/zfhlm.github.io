@@ -49,6 +49,12 @@
       * [spring cloud 服务监控 prometheus](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/springcloud/monitor/Part02%20spring%20cloud%20%E6%9C%8D%E5%8A%A1%E7%9B%91%E6%8E%A7%20prometheus.md)
     * spring cloud kubernetes
   * apache dubbo
+  * distributed transaction
+    * [分布式事务 atomikos](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part01%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20atomikos.md)
+    * [分布式事务 seata 服务](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part02%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20%E6%9C%8D%E5%8A%A1.md)
+    * [分布式事务 seata XA 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part03%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20XA%E6%A8%A1%E5%BC%8F.md)
+    * [分布式事务 seata AT 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part04%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20AT%E6%A8%A1%E5%BC%8F.md)
+    * [分布式事务 seata TCC 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part05%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20TCC%E6%A8%A1%E5%BC%8F.md)
 
 ## 我的项目
 
