@@ -3,17 +3,19 @@
 
   * 简单介绍
 
-        两阶段提交协议的演变：
+        TCC 模式，不依赖于底层数据资源的事务支持：
 
-            一阶段：业务数据和回滚日志记录在同一个本地事务中提交，释放本地锁和连接资源。
+            一阶段 prepare 行为：调用 自定义 的 prepare 逻辑。
 
-            二阶段：提交异步化，非常快速地完成。回滚通过一阶段的回滚日志进行反向补偿。
+            二阶段 commit 行为：调用 自定义 的 commit 逻辑。
+
+            二阶段 rollback 行为：调用 自定义 的 rollback 逻辑。
 
   * 官方文档地址：
 
         https://seata.io/zh-cn/docs/overview/what-is-seata.html
 
-        https://github.com/seata/seata/blob/develop/script/client/at/db/mysql.sql
+        https://github.com/seata/seata/blob/develop/script/client/tcc/db/mysql.sql
 
   * 示例源码地址：
 
@@ -23,9 +25,9 @@
 
   * 创建两个 spring boot 服务：
 
-        mrh-spring-boot-transaction-seata-at-integral
+        mrh-spring-boot-transaction-seata-tcc-integral
 
-        mrh-spring-boot-transaction-seata-at-user
+        mrh-spring-boot-transaction-seata-tcc-user
 
   * 两个服务，引入 maven 依赖：
 
@@ -58,7 +60,7 @@
 
         spring:
           application:
-            name: mrh-spring-boot-transaction-seata-xa-integral
+            name: mrh-spring-boot-transaction-seata-tcc-integral
           datasource:
             type: org.apache.commons.dbcp2.BasicDataSource
             url: 'jdbc:mysql://192.168.140.130:3306/integral?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8'
@@ -89,7 +91,6 @@
           enable-auto-data-source-proxy: false
           application-id: mrh-seata-xa-integral
           tx-service-group: default_tx_group
-          data-source-proxy-mode: AT
           service:
             vgroup-mapping:
               default_tx_group: default
@@ -111,7 +112,7 @@
 
         spring:
           application:
-            name: mrh-spring-boot-transaction-seata-xa-user
+            name: mrh-spring-boot-transaction-seata-tcc-user
           datasource:
             type: org.apache.commons.dbcp2.BasicDataSource
             url: 'jdbc:mysql://192.168.140.130:3306/user?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8'
@@ -142,7 +143,6 @@
           enable-auto-data-source-proxy: false
           application-id: mrh-seata-xa-user
           tx-service-group: default_tx_group
-          data-source-proxy-mode: AT
           service:
             vgroup-mapping:
               default_tx_group: default
@@ -211,67 +211,111 @@
 
         }
 
-  * 两个服务，配置 seata 代理数据源：
+  * 两个服务，数据库创建用于自动处理 空回滚、防悬挂 的日志表：
 
-        @Configuration
-        public class SeataConfiguration {
+        -- -------------------------------- The script use tcc fence  --------------------------------
+        CREATE TABLE IF NOT EXISTS `tcc_fence_log`
+        (
+            `xid`           VARCHAR(128)  NOT NULL COMMENT 'global id',
+            `branch_id`     BIGINT        NOT NULL COMMENT 'branch id',
+            `action_name`   VARCHAR(64)   NOT NULL COMMENT 'action name',
+            `status`        TINYINT       NOT NULL COMMENT 'status(tried:1;committed:2;rollbacked:3;suspended:4)',
+            `gmt_create`    DATETIME(3)   NOT NULL COMMENT 'create time',
+            `gmt_modified`  DATETIME(3)   NOT NULL COMMENT 'update time',
+            PRIMARY KEY (`xid`, `branch_id`),
+            KEY `idx_gmt_modified` (`gmt_modified`),
+            KEY `idx_status` (`status`)
+        ) ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4;
 
-            // 代理数据源
-            @Bean("dataSourceProxy")
-            @Primary
-            public DataSourceProxy dataSourceProxy(BasicDataSource dataSource) {
-                return new DataSourceProxy(dataSource);
+### 添加测试接口
+
+  * 创建 integral TCC 声明接口：
+
+        public class TestTccParameter {
+
+            private int id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            @Override
+            public String toString() {
+                StringBuilder builder = new StringBuilder();
+                builder.append("TestTccParameter [id=");
+                builder.append(id);
+                builder.append("]");
+                return builder.toString();
             }
 
         }
 
-  * 两个服务，数据源对应的数据库，创建 seata at 用于回滚的日志表：
+        @LocalTCC
+        public interface TestTccAction {
 
-        // https://github.com/seata/seata/blob/develop/script/client/at/db/mysql.sql
+            // useTCCFence=true 处理空回滚、事务悬挂
+            // 注意处理  commitTcc、cancelTcc 幂等问题
 
-        -- for AT mode you must to init this sql for you business database. the seata server not need it.
-        CREATE TABLE IF NOT EXISTS `undo_log`
-        (
-            `branch_id`     BIGINT       NOT NULL COMMENT 'branch transaction id',
-            `xid`           VARCHAR(128) NOT NULL COMMENT 'global transaction id',
-            `context`       VARCHAR(128) NOT NULL COMMENT 'undo_log context,such as serialization',
-            `rollback_info` LONGBLOB     NOT NULL COMMENT 'rollback info',
-            `log_status`    INT(11)      NOT NULL COMMENT '0:normal status,1:defense status',
-            `log_created`   DATETIME(6)  NOT NULL COMMENT 'create datetime',
-            `log_modified`  DATETIME(6)  NOT NULL COMMENT 'modify datetime',
-            UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
-        ) ENGINE = InnoDB
-          AUTO_INCREMENT = 1
-          DEFAULT CHARSET = utf8mb4 COMMENT ='AT transaction mode undo table';
+            @TwoPhaseBusinessAction(name = "prepareTcc", commitMethod = "commitTcc", rollbackMethod = "cancelTcc", useTCCFence=true)
+            public String prepareTcc(@BusinessActionContextParameter(paramName="parameter") TestTccParameter parameter);
 
-### 添加测试接口
+            public void commitTcc(BusinessActionContext context);
+
+            public void cancelTcc(BusinessActionContext context);
+
+        }
 
   * 创建 integral 测试接口：
 
+        //   prepare 一般进行资源锁定，这里测试直接插入数据。
+        //
+        //  真实开发场景，需要配合业务表进行使用，例如：
+        //
+        //      数额相关的场景，表中需要新增相关字段，prepare 阶段，进行库存的预扣，commit/cancel 阶段，进行库存实际扣除
+        //
+        //      简单的入库场景，可以通过预设数据状态，比如正常数据status=1，中间态数据status=2，防止用户看见中间态的数据
+        //      在 prepare 阶段新增数据 status=2，执行 commit 时更改 status=1，执行 cancel 时删除数据
+
         @RestController
-        public class TestController {
+        public class TestController implements TestTccAction {
 
             @Autowired
             private TIntegralMapper integralMapper;
 
             @Transactional
             @RequestMapping(path="integral")
-            public String integral() {
+            @Override
+            public String prepareTcc(TestTccParameter parameter) {
 
                 System.err.println(RootContext.getXID());
+                System.out.println("prepare :: " + parameter);
 
                 // 本地插入
                 TIntegral integral = new TIntegral();
-                integral.setId(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE));
+                integral.setId(parameter.getId());
                 integral.setName(UUID.randomUUID().toString());
                 integralMapper.insert(integral);
 
-                // 模拟错误回滚
-                if(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE)%2 == 0) {
-                    throw new RuntimeException("test");
-                }
-
                 return "success";
+            }
+
+            @Override
+            public void commitTcc(BusinessActionContext context) {
+                TestTccParameter parameter = context.getActionContext("parameter", TestTccParameter.class);
+                System.out.println("commit :: " + parameter);
+            }
+
+          @Transactional
+            @Override
+            public void cancelTcc(BusinessActionContext context) {
+                TestTccParameter parameter = context.getActionContext("parameter", TestTccParameter.class);
+                System.out.println("cancel :: " + parameter);
+                integralMapper.deleteByPrimaryKey(parameter.getId());
             }
 
         }
@@ -304,7 +348,7 @@
             @Autowired
             private TUserMapper userMapper;
 
-            @GlobalTransactional(rollbackFor=Throwable.class, timeoutMills=5000)
+            @GlobalTransactional(rollbackFor=Throwable.class, timeoutMills=500000)
             @Transactional
             @RequestMapping(path="user")
             public String user() {
@@ -317,10 +361,18 @@
                 user.setName(UUID.randomUUID().toString());
                 userMapper.insert(user);
 
-                // 远程调用 integral，请求头模拟传递 XID
+                // 远程调用模拟，带上 XID
+                RestTemplate template = new RestTemplate();
                 LinkedMultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
                 headers.put(RootContext.KEY_XID, Collections.singletonList(RootContext.getXID()));
-                new RestTemplate().postForEntity("http://localhost:8888/integral", new HttpEntity<String>(headers), String.class);
+                template.postForEntity("http://localhost:8888/integral", new HttpEntity<String>(headers), String.class);
+
+                // 查看数据库数据状态
+                //try {
+                //    Thread.sleep(20000L);
+                //} catch (InterruptedException e) {
+                //    e.printStackTrace();
+                //}
 
                 // 模拟错误回滚
                 if(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE)%2 == 0) {
@@ -339,7 +391,3 @@
 
         # 多次刷新，查看分布式事务是否生效
         http://localhost:8889/user
-
-### 关于 @GlobalLock 注解
-
-  * (直接查看官方文档，需要配合业务 SQL for update 使用)

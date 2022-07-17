@@ -81,7 +81,7 @@
 
         seata:
           enabled: true
-          # 关闭自动配置，手动配置代理数据源 (重要配置)
+          # 关闭自动配置代理数据源
           enable-auto-data-source-proxy: false
           application-id: mrh-seata-xa-integral
           tx-service-group: default_tx_group
@@ -134,7 +134,7 @@
 
         seata:
           enabled: true
-          # 关闭自动配置，手动配置代理数据源 (重要配置)
+          # 关闭自动配置代理数据源
           enable-auto-data-source-proxy: false
           application-id: mrh-seata-xa-user
           tx-service-group: default_tx_group
