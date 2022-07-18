@@ -433,7 +433,7 @@
 
 ### saga 事务状态机
 
-  * 访问 https://seata.io/saga_designer/index.html，拖拽生成以下 saga 状态机流程图：
+  * 访问 https://seata.io/saga_designer/index.html ，拖拽生成以下 saga 状态机流程图：
 
     ![saga状态机](./Part06.01.png)
 
