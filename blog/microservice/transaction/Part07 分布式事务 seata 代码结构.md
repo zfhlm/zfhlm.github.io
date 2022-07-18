@@ -5,16 +5,6 @@
 
         当引入 seata 之后，代码中本地事务、分布式事务混合在一起，不便于管理，需要对两者进行分离管理
 
-  * 官方文档地址：
-
-        https://seata.io/zh-cn/docs/overview/what-is-seata.html
-
-        https://github.com/seata/seata/blob/develop/script/client/saga/db/mysql.sql
-
-  * 示例源码地址：
-
-        https://github.com/zfhlm/mrh-example/tree/main/mrh-spring-boot
-
 ### 分离管理
 
   * 分布式系统中，各个子服务应该统一使用某个模式的分布式事务：
