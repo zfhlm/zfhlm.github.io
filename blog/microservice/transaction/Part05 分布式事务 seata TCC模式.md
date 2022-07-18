@@ -89,7 +89,7 @@
           enabled: true
           # 关闭自动配置代理数据源
           enable-auto-data-source-proxy: false
-          application-id: mrh-seata-xa-integral
+          application-id: mrh-seata-tcc-integral
           tx-service-group: default_tx_group
           service:
             vgroup-mapping:
@@ -141,7 +141,7 @@
           enabled: true
           # 关闭自动配置代理数据源
           enable-auto-data-source-proxy: false
-          application-id: mrh-seata-xa-user
+          application-id: mrh-seata-tcc-user
           tx-service-group: default_tx_group
           service:
             vgroup-mapping:

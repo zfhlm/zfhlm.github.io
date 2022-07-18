@@ -47,6 +47,7 @@
     * [分布式事务 seata XA 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part03%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20XA%E6%A8%A1%E5%BC%8F.md)
     * [分布式事务 seata AT 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part04%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20AT%E6%A8%A1%E5%BC%8F.md)
     * [分布式事务 seata TCC 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part05%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20TCC%E6%A8%A1%E5%BC%8F.md)
+    * [分布式事务 seata saga 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part06%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20saga%E6%A8%A1%E5%BC%8F.md)
 
 ## 我的项目
 

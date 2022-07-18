@@ -87,7 +87,7 @@
           enabled: true
           # 关闭自动配置代理数据源
           enable-auto-data-source-proxy: false
-          application-id: mrh-seata-xa-integral
+          application-id: mrh-seata-at-integral
           tx-service-group: default_tx_group
           data-source-proxy-mode: AT
           service:
@@ -140,7 +140,7 @@
           enabled: true
           # 关闭自动配置代理数据源
           enable-auto-data-source-proxy: false
-          application-id: mrh-seata-xa-user
+          application-id: mrh-seata-at-user
           tx-service-group: default_tx_group
           data-source-proxy-mode: AT
           service:
