@@ -656,34 +656,21 @@
 
 ### saga 服务集成状态机事务
 
-  * 添加 saga 相关配置 bean：
+  * 添加 saga 相关配置：
 
-        @Configuration
-        public class SeataConfiguration {
+        // 注意，如果不添加以下配置，默认 rollback 失败也不重试
 
-            @Bean
-            public DbStateMachineConfig dbStateMachineConfig(DataSource dataSource) {
-                DbStateMachineConfig config = new DbStateMachineConfig();
-                config.setDataSource(dataSource);
-                config.setResources(new String[] {"classpath:statelang/*.json"});
-                return config;
-            }
-
-            @Bean
-            public ProcessCtrlStateMachineEngine processCtrlStateMachineEngine(DbStateMachineConfig config) {
-                ProcessCtrlStateMachineEngine engine = new ProcessCtrlStateMachineEngine();
-                engine.setStateMachineConfig(config);
-                return engine;
-            }
-
-            @Bean
-            public StateMachineEngineHolder stateMachineEngineHolder(StateMachineEngine engine) {
-                StateMachineEngineHolder engineHolder = new StateMachineEngineHolder();
-                engineHolder.setStateMachineEngine(engine);
-                return engineHolder;
-            }
-
-        }
+        seata:
+          saga:
+            enabled: true
+            state-machine:
+              # 默认使用应用名称，如果不一致需要按照当前配置
+              application-id: ${seata.application-id}
+              resources: 'classpath:statelang/*.json'
+              rm-report-success-enable: true
+              saga-branch-register-enable: true
+              saga-compensate-persist-mode-update: true
+              saga-retry-persist-mode-update: true
 
   * 创建测试接口，执行 saga 事务：
 
