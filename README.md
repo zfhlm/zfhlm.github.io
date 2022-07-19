@@ -51,6 +51,12 @@
     * [分布式事务 seata 代码结构](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part07%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20seata%20%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.md)
     * [分布式事务 rabbitmq 最大努力通知](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part08%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20rabbitmq%20%E6%9C%80%E5%A4%A7%E5%8A%AA%E5%8A%9B%E9%80%9A%E7%9F%A5.md)
     * [分布式事务 rocketmq 事务消息](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/transaction/Part09%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%20rocketmq%20%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF.md)
+  * distributed id generator
+    * [分布式 ID 生成器 uuid](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/id/generator/Part01%20%E5%88%86%E5%B8%83%E5%BC%8F%20ID%20%E7%94%9F%E6%88%90%E5%99%A8%20uuid.md)
+    * [分布式 ID 生成器 推特 snowflake](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/id/generator/Part02%20%E5%88%86%E5%B8%83%E5%BC%8F%20ID%20%E7%94%9F%E6%88%90%E5%99%A8%20%E6%8E%A8%E7%89%B9%20snowflake.md)
+    * [分布式 ID 生成器 百度 uid](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/id/generator/Part03%20%E5%88%86%E5%B8%83%E5%BC%8F%20ID%20%E7%94%9F%E6%88%90%E5%99%A8%20%E7%99%BE%E5%BA%A6%20uid.md)
+    * [分布式 ID 生成器 美团 leaf](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/id/generator/Part04%20%E5%88%86%E5%B8%83%E5%BC%8F%20ID%20%E7%94%9F%E6%88%90%E5%99%A8%20%E7%BE%8E%E5%9B%A2%20leaf.md)
+    * [分布式 ID 生成器 自定义生成器](https://github.com/zfhlm/zfhlm.github.io/blob/main/blog/microservice/id/generator/Part05%20%E5%88%86%E5%B8%83%E5%BC%8F%20ID%20%E7%94%9F%E6%88%90%E5%99%A8%20%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%9F%E6%88%90%E5%99%A8.md)
 
 ## 我的项目
 
