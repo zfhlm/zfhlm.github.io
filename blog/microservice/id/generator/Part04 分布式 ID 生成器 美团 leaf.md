@@ -77,12 +77,12 @@
          */
         public interface IdGenerator<R> {
 
-        	/**
-        	 * 生成 ID
-        	 *
-        	 * @return
-        	 */
-        	public R generate();
+            /**
+             * 生成 ID
+             *
+             * @return
+             */
+            public R generate();
 
         }
 
@@ -95,25 +95,25 @@
          */
         public class LeafServerProperties {
 
-        	private String snowflakeUrl;
+            private String snowflakeUrl;
 
-        	private String segmentUrl;
+            private String segmentUrl;
 
-        	public String getSnowflakeUrl() {
-        		return snowflakeUrl;
-        	}
+            public String getSnowflakeUrl() {
+                return snowflakeUrl;
+            }
 
-        	public void setSnowflakeUrl(String snowflakeUrl) {
-        		this.snowflakeUrl = snowflakeUrl;
-        	}
+            public void setSnowflakeUrl(String snowflakeUrl) {
+                this.snowflakeUrl = snowflakeUrl;
+            }
 
-        	public String getSegmentUrl() {
-        		return segmentUrl;
-        	}
+            public String getSegmentUrl() {
+                return segmentUrl;
+            }
 
-        	public void setSegmentUrl(String segmentUrl) {
-        		this.segmentUrl = segmentUrl;
-        	}
+            public void setSegmentUrl(String segmentUrl) {
+                this.segmentUrl = segmentUrl;
+            }
 
         }
 
@@ -125,26 +125,26 @@
         @Configuration
         public class LeafConfiguration {
 
-        	@Bean
-        	public RestTemplate restTemplate() {
-        		return new RestTemplate();
-        	}
+            @Bean
+            public RestTemplate restTemplate() {
+                return new RestTemplate();
+            }
 
-        	@Bean
-        	@ConfigurationProperties("leaf")
-        	public LeafServerProperties leafServerProperties() {
-        		return new LeafServerProperties();
-        	}
+            @Bean
+            @ConfigurationProperties("leaf")
+            public LeafServerProperties leafServerProperties() {
+                return new LeafServerProperties();
+            }
 
-        	@Bean("snowflakeIdGenerator")
-        	public IdGenerator<Long> snowflakeIdGenerator(RestTemplate restTemplate, LeafServerProperties properties) {
-        		return () -> restTemplate.getForObject(properties.getSnowflakeUrl(), Long.class);
-        	}
+            @Bean("snowflakeIdGenerator")
+            public IdGenerator<Long> snowflakeIdGenerator(RestTemplate restTemplate, LeafServerProperties properties) {
+                return () -> restTemplate.getForObject(properties.getSnowflakeUrl(), Long.class);
+            }
 
-        	@Bean("segmentIdGenerator")
-        	public IdGenerator<Long> segmentIdGenerator(RestTemplate restTemplate, LeafServerProperties properties) {
-        		return () -> restTemplate.getForObject(properties.getSegmentUrl(), Long.class);
-        	}
+            @Bean("segmentIdGenerator")
+            public IdGenerator<Long> segmentIdGenerator(RestTemplate restTemplate, LeafServerProperties properties) {
+                return () -> restTemplate.getForObject(properties.getSegmentUrl(), Long.class);
+            }
 
         }
 
@@ -175,23 +175,23 @@
         @RestController
         public class TestController {
 
-        	@Autowired
-        	@Qualifier("snowflakeIdGenerator")
-        	private IdGenerator<Long> snowflakeIdGenerator;
+            @Autowired
+            @Qualifier("snowflakeIdGenerator")
+            private IdGenerator<Long> snowflakeIdGenerator;
 
-        	@Autowired
-        	@Qualifier("segmentIdGenerator")
-        	private IdGenerator<Long> segmentIdGenerator;
+            @Autowired
+            @Qualifier("segmentIdGenerator")
+            private IdGenerator<Long> segmentIdGenerator;
 
-        	@RequestMapping(path="snowflake")
-        	public Long snowflake() {
-        		return snowflakeIdGenerator.generate();
-        	}
+            @RequestMapping(path="snowflake")
+            public Long snowflake() {
+                return snowflakeIdGenerator.generate();
+            }
 
-        	@RequestMapping(path="segment")
-        	public Long segment() {
-        		return segmentIdGenerator.generate();
-        	}
+            @RequestMapping(path="segment")
+            public Long segment() {
+                return segmentIdGenerator.generate();
+            }
 
         }
 
