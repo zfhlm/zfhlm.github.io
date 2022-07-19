@@ -21,7 +21,7 @@
 
        原生的生成器未解决时钟回拨问题，无法直接使用，服务器 NTP 时钟回拨会导致 ID 冲突
 
-  * 官方文档：
+  * 官方文档地址：
 
         https://github.com/twitter-archive/snowflake
 
