@@ -1,25 +1,29 @@
 
-# docker swarm
+# docker 集群管理 swarm
 
-    docker 集群管理工具，高版本 docker 引擎已内置该功能，无需额外安装配置
+  * docker 自带的集群管理工具
 
-    docker swarm 默认的网络模式为 overlay 网络
+        docker 集群管理工具，高版本 docker 引擎已内置该功能，无需额外安装配置
 
-    官方文档地址：https://docs.docker.com/engine/swarm/
+        docker swarm 默认的网络模式为 overlay 网络
 
-### 服务器准备
+  * 官方文档地址
 
-    192.168.140.200        # 工作节点
+        https://docs.docker.com/engine/swarm/
 
-    192.168.140.201        # 工作节点
+  * 服务器准备
 
-    192.168.140.202        # 管理节点
+        192.168.140.200        # 工作节点
 
-    (三台服务器配置好 docker 和 hostname)
+        192.168.140.201        # 工作节点
+
+        192.168.140.202        # 管理节点
+
+        (三台服务器配置好 docker 和 hostname)
 
 ### docker swarm 配置
 
-    创建管理节点，输入命令：
+  * 创建管理节点，输入命令：
 
         docker swarm init --advertise-addr 192.168.140.202
 
@@ -37,11 +41,11 @@
 
         docker node ls
 
-    创建工作节点，输入命令：
+  * 创建工作节点，输入命令：
 
         docker swarm join --token SWMTKN-1-32cycv5bsvhtwd4zi1144jbw8hk1i4483hpa6csaufq9pewsjh-2jqniyyiuz2fmzpvlnajxxpid 192.168.140.202:2377
 
-    管理节点查看所有节点，输入命令：
+  * 管理节点查看所有节点，输入命令：
 
         docker node ls
 
@@ -54,11 +58,11 @@
 
 ### docker swarm 发布任务
 
-    发布 centos 容器，输入命令：
+  * 发布 centos 容器，输入命令：
 
         docker service create --replicas 1 --name centos centos /usr/sbin/init
 
-    查看已发布容器，输入命令：
+  * 查看已发布容器，输入命令：
 
         docker service ls
 
@@ -68,7 +72,7 @@
 
         docker service ps centos
 
-    更改 centos 容器的副本数，输入命令：
+  * 更改 centos 容器的副本数，输入命令：
 
         docker service scale centos=2
 
@@ -76,13 +80,13 @@
 
         docker service ps centos
 
-    移除 centos 容器，输入命令：
+  * 移除 centos 容器，输入命令：
 
         docker service rm centos
 
         docker service ls
 
-    节点下线并迁移 centos 容器，输入命令：
+  * 节点下线并迁移 centos 容器，输入命令：
 
         docker service create --replicas 3 --name centos centos /usr/sbin/init
 
@@ -116,7 +120,7 @@
             dbratvomlgj4l25vamleot47e     docker201               Ready     Drain                           20.10.10
             otc1ykqm5hovsfxelgy7lcxz2 *   docker202               Ready     Active         Leader           20.10.10
 
-    节点重新上线，输入命令：
+  * 节点重新上线，输入命令：
 
         docker node update --availability active docker201
 
@@ -131,9 +135,9 @@
 
 ### docker swarm 命令
 
-    注意，以下命令不列出参数，可使用 --help 查看
+  * 注意，以下命令不列出参数，可使用 --help 查看
 
-    集群节点管理：
+  * 集群节点管理：
 
         docker swarm init                               # 初始化管理节点
 
@@ -149,7 +153,7 @@
 
         docker swarm leave                              # 离开集群
 
-    工作节点管理：
+  * 工作节点管理：
 
         docker node ls                                  # 查询工作节点列表
 
@@ -163,7 +167,7 @@
 
         docker node rm                                  # 移除工作节点
 
-    运行任务管理：
+  * 运行任务管理：
 
         docker service ls                               # 查询所有任务列表
 
@@ -175,7 +179,7 @@
 
         docker service rm                               # 移除执行任务
 
-    配置信息管理：
+  * 配置信息管理：
 
         docker config create                            # 创建配置信息
 
@@ -185,7 +189,7 @@
 
         docker config rm                                # 移除配置信息
 
-    秘钥信息管理：
+  * 秘钥信息管理：
 
         docker secret create                            # 创建秘钥信息
 
@@ -197,9 +201,9 @@
 
 ### 容器编排
 
-    可以使用 docker stack 在 docker swarm 中进行容器编排，语法参考 docker compose 文档
+  * 可以使用 docker stack 在 docker swarm 中进行容器编排，语法参考 docker compose 文档
 
-    主要命令：
+  * 主要命令：
 
         docker stack deploy                             # 发布编排任务
 
@@ -210,3 +214,27 @@
         docker stack rm                                 # 移除编排任务
 
         docker stack services                           # 查看编排任务容器信息
+
+### 管理面板 CE
+
+  * 一个开源的可以使用在 docker standalone 和 docker swarm 上的界面化工具
+
+  * 初始化 docker 和 docker swarm，输入命令：
+
+        (略)
+
+  * 安装 portainer，输入命令：
+
+        cd /usr/local
+
+        mkdir portainer && cd portainer
+
+        curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
+
+        docker stack deploy -c portainer-agent-stack.yml portainer
+
+        docker ps
+
+  * 访问页面：
+
+        https://ipaddress:9443

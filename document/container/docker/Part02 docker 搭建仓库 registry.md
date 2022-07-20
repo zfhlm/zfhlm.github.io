@@ -1,19 +1,17 @@
 
-# docker registry
+# docker 搭建仓库 registry
 
-    使用 docker registry 搭建自己的 docker 私有镜像仓库
+  * 使用 docker registry 搭建自己的 docker 私有镜像仓库，服务器准备：
 
-#### 服务器准备
+        192.168.140.199        #docker镜像仓库服务器
 
-    192.168.140.199        #docker镜像仓库服务器
+        192.168.140.200        #docker镜像仓库客户端
 
-    192.168.140.200        #docker镜像仓库客户端
+        (两台虚拟机安装 docker，参考 Part1 进行)
 
-    (两台虚拟机安装 docker，参考 Part1 进行)
+### 安装仓库
 
-#### registry 安装
-
-    仓库服务器拉取 registry 镜像，输入命令：
+  * 仓库服务器拉取 registry 镜像，输入命令：
 
         docker search registry
 
@@ -21,7 +19,7 @@
 
         docker images
 
-    仓库服务器运行 registry 镜像，输入命令：
+  * 仓库服务器运行 registry 镜像，输入命令：
 
         mkdir -p /usr/local/registry
 
@@ -39,9 +37,9 @@
             CONTAINER ID   IMAGE      COMMAND                   PORTS                                       NAMES
             0cf00009d3d3   registry   "/entrypoint.sh /etc…"    0.0.0.0:5000->5000/tcp, :::5000->5000/tcp   registry
 
-#### registry 使用
+### 使用仓库
 
-    客户端修改配置，允许使用 http 与私有镜像仓库交互，输入命令：
+  * 客户端修改配置，允许使用 http 与私有镜像仓库交互，输入命令：
 
         vi /etc/docker/daemon.json
 
@@ -53,7 +51,7 @@
 
         systemctl docker restart
 
-    客户端先从 docker hub 拉取一个测试用的镜像，输入命令：
+  * 客户端先从 docker hub 拉取一个测试用的镜像，输入命令：
 
         docker search nginx
 
@@ -66,7 +64,7 @@
             REPOSITORY                       TAG       IMAGE ID       CREATED       SIZE
             nginx                            latest    87a94228f133   2 weeks ago   133MB
 
-    客户端重新 tag 镜像，上传到私有仓库，输入命令：
+  * 客户端重新 tag 镜像，上传到私有仓库，输入命令：
 
         docker tag nginx 192.168.140.199:5000/nginx-pro:v1.0
 
@@ -80,7 +78,7 @@
             192.168.140.199:5000/nginx-pro   v1.0      87a94228f133   2 weeks ago   133MB
             nginx                            latest    87a94228f133   2 weeks ago   133MB
 
-    客户端删除本地镜像，输入命令：
+  * 客户端删除本地镜像，输入命令：
 
         docker rmi 192.168.140.199:5000/nginx-pro:v1.0
 
@@ -88,7 +86,7 @@
 
         docker images
 
-    客户端拉取私有仓库镜像，输入命令：
+  * 客户端拉取私有仓库镜像，输入命令：
 
         docker pull 192.168.140.199:5000/nginx-pro:v1.0
 
@@ -99,13 +97,13 @@
             REPOSITORY                       TAG       IMAGE ID       CREATED       SIZE
             192.168.140.199:5000/nginx-pro   v1.0      87a94228f133   2 weeks ago   133MB
 
-    客户端查询私有仓库镜像，输入命令：
+  * 客户端查询私有仓库镜像，输入命令：
 
         curl http://192.168.140.199:5000/v2/_catalog
 
-#### registry 认证
+### 开启认证
 
-    使用 httpd 镜像生成账号密码，输入命令：
+  * 使用 httpd 镜像生成账号密码，输入命令：
 
         cd /usr/local/registry/
 
@@ -115,7 +113,7 @@
 
         docker run --entrypoint htpasswd httpd:2 -Bbn docker 123456 >> ./auth/htpasswd
 
-    重启 registry 容器，输入命令：
+  * 重启 registry 容器，输入命令：
 
         docker stop registry
 
@@ -134,13 +132,13 @@
             --name registry \
             registry
 
-    使用客户端尝试拉取镜像，输入命令：
+  * 使用客户端尝试拉取镜像，输入命令：
 
         docker pull 192.168.140.199:5000/nginx-pro:v1.0
 
         -> 拉取失败提示需要认证信息：no basic auth credentials
 
-    客户端认证后再拉取镜像，输入命令：
+  * 客户端认证后再拉取镜像，输入命令：
 
         docker login 192.168.140.199:5000 -u docker -p 123456
 

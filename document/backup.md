@@ -1,10 +1,9 @@
 
-  * 系统配置
+  * TODO
     * [centos vmware 虚拟机](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part1%20%E5%88%9B%E5%BB%BAVMware%E8%99%9A%E6%8B%9F%E6%9C%BA.md)
     * [centos 网络抓包](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part3%20%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7.md)
     * [centos 升级内核](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part5%20%E5%8D%87%E7%BA%A7%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC.md)
     * [centos 防火墙命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part4%20%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%98%B2%E7%81%AB%E5%A2%99.md)
-  * 数据库/搜索引擎
     * [elasticsearch 基础命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part3%20%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9Celasticsearch.md)
     * [mysql 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part01%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [mysql 集群-主从](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part02%20%E9%9B%86%E7%BE%A4%E5%9F%BA%E7%A1%80%E4%B8%BB%E4%BB%8E%E6%A8%A1%E5%BC%8F.md)
@@ -29,27 +28,10 @@
     * [postgresql 客户端](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/postgresql/Part02%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%B7%A5%E5%85%B7.md)
     * [mongodb 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mongodb/Part1%20%E5%8D%95%E7%82%B9%E5%AE%89%E8%A3%85mongodb.md)
     * [neo4j 社区版单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/neo4j/Part1%20%E5%AE%89%E8%A3%85%E7%A4%BE%E5%8C%BA%E7%89%88neo4j.md)
-  * 代理中间件
     * [lvs 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/proxy/lvs/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [lvs NAT 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/proxy/lvs/Part2%20NAT%E6%A8%A1%E5%BC%8F.md)
     * [lvs DR 模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/proxy/lvs/Part3%20DR%E6%A8%A1%E5%BC%8F.md)
     * [lvs 多vip热备](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/proxy/lvs/Part4%20%E5%A4%9AVIP%E7%83%AD%E5%A4%87(keepalived).md)
-  * 容器与编排
-    * [docker 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part01%20docker%E5%AE%89%E8%A3%85.md)
-    * [docker 命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part02%20docker%E5%91%BD%E4%BB%A4.md)
-    * [docker 镜像](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part04%20docker%E9%95%9C%E5%83%8F.md)
-    * [docker 网络 bridge](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part05%20bridge%20networks.md)
-    * [docker 网络 host](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part06%20host%20networks.md)
-    * [docker 网络 none](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part07%20none%20networks.md)
-    * [docker 网络 container](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part08%20container%20networks.md)
-    * [docker 网络 overlay](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part09%20overlay%20networks.md)
-    * [docker 网络 ipvlan](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part10%20ipvlan%20networks.md)
-    * [docker 网络 maclan](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part11%20macvlan%20networks.md)
-    * [docker 容器编排 compose](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part12%20docker%20compose.md)
-    * [docker 集群管理 swarm](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part13%20docker%20swarm.md)
-    * [docker 界面工具 portainer](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part14%20CE%20Portainer.md)
-    * [docker 镜像仓库 registry](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part03%20registry%E5%AE%89%E8%A3%85.md)
-    * [docker 镜像仓库 harbor](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part15%20harbor%E5%AE%89%E8%A3%85.md)
     * [kubernetes 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part01%20kubernetes%20%E5%AE%89%E8%A3%85.md)
     * [kubernetes 对象 Namespace](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part02%20kubernetes%20Namespace.md)
     * [kubernetes 对象 Pod](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part03%20kubernetes%20Pod.md)
@@ -69,15 +51,12 @@
     * [kubernetes 对象 Scheduling](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part17%20kubernetes%20Scheduling.md)
     * [kubernetes 包管理器 Helm](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part18%20kubernetes%20Helm.md)
     * [kubernetes 可视化面板 Dashboard](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part19%20kubernetes%20Dashboard.md)
-  * 应用性能监测
     * [skywalking backend 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/skywalking/Part1%20%E5%8D%95%E7%82%B9backend%E9%85%8D%E7%BD%AE.md)
     * [skywalking backend 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/skywalking/Part2%20%E9%9B%86%E7%BE%A4backend%E9%85%8D%E7%BD%AE.md)
     * [skywalking agent 接入](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/skywalking/Part3%20%E5%BA%94%E7%94%A8agent%E9%85%8D%E7%BD%AE.md)
     * [skywalking 监控告警](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/skywalking/Part4%20%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AE.md)
-  * 版本管理
     * [svn 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/svn/Part1%20%E5%AE%89%E8%A3%85svn.md)
     * [git 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/git/Part1%20%E5%AE%89%E8%A3%85git.md)
-  * 自动化构建
     * [maven 构建环境配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/maven/Part1%20%E9%85%8D%E7%BD%AEmaven%E6%9E%84%E5%BB%BA%E7%8E%AF%E5%A2%83.md)
     * [nexus 私库配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/maven/Part2%20%E5%AE%89%E8%A3%85maven%E7%A7%81%E5%BA%93nexus.md)
     * [jenkins 初始化安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/jenkins/Part1%20%E5%88%9D%E5%A7%8B%E5%8C%96.md)

@@ -1,9 +1,9 @@
 
-# build docker image
+# docker 制作镜像 Dockerfile
 
-#### 构建指令
+### 构建指令
 
-    FROM
+  * FROM
 
         指定基础镜像，格式为 FROM <image>:<tag>
 
@@ -13,7 +13,7 @@
 
             FROM nginx:1.21.3
 
-    RUN
+  * RUN
 
         指定构建镜像执行命令，仅在构建镜像阶段有效，格式为 RUN <command> ... 或 RUN [<command>, ...]
 
@@ -25,7 +25,7 @@
                 && wget -O tomcat.tar https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.72/bin/apache-tomcat-8.5.72.tar.gz \
                 && tar -zxvf tomcat.tar
 
-    ARG
+  * ARG
 
         定义构建参数，仅在构建镜像阶段有效，格式为 ARG <key>=<value>
 
@@ -33,7 +33,7 @@
 
             ARG JAR_NAME tomcat.tar
 
-    WORKDIR
+  * WORKDIR
 
         指定当前工作目录，格式为 WORKDIR <path>
 
@@ -43,15 +43,15 @@
 
             WORKDIR /usr/local/nginx
 
-    ADD
+  * ADD
 
         添加文件到镜像目录，格式为 ADD [--chown=<user>:<group>] <fromPath>... <toPath>
 
         例如：
 
-            COPY ./login.html /usr/local/tomcat/webapps/ROOT
+            ADD ./login.html /usr/local/tomcat/webapps/ROOT
 
-    COPY
+  * COPY
 
         拷贝文件到镜像目录，格式为 COPY [--chown=<user>:<group>] <fromPath>... <toPath>
 
@@ -61,7 +61,7 @@
 
             COPY ./index.html ./css /usr/local/tomcat/webapps/ROOT
 
-    LABEL
+  * LABEL
 
         添加镜像描述信息，格式为 LABEL <key>=<value> <key>=<value> <key>=<value> ...
 
@@ -69,7 +69,7 @@
 
             LABEL organization=personal email=abc@123.com author=zhangsan
 
-    ONBUILD
+  * ONBUILD
 
         指定延迟构建执行，格式为 ONBUILD <其它指令>
 
@@ -77,7 +77,7 @@
 
             ONBUILD RUN echo 'hello'
 
-    VOLUME
+  * VOLUME
 
         定义匿名挂载目录，格式为 VOLUME <path> 或 VOLUME [<path>, ...]
 
@@ -87,7 +87,7 @@
 
             VOLUME ["/tmp", "/home/root"]
 
-    ENV
+  * ENV
 
         定义环境变量，容器之内有效，格式为 ENV <key> <value> 或 ENV <key1>=<value1> <key2>=<value2>...
 
@@ -95,7 +95,7 @@
 
             ENV PATH=1.0
 
-    EXPOSE
+  * EXPOSE
 
         定义运行容器暴露端口，格式为 EXPOSE <port>
 
@@ -105,7 +105,7 @@
 
             EXPOSE 8080 8090
 
-    USER
+  * USER
 
         定义执行命令的用户，格式为 USER <user>:<group>
 
@@ -115,7 +115,7 @@
 
             USER udev:dev
 
-    ENTRYPOINT
+  * ENTRYPOINT
 
         指定运行容器执行命令定参，格式为 ENTRYPOINT [<command>, <param>, ...]
 
@@ -123,7 +123,7 @@
 
             ENTRYPOINT ["startup.sh"]
 
-    CMD
+  * CMD
 
         指定运行容器执行命令变参，多个最后一条有效，格式为 CMD <command> <param> ... 或 CMD [<command>, <param>, ...]
 
@@ -131,7 +131,7 @@
 
             CMD ["java", "-jar", "springboot.jar"]
 
-    HEALTHCHECK
+  * HEALTHCHECK
 
         指定容器监控检测命令，格式为 HEALTHCHECK [OPTIONS] CMD command 或 HEALTHCHECK NONE
 
@@ -143,9 +143,9 @@
 
             HEALTHCHECK CMD /usr/bin/pkill -0 nginx
 
-#### 基于 openjdk 镜像构建 tomcat 镜像
+### 基于 openjdk 镜像构建 tomcat 镜像
 
-    宿主机输入命令：
+  * 宿主机下载 tomcat 安装包，输入命令：
 
         yum -y install wget
 
@@ -153,7 +153,7 @@
 
         wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.72/bin/apache-tomcat-8.5.72.tar.gz
 
-    宿主机创建 Dockerfile 文件，输入命令：
+  * 宿主机创建 Dockerfile 文件，输入命令：
 
         cd /usr/local/software
 
@@ -172,7 +172,7 @@
             EXPOSE 8080 8009 8005
             CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
 
-    宿主机构建 tomcat 镜像，并运行容器，输入命令：
+  * 宿主机构建 tomcat 镜像，并运行容器，输入命令：
 
         docker build -t tomcat:1.0 .
 
@@ -180,15 +180,15 @@
 
         docker ps
 
-    宿主机访问tomcat，输入命令：
+  * 宿主机访问tomcat，输入命令：
 
         curl http://localhost:8080
 
         -> hello
 
-#### 构建 springboot 项目镜像
+### 构建 springboot 项目镜像
 
-    springboot 启动类：
+  * springboot 启动类：
 
         @Controller
         @RequestMapping
@@ -207,11 +207,11 @@
 
         }
 
-    springboot 配置文件 application.properties：
+  * springboot 配置文件 application.properties：
 
         server.port=8888
 
-    springboot maven 配置 pom.xml：
+  * springboot maven 配置 pom.xml：
 
         <parent>
             <groupId>org.springframework.boot</groupId>
@@ -241,7 +241,7 @@
             </plugins>
         </build>
 
-    springboot 项目根目录创建 Dockerfile，填写以下指令：
+  * springboot 项目根目录创建 Dockerfile，填写以下指令：
 
         FROM openjdk
         WORKDIR /usr/local/application/
@@ -249,9 +249,9 @@
         EXPOSE 8888
         ENTRYPOINT ["java", "-jar","/usr/local/application/application.jar"]
 
-    注意服务器配置好 jdk1.8、maven、docker 环境，将项目命名为 test 上传到服务器 /usr/local/ 目录
+  * 使用 maven 打包，再构建 docker 镜像，输入命令：
 
-    使用 maven 打包，再构建 docker 镜像，输入命令：
+        (注意服务器配置好 jdk1.8、maven、docker 环境，将项目命名为 test 上传到服务器 /usr/local/ 目录)
 
         cd /usr/local/test/
 
@@ -261,7 +261,7 @@
 
         docker ps
 
-    访问 springboot 接口：
+  * 访问 springboot 接口：
 
         curl http://localhost:8888
 

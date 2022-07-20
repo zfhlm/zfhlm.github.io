@@ -1,25 +1,35 @@
 
-# docker overlay networks
+# docker 叠加网络 overlay
 
-    overlay模式，使用 docker network create -d overlay <NAME> 创建docker网卡，启动时加上 --net=<NAME> 参数
+  * 简单介绍
 
-    overlay模式实现：基于 consul 的旧版本实现、基于 swarm 的新版本实现
+        使用 overlay 网络，docker 容器之间可以跨主机互相访问
 
-    overlay模式，容器之间可以跨主机互相访问
+  * 创建方式
 
-#### 服务器准备
+        命令 docker network create -d overlay <NAME> 创建 docker 网卡
 
-    192.168.140.200        #docker宿主机
+        启动 docker 时加上 --net=<NAME> 参数
 
-    192.168.140.201        #docker宿主机
+  * 注意，当前只为测试，基于 consul 实现 overlay，实际使用中：
 
-    192.168.140.202        #consul服务器
+        如果使用 docker swarm 管理容器，默认已存在 overlay 网络，无需任何配置
 
-    (三台服务器根据 Part1 配置好 docker，并且内核版本不低于3.18)
+        如果使用 k8s 进行容器编排发布，网络都交给 k8s 进行管理和配置，更加不需要在 docker 作任何处理
 
-#### 配置overlay环境
+  * 服务器准备
 
-    consul服务器安装启动consul，输入命令：
+        192.168.140.200        #docker宿主机
+
+        192.168.140.201        #docker宿主机
+
+        192.168.140.202        #consul服务器
+
+        (三台服务器根据 Part1 配置好 docker，并且内核版本不低于3.18)
+
+### 配置 overlay 网络
+
+  * 使用 docker 启动 consul 服务，输入命令：
 
         docker pull consul
 
@@ -29,11 +39,10 @@
 
         docker ps
 
-    客户端浏览器查看consul，输入地址：
+        # 客户端浏览器查看consul，输入地址：
+        # http://192.168.140.202:5800/
 
-        http://192.168.140.202:5800/
-
-    两台宿主机输入命令：
+  * 两台宿主机输入命令：
 
         vi /etc/docker/daemon.json
 
@@ -44,23 +53,23 @@
                 "cluster-advertise": "ens33:2376"
             }
 
-    两台宿主机重启 docker，输入命令：
+  * 两台宿主机重启 docker，输入命令：
 
         systemctl daemon-reload
 
         systemctl restart docker
 
-    客户端浏览器查看 consul Key/Value 可以看到两个节点注册成功：
+  * 客户端浏览器查看 consul Key/Value 可以看到两个节点注册成功：
 
         192.168.140.201:2376
 
         192.168.140.200:2376
 
-    一台宿主机创建 docker overlay network，输入命令：
+  * 一台宿主机创建 docker overlay network，输入命令：
 
         docker network create -d overlay my-overlay
 
-    两台宿主机查看 docker network，输入命令：
+  * 两台宿主机查看 docker network，输入命令：
 
         docker network ls
 
@@ -77,19 +86,19 @@
         | 7c9f12689eb8 |  none            | null    | local |
         +--------------+------------------+---------+-------+
 
-    至此配置完成
+        //至此配置完成
 
-#### 容器网络
+### 使用 overlay 网络
 
-    第一台宿主机运行  centos 容器，输入命令：
+  * 第一台宿主机运行  centos 容器，输入命令：
 
         docker run -d -it --net my-overlay --name centos1 centos /usr/sbin/init
 
-    第二台宿主机运行 centos 容器，输入命令：
+  * 第二台宿主机运行 centos 容器，输入命令：
 
         docker run -d -it --net my-overlay --name centos2 centos /usr/sbin/init
 
-    两台宿主机查看网络信息，输入命令：
+  * 两台宿主机查看网络信息，输入命令：
 
         ip addr
 
@@ -119,7 +128,7 @@
         | vethe12d07b@if43|                    |                 | 76:4f:e5:19:4a:69 |       link     |docker_gwbridge |
         +-----------------+--------------------+-----------------+-------------------+----------------+----------------+
 
-    两台宿主机查看 centos 容器网络，输入命令：
+  * 两台宿主机查看 centos 容器网络，输入命令：
 
         docker exec -it centos1 ip addr
 
@@ -143,7 +152,7 @@
         |   eth0@if44     |   172.18.0.2/16    | 172.18.255.255  | 02:42:ac:12:00:02 |      global    |             |
         +-----------------+--------------------+-----------------+-------------------+----------------+-------------+
 
-    两台宿主机查看 docker 网卡，输入命令：
+  * 两台宿主机查看 docker 网卡，输入命令：
 
         docker network ls
 
@@ -189,7 +198,7 @@
         |docker_gwbridge|  172.18.0.0/16   |    172.18.0.1   |gateway_381d8255c34d| 172.18.0.2/16  | 02:42:ac:12:00:02 |
         +---------------+------------------+-----------------+--------------------+----------------+-------------------+
 
-    整理以上网络情况，可以梳理出网络连接信息：
+  * 整理以上网络情况，可以梳理出网络连接信息：
 
         docker_gwbridge(172.18.0.1)  ----  vethe12d07b@if20(forward)  ----  eth1@if21(172.18.0.2)
         docker_gwbridge(172.18.0.1)  ----  veth685f01d@if43(forward)  ----  eth1@if44(172.18.0.2)
@@ -197,11 +206,9 @@
         my-overlay(10.0.0.1)  ----  eth0@if19(10.0.0.2)
         my-overlay(10.0.0.1)  ----  eth0@if42(10.0.0.3)
 
-    容器 overlay 网络配置成功，两个容器的 overlay 网络 IP 地址分别为：10.0.0.2、10.0.0.3
+        (两个容器的 overlay 网络 IP 地址分别为：10.0.0.2、10.0.0.3)
 
-#### 容器ping
-
-    容器可以 ping 宿主机，输入命令：
+  * 容器可以 ping 宿主机，输入命令：
 
         docker exec -it centos1 ping 192.168.140.200
 
@@ -213,7 +220,7 @@
 
             3 packets transmitted, 3 received, 0% packet loss, time 2001ms
 
-    容器可以 ping 与宿主机同一局域网的主机，输入命令：
+  * 容器可以 ping 与宿主机同一局域网的主机，输入命令：
 
         docker exec -it centos1 ping 192.168.140.201
 
@@ -225,7 +232,7 @@
 
             3 packets transmitted, 3 received, 0% packet loss, time 2001ms
 
-    容器可以 ping 宿主机能访问的互联网，输入命令：
+  * 容器可以 ping 宿主机能访问的互联网，输入命令：
 
         docker exec -it centos1 ping www.baidu.com
 
@@ -237,7 +244,7 @@
 
             3 packets transmitted, 3 received, 0% packet loss, time 2004ms
 
-    容器可以 ping 跨主机容器，输入命令：
+  * 容器可以 ping 跨主机容器，输入命令：
 
         docker exec -it centos1 ping 10.0.0.3
 
@@ -248,7 +255,3 @@
             64 bytes from 10.0.0.3: icmp_seq=3 ttl=64 time=0.304 ms
 
             3 packets transmitted, 3 received, 0% packet loss, time 2007ms
-
-#### 使用 docker swarm 创建 overlay 网络
-
-    (参考 Part13，docker swarm 默认网络模式为 overlay 无需额外进行配置)

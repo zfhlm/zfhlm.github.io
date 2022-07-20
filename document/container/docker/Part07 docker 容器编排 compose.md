@@ -1,19 +1,21 @@
 
-# docker compose
+# docker 容器编排 compose
 
-    docker compose 用于定义和运行多容器Docker应用程序的工具，使用 yaml 文件进行容器编排
+  * docker 自带的容器编排功能
 
-    注意，只有 docker compose 而不配合 docker swarm 只能实现单主机容器编排
+        docker compose 用于定义和运行多容器Docker应用程序的工具，使用 yaml 文件进行容器编排
 
-### 下载安装
+        注意，只有 docker compose 而不配合 docker swarm 只能实现单主机容器编排
 
-    下载执行脚本，输入命令：
+### 环境配置
+
+  * 下载执行脚本，输入命令：
 
         cd /usr/local/software
 
         wget -O docker-compose https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-linux-x86_64
 
-    配置执行脚本，输入命令：
+  * 配置执行脚本，输入命令：
 
         mkdir -p /usr/lib/docker/cli-plugins/
 
@@ -23,21 +25,21 @@
 
         ln -s /usr/lib/docker/cli-plugins/docker-compose /usr/bin/docker-compose
 
-    查看是否成功，输入命令：
+  * 查看是否配置成功，输入命令：
 
         docker-compose --version
 
         -> Docker Compose version v2.0.1
 
-### docker compose 配置
+### 编排配置项
 
-    docker compose 配置文件名称：
+  * docker compose 配置文件名称：
 
         compose.yaml
 
         compose.yml
 
-    docker compose 配置文件顶层由以下几部分组成：
+  * docker compose 配置文件顶层由以下几部分组成：
 
         version           # 定义验证配置文件版本号
 
@@ -51,19 +53,21 @@
 
         services          # 定义从打包镜像到运行容器的配置(核心，在此引用其他配置)
 
-    更多配置信息，访问官方文档地址：
+  * 更多配置信息，访问官方文档地址：
 
         https://github.com/compose-spec/compose-spec/blob/master/spec.md
 
-### docker compose 使用
+### 编排示例
 
-    使用 docker compose 编排两个容器：
+  * 使用 docker compose 编排两个容器：
 
         容器一：redis
 
         容器二：springboot application
 
-    springboot 应用主要代码示例：
+        (容器二依赖容器一，容器一启动完成后，才启动容器二)
+
+  * springboot 应用主要代码示例：
 
         @Autowired
         private RedisTemplate<String, String> redisTemplate;
@@ -75,13 +79,13 @@
             return redisTemplate.opsForValue().get("key");
         }
 
-    springboot 应用配置：
+  * springboot 应用配置：
 
         server.port=8888
         spring.redis.host=redis
         spring.redis.port=6379
 
-    springboot 应用 Dockerfile 配置：
+  * springboot 应用 Dockerfile 配置：
 
         FROM openjdk
         WORKDIR /usr/local/app/
@@ -89,9 +93,9 @@
         EXPOSE 8888
         ENTRYPOINT ["java", "-jar","/usr/local/app/application.jar"]
 
-    springboot 打包成可执行文件 application.jar，和 Dockerfile 上传到 /usr/local/compose/ 目录
+  * springboot 打包成可执行文件 application.jar，和 Dockerfile 上传到 /usr/local/compose/ 目录
 
-    编写 docker compose 配置：
+  * 编写 docker compose 配置：
 
         cd /usr/local/compose/
 
@@ -111,12 +115,12 @@
                 depends_on:
                   - redis
 
-    使用 docker compose 编排启动两个容器，输入命令：
+  * 使用 docker compose 编排启动两个容器，输入命令：
 
         docker-compose up -d
 
         docker inspect application
 
-    访问 springboot 接口，输入命令：
+  * 访问 springboot 接口，输入命令：
 
         curl http://hostname:8888 && echo
