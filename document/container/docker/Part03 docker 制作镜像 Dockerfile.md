@@ -243,6 +243,8 @@
 
   * springboot 项目根目录创建 Dockerfile，填写以下指令：
 
+        (注意，如果不希望日志再次输出到docker，启动命令将日志输出重定向到 dev/null)
+
         FROM openjdk
         WORKDIR /usr/local/application/
         COPY target/application.jar application.jar

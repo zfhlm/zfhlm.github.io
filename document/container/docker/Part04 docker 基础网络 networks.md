@@ -221,6 +221,22 @@
         |    eth0@if15    |   172.17.0.3/16    |  172.17.255.255 | 02:42:ac:11:00:03 |      global    |             |
         +-----------------+--------------------+-----------------+-------------------+----------------+-------------+
 
+  * overlay 固定容器 IP 地址
+
+        # 先创建用户类型的 overlay 网络
+
+        # 网段 10.1.0.0/16 网关 10.1.0.1，可用 10.1.X.Y 网段
+        docker network create --subnet=10.1.0.0/16 --gateway=10.1.0.1 -d bridge mrh-bridge
+
+        docker network ls
+
+        docker network inspect mrg-bridge
+
+        # 启动容器的时候，指定使用的网络、IP 地址：
+
+        # 注意 --net 参数 --ip 参数
+        docker run -it -d --net mrh-bridge --ip 10.1.1.1 --name centos3 centos /usr/sbin/init
+
 ### 共享主机网络 host
 
   * 宿主机查看本机网络，输入命令：

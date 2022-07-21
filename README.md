@@ -139,7 +139,7 @@
     * [grafana 自定义显示面板](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/grafana/Part3%20%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%9F%E8%AE%A1%E9%9D%A2%E6%9D%BFgrafana.md)
     * [alertmanager 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/alertmanager/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEalertmanager.md)
   * 容器引擎
-    * [docker 安装与基本命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part01%20docker%20%E5%AE%89%E8%A3%85%E4%B8%8E%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4.md)
+    * [docker 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part01%20docker%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE.md)
     * [docker 搭建仓库 registry](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part02%20docker%20%E6%90%AD%E5%BB%BA%E4%BB%93%E5%BA%93%20registry.md)
     * [docker 搭建仓库 harbor](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part09%20docker%20%E6%90%AD%E5%BB%BA%E4%BB%93%E5%BA%93%20harbor.md)
     * [docker 制作镜像 Dockerfile](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part03%20docker%20%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F%20Dockerfile.md)
@@ -148,4 +148,3 @@
     * [docker 虚拟局域网 vlan](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part06%20docker%20%E8%99%9A%E6%8B%9F%E5%B1%80%E5%9F%9F%E7%BD%91%20vlan.md)
     * [docker 容器编排 compose](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part07%20docker%20%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92%20compose.md)
     * [docker 集群管理 swarm](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part08%20docker%20%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86%20swarm.md)
-    * [docker 资源控制 cgroup](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part10%20docker%20%E8%B5%84%E6%BA%90%E6%8E%A7%E5%88%B6%20cgroup.md)
