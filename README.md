@@ -148,3 +148,12 @@
     * [docker 容器编排 compose](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part07%20docker%20%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92%20compose.md)
     * [docker 叠加网络 overlay](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part08%20docker%20%E5%8F%A0%E5%8A%A0%E7%BD%91%E7%BB%9C%20overlay.md)
     * [docker 集群管理 swarm](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part09%20docker%20%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86%20swarm.md)
+  * 持续集成
+    * [svn 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part01%20svn%20%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
+    * [git 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part02%20git%20%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
+    * [maven 构建环境配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part03%20maven%20%E6%9E%84%E5%BB%BA%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
+    * [maven nexus 私库配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part04%20maven%20nexus%20%E7%A7%81%E5%BA%93%E9%85%8D%E7%BD%AE.md)
+    * [jenkins 安装与简单构建](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part05%20Jenkins%20%E5%AE%89%E8%A3%85%E4%B8%8E%E7%AE%80%E5%8D%95%E6%9E%84%E5%BB%BA.md)
+    * [jenkins 自动化部署 springboot 服务(git)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part06%20Jenkins%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%20springboot%20%E6%9C%8D%E5%8A%A1(git).md)
+    * [jenkins 自动化部署 springboot 服务(nexus)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part07%20Jenkins%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%20springboot%20%E6%9C%8D%E5%8A%A1(nexus).md)
+    * [jenkins 自动化部署 docker 服务](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part08%20Jenkins%20%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%20docker%20%E6%9C%8D%E5%8A%A1.md)

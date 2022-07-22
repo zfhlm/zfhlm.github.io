@@ -1,7 +1,7 @@
 
 #### 配置maven
 
-    1，下载maven安装包
+  * 下载 maven 安装包
 
         下载地址： https://maven.apache.org/download.cgi
 
@@ -9,7 +9,7 @@
 
         上传到服务器目录：/usr/local/software
 
-    2，解压安装包，输入命令：
+  * 解压安装包，输入命令：
 
         cd /usr/local/software
 
@@ -21,7 +21,7 @@
 
         ln -s ./apache-maven-3.8.3 maven
 
-    3，更改maven配置，输入命令：
+  * 更改 maven 配置，输入命令：
 
         cd /usr/local/maven
 
@@ -35,7 +35,7 @@
 
             <localRepository>/usr/local/maven/repo</localRepository>
 
-    4，添加系统环境变量，输入命令：
+  * 添加系统环境变量，输入命令：
 
         vi /etc/profile
 
