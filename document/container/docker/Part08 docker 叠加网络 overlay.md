@@ -5,9 +5,9 @@
 
         使用 overlay 网络，docker 容器之间可以跨主机互相访问
 
-        // 当前只为测试，基于 consul 实现 overlay
+        // 当前只为测试，基于 consul 创建 overlay 网络
 
-        // 如果使用 docker swarm 管理容器，默认已存在 overlay 网络，无需任何配置
+        // 如果使用 docker swarm 管理容器集群，默认已存在 overlay 网络，无需任何配置
 
         // 如果使用 k8s 进行容器编排发布，网络都交给 k8s 进行管理和配置，更加不需要在 docker 作任何处理
 

@@ -17,30 +17,6 @@
 
         https://docs.docker.com/compose/
 
-### 初始安装
-
-  * 下载执行脚本，输入命令：
-
-        cd /usr/local/software
-
-        wget -O docker-compose https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-linux-x86_64
-
-  * 配置执行脚本，输入命令：
-
-        mkdir -p /usr/lib/docker/cli-plugins/
-
-        mv ./docker-compose /usr/lib/docker/cli-plugins/
-
-        chmod +x /usr/lib/docker/cli-plugins/docker-compose
-
-        ln -s /usr/lib/docker/cli-plugins/docker-compose /usr/bin/docker-compose
-
-  * 查看是否配置成功，输入命令：
-
-        docker compose version
-
-        -> Docker Compose version v2.0.1
-
 ### 编排配置
 
   * 配置文件命名：
