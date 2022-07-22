@@ -11,8 +11,6 @@
 
         ④，jenkins 远程执行目标服务器 shell 脚本，启动 springboot 服务
 
-        (版本回滚：相当于发布一个旧的分支，选择之前的分支版本，然后发布即可)
-
   * 官方网站地址：
 
         https://www.jenkins.io/
@@ -172,6 +170,8 @@
 
         ⑥，Git parameter
 
+        ⑦，Extended Choice Parameter
+
   * 更改 jenkins 全局配置：
 
         第一步，点击【Manage Jenkins】
@@ -272,13 +272,33 @@
 
                     【保持构建的最大个数】：填入 10
 
-                点击【参数化构建】选择【Git参数】：
+                选中【参数化构建】
 
-                    【名称】：填写branch
+                添加参数，选择【Git参数】：
 
-                    【描述】：填写分支
+                    【名称】：填写 branch
 
-                    【参数类型】：选择分支
+                    【描述】：填写 请选择发布分支
+
+                    【参数类型】：选择 分支
+
+                添加参数，选择【Extended Choice Parameter】：
+
+                    【Name】：填写 target-server
+
+                    【Description】：填写 请选择发布服务器
+
+                    【Basic Parameter Types】：选中
+
+                    【Parameter Type】：选择 Check Boxes
+
+                    【Number of Visible items】：填写 5 按实际填写
+
+                    【Delimiter】：填写英文逗号 ,
+
+                    【Choose Source for Value】：点击选中
+
+                    【Value】英文逗号分隔服务器，填写 192.168.140.130,192.168.140.131
 
             源码管理
 
@@ -340,6 +360,8 @@
 
                     【Name】：选择应用服务器
 
+                    【高级】，点击选中【Label】，填入 192.168.140.130
+
                     【Transfers】-【Source files】：填入 target/*.jar
 
                     【Transfers】-【Remove prefix】：填入target
@@ -349,6 +371,8 @@
                     【Transfers】-【Exec command】：填入执行脚本  sh /usr/local/springboot/startup.sh
 
                 可点击【Add Server】多次输入应用服务信息
+
+                点击【Add Server】 下的【高级】，填写 target-server
 
         第六步，点击【保存】完成配置
 
@@ -360,7 +384,7 @@
 
         第二步，点击 Build with Parameters
 
-        第三步，选择需要发布的分支，点击 开始构建
+        第三步，选择需要发布的分支，选择发布的服务器，然后点击开始构建
 
         第四步，点击 #xx 进入构建界面，查看构建情况
 
