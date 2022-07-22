@@ -1,7 +1,7 @@
 
-# Jenkins 自动化部署 springboot 服务(git)
+# Jenkins 持续集成 springboot 服务(git)
 
-  * 部署过程
+  * 持续集成过程
 
         ①，jenkins 从 git 仓库拉取指定分支源码
 
