@@ -1,7 +1,7 @@
 
 # docker 搭建仓库 registry
 
-  * 使用 docker registry 搭建自己的 docker 私有镜像仓库，服务器准备：
+  * 使用 docker registry 搭建私有镜像仓库，服务器准备：
 
         192.168.140.199        #docker镜像仓库服务器
 

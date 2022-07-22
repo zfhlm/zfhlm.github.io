@@ -1,7 +1,7 @@
 
 # docker 集群管理 swarm
 
-  * docker 自带的集群管理工具
+  * 简单介绍
 
         docker 集群管理工具，高版本 docker 引擎已内置该功能，无需额外安装配置
 
@@ -11,15 +11,13 @@
 
         https://docs.docker.com/engine/swarm/
 
-  * 服务器准备
+  * 准备三台服务器，安装 docker 并配置好主机名：
 
         192.168.140.200        # 工作节点
 
         192.168.140.201        # 工作节点
 
         192.168.140.202        # 管理节点
-
-        (三台服务器配置好 docker 和 hostname)
 
 ### docker swarm 配置
 

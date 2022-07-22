@@ -1,11 +1,9 @@
 
 # docker 容器编排 compose
 
-  * docker 自带的容器编排功能
+  * 简单介绍
 
-        docker compose 用于定义和运行多容器Docker应用程序的工具，使用 yaml 文件进行容器编排
-
-        注意，只有 docker compose 而不配合 docker swarm 只能实现单主机容器编排
+        docker compose 用于定义和运行多容器Docker应用程序的工具，使用 yaml 文件进行容器编排，默认只能进行单宿主机容器编排
 
   * 官方文档地址：
 
@@ -329,14 +327,14 @@
 
         docker compose -f compose.yml up
 
-        docker inspect redis | grep -E '("Memory"|"NanoCpus")
+        docker inspect redis | grep -E '("Memory"|"NanoCpus")'
 
         ->
 
             "Memory": 104857600,
             "NanoCpus": 1000000000,
 
-        docker inspect app-test | grep -E '("Memory"|"NanoCpus")
+        docker inspect app-test | grep -E '("Memory"|"NanoCpus")'
 
         ->
 

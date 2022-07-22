@@ -5,17 +5,11 @@
 
         使用 overlay 网络，docker 容器之间可以跨主机互相访问
 
-  * 创建方式
+        // 当前只为测试，基于 consul 实现 overlay
 
-        命令 docker network create -d overlay <NAME> 创建 docker 网卡
+        // 如果使用 docker swarm 管理容器，默认已存在 overlay 网络，无需任何配置
 
-        启动 docker 时加上 --net=<NAME> 参数
-
-  * 注意，当前只为测试，基于 consul 实现 overlay，实际使用中：
-
-        如果使用 docker swarm 管理容器，默认已存在 overlay 网络，无需任何配置
-
-        如果使用 k8s 进行容器编排发布，网络都交给 k8s 进行管理和配置，更加不需要在 docker 作任何处理
+        // 如果使用 k8s 进行容器编排发布，网络都交给 k8s 进行管理和配置，更加不需要在 docker 作任何处理
 
   * 服务器准备
 
@@ -85,8 +79,6 @@
         +--------------+------------------+---------+-------+
         | 7c9f12689eb8 |  none            | null    | local |
         +--------------+------------------+---------+-------+
-
-        //至此配置完成
 
 ### 使用 overlay 网络
 
