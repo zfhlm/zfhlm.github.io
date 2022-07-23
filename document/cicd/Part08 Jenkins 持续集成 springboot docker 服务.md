@@ -387,7 +387,7 @@
 
   * 开始构建：
 
-        第一步，进入 deploy-git-boot-test-job 任务界面
+        第一步，进入 deploy-docker-boot-test-job 任务界面
 
         第二步，点击 Build with Parameters
 
