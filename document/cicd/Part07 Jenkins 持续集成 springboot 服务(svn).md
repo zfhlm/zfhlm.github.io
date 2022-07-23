@@ -11,7 +11,7 @@
 
         ④，jenkins 远程执行目标服务器 shell 脚本，启动 springboot 服务
 
-        (以下操作与 git 类似，区别在于源码库差异)
+        (以下操作与 git 类似，区别在于不需要 git 客户端，以及源码库差异)
 
   * 官方网站地址：
 
@@ -161,10 +161,6 @@
 
         (过程略，maven 路径 /usr/local/maven )
 
-  * 安装 git 客户端，配置 ssh 免密访问 git 服务器：
-
-        (过程略，参考 git 安装与配置，git shell 路径 /bin/git )
-
 ### 添加 jenkins 服务相关配置
 
   * 安装 jenkins 插件：
@@ -206,12 +202,6 @@
                 【别名】输入：jdk11
 
                 【JAVA_HOME】输入：/usr/local/jdk
-
-                【自动安装】去除选中状态
-
-            Git
-
-                【Path to Git executable】一栏输入：/usr/bin/git
 
                 【自动安装】去除选中状态
 
