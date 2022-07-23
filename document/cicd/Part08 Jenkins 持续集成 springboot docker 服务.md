@@ -82,7 +82,15 @@
             </plugins>
         </build>
 
-  * springboot 相关脚本：
+  * springboot Dockerfile :
+
+        FROM openjdk
+        WORKDIR /usr/local/application/
+        COPY target/application.jar application.jar
+        EXPOSE 8888
+        ENTRYPOINT ["java", "-jar","/usr/local/application/application.jar"]
+
+  * springboot docker 相关脚本：
 
         (创建分支的同时，更改分支代码中的相关版本号)
 
@@ -158,6 +166,7 @@
             +- src/main/resources
             +  +---------------- application.yml
             +- pom.xml
+            +- Dockerfile
             +- docker-build.sh
             +- docker-deploy.sh
 
