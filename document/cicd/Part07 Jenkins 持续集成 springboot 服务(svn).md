@@ -29,7 +29,7 @@
 
         192.168.140.131         # svn 服务器
 
-### 准备 git springboot 源码
+### 准备 svn springboot 源码
 
   * springboot 项目相关类：
 
@@ -84,7 +84,7 @@
             </plugins>
         </build>
 
-  * 上传到 git 服务器：
+  * 上传到 svn 服务器：
 
         主干地址 svn://192.168.140.131/test/trunk
 

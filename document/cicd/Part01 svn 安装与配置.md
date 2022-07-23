@@ -99,4 +99,44 @@
 
         svn://192.168.140.131:3690/
 
-        svn://192.168.140.131:3690/dev
+        svn://192.168.140.131:3690/test
+
+### svn 主流命名规范
+
+  * 一般使用以下命名法：
+
+        +- <project-name>
+        +  +--------- trunk
+        +  +--------- branches
+        +  +--------- document
+        +  +--------- ...
+
+  * 主干 trunk 只有一份：
+
+        +- <project-name>
+        +  +--------- trunk
+        +             +---------- src/main/java
+        +             +---------- src/main/resources
+        +             +---------- src/test/java
+        +             +---------- src/test/resources
+        +             +---------- pom.xml
+
+  * 分支 branches 有多份，有必要可以添加分支名称前后缀，进行区别各种版本：
+
+        +- <project-name>
+        +  +--------- branches
+        +             +---------- V1.0.1
+        +             +           +---------- src/main/java
+        +             +           +---------- src/main/resources
+        +             +           +---------- src/test/java
+        +             +           +---------- src/test/resources
+        +             +           +---------- pom.xml
+        +             +---------- V1.0.2
+        +             +           +---------- src/main/java
+        +             +           +---------- src/main/resources
+        +             +           +---------- src/test/java
+        +             +           +---------- src/test/resources
+        +             +           +---------- pom.xml
+        +             +---------- ...
+
+  * 文档 document 以及 其他目录 未有过多要求
