@@ -155,5 +155,5 @@
     * [maven nexus 私库配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part04%20maven%20nexus%20%E7%A7%81%E5%BA%93%E9%85%8D%E7%BD%AE.md)
     * [jenkins 安装与简单构建](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part05%20Jenkins%20%E5%AE%89%E8%A3%85%E4%B8%8E%E7%AE%80%E5%8D%95%E6%9E%84%E5%BB%BA.md)
     * [jenkins 持续集成 springboot 服务(git)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part06%20Jenkins%20%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%20springboot%20%E6%9C%8D%E5%8A%A1(git).md)
-    * [jenkins 持续集成 springboot 服务(nexus)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part07%20Jenkins%20%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%20springboot%20%E6%9C%8D%E5%8A%A1(nexus).md)
+    * [jenkins 持续集成 springboot 服务(svn)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part07%20Jenkins%20%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%20springboot%20%E6%9C%8D%E5%8A%A1(svn).md)
     * [jenkins 持续集成 docker 服务](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part08%20Jenkins%20%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%20docker%20%E6%9C%8D%E5%8A%A1.md)

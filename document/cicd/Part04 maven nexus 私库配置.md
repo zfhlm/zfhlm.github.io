@@ -292,13 +292,12 @@
 
         maven项目信息：
 
-            　<groupId>org.lushen.mrh</groupId>
-              <artifactId>test</artifactId>
-              <version>1.0.RELEASE</version>
-              <!-- <version>1.0-SNAPSHOT</version> -->
+            <groupId>org.lushen.mrh</groupId>
+            <artifactId>test</artifactId>
+            <version>1.0.1-RELEASES</version>
 
         maven执行命令：
 
             mvn clean deploy -Dmaven.test.skip=true
 
-            maven会根据项目的version中是否带有-SNAPSHOT来判断是快照版本还是正式版本
+            maven 会根据项目的version中是否带有-SNAPSHOTS 来判断是快照版本还是正式版本
