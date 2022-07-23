@@ -127,14 +127,14 @@
             # 停止运行相同名称容器
             CONTIANER_ID=$(docker ps --filter name=$CONTIANER_SHORT_NAME* -q)
             if [ $CONTIANER_ID != "" ]; then
-            	echo 'stop docker container id : $CONTIANER_ID'
+                echo 'stop docker container id : $CONTIANER_ID'
                 docker stop $CONTIANER_ID
             fi
 
             # 删除名称和版本相同的容器
             CONTIANER_ID=$(docker ps -a --filter name=$CONTIANER_FULL_NAME -q)
             if [ $CONTIANER_ID != "" ]; then
-            	echo 'remove docker container id : $CONTIANER_ID'
+                echo 'remove docker container id : $CONTIANER_ID'
                 docker rm $CONTIANER_ID
             fi
 
