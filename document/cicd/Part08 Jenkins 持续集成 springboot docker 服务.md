@@ -1,15 +1,15 @@
 
-# Jenkins 持续集成 springboot 服务(git)
+# Jenkins 持续集成 springboot docker 服务
 
-  * 持续集成过程
+  * 持续集成过程：
 
         ①，jenkins 从 git 仓库拉取指定分支源码
 
         ②，jenkins 自动使用 maven 打包可执行 jar
 
-        ③，jenkins 远程发布 jar 包到目标服务器
+        ③，jenkins 执行源码 docker-build.sh 脚本，将生成的镜像上传到指定私库
 
-        ④，jenkins 远程执行目标服务器 shell 脚本，启动 springboot 服务
+        ④，jenkins 传输源码 docker-deploy.sh 脚本到 docker 运行节点，并执行启动容器
 
   * 官方网站地址：
 
@@ -21,11 +21,11 @@
 
         192.168.140.136         # jenkins 服务器
 
-        192.168.140.130         # springboot 服务器1
+        192.168.140.136         # docker 镜像仓库
 
-        192.168.140.131         # springboot 服务器2
+        192.168.140.131         # git 源码
 
-        192.168.140.131         # git 服务器
+        192.168.140.130         # docker 运行节点
 
 ### 准备 git springboot 源码
 
@@ -82,6 +82,72 @@
             </plugins>
         </build>
 
+  * springboot 相关脚本：
+
+        (创建分支的同时，更改分支代码中的相关版本号)
+
+        vi docker-build.sh
+
+        =>
+
+            #!/bin/sh
+
+            # 常量定义
+            JAR_NAME=app-test
+            JAR_VERSION=v1.0
+            REGISTRY_ADDR=192.168.140.136:5000
+
+            # 镜像名称
+            ORIGIN_IMAGE_NAME=$JAR_NAME:$JAR_VERSION
+            TAG_IMAGE_NAME=$REGISTRY_ADDR/$ORIGIN_IMAGE_NAME
+
+            # 构建镜像
+            docker build -t $ORIGIN_IMAGE_NAME .
+
+            # 镜像上传到私库
+            docker tag $ORIGIN_IMAGE_NAME $TAG_IMAGE_NAME
+            docker push $TAG_IMAGE_NAME
+
+        vi docker-deploy.sh
+
+        =>
+
+            #!/bin/sh
+
+            # 常量定义
+            JAR_NAME=app-test
+            JAR_VERSION=v1.0
+            REGISTRY_ADDR=192.168.140.136:5000
+
+            # 镜像容器名称
+            TAG_IMAGE_NAME=$REGISTRY_ADDR/$JAR_NAME:$JAR_VERSION
+            CONTIANER_SHORT_NAME=$JAR_NAME
+            CONTIANER_FULL_NAME=$JAR_NAME"_"$JAR_VERSION
+
+            # 停止运行相同名称容器
+            CONTIANER_ID=$(docker ps --filter name=$CONTIANER_SHORT_NAME* -q)
+            if [ $CONTIANER_ID != "" ]; then
+            	echo 'stop docker container id : $CONTIANER_ID'
+                docker stop $CONTIANER_ID
+            fi
+
+            # 删除名称和版本相同的容器
+            CONTIANER_ID=$(docker ps -a --filter name=$CONTIANER_FULL_NAME -q)
+            if [ $CONTIANER_ID != "" ]; then
+            	echo 'remove docker container id : $CONTIANER_ID'
+                docker rm $CONTIANER_ID
+            fi
+
+            # 拉取当前版本容器并启动
+            docker pull $TAG_IMAGE_NAME
+
+            # 启动容器
+            docker run -it -d --name $CONTIANER_FULL_NAME -p 8888:8888 $TAG_IMAGE_NAME
+
+            # 输出启动信息
+            CONTIANER_ID=$(docker ps -a --filter name=$CONTIANER_FULL_NAME -q)
+            echo 'start docker container id : $CONTIANER_ID'
+
   * 上传到 git 服务器：
 
         ssh://git@192.168.140.131/home/repo/test.git
@@ -92,53 +158,8 @@
             +- src/main/resources
             +  +---------------- application.yml
             +- pom.xml
-
-### 初始化 springboot 服务器
-
-  * 创建远程执行目录、重启服务的脚本文件：
-
-        mkdir -p /usr/local/springboot
-
-        cd /usr/local/springboot
-
-        # 注意，脚本执行不能出现阻塞操作，否则会使 jenkins 构建任务卡死
-        vi startup.sh
-
-        =>
-
-            #!/bin/sh
-            CheckProcess()
-            {
-                if [ "$1" = "" ];
-                then
-                    return 1
-                fi
-
-                PROCESS_NUM=$(ps -ef|grep "$1"|grep -v "grep"|wc -l)
-                if [ "$PROCESS_NUM" = "1" ];
-                then
-                    return 0
-                else
-                    return 1
-                fi
-            }
-
-            CheckProcess "/usr/local/springboot/application.jar"
-            CheckQQ_RET=$?
-            if [ "$CheckQQ_RET" = "0" ];
-            then
-                echo "restart test ..."
-                kill -9 $(ps -ef|grep /usr/local/springboot/application.jar |gawk '$0 !~/grep/ {print $2}' |tr -s '\n' ' ')
-                sleep 1
-                exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
-                echo "restart test success..."
-            else
-                echo "restart test..."
-                exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
-                echo "restart test success..."
-            fi
-
-        chmod 777 startup.sh
+            +- docker-build.sh
+            +- docker-deploy.sh
 
 ### 初始化 jenkins 服务器
 
@@ -153,6 +174,14 @@
   * 安装 git 客户端，配置 ssh 免密访问 git 服务器：
 
         (过程略，参考 git 安装与配置，git shell 路径 /bin/git )
+
+  * 安装 docker 服务：
+
+        (过程略)
+
+  * 安装 docker registry 私库：
+
+        (过程略，注意在 docker 运行节点配置免登录)
 
 ### 添加 jenkins 服务相关配置
 
@@ -250,7 +279,7 @@
 
         第一步，点击【新增Item】
 
-        第二步，【输入一个任务名称】填写 deploy-git-boot-test-job
+        第二步，【输入一个任务名称】填写 deploy-docker-boot-test-job
 
         第三步，选择【构建一个maven项目】
 
@@ -332,19 +361,23 @@
 
                 选中【Run only if build succeeds】
 
+                点击【Add post-build step】，选择【执行 shell】
+
+                    【命令】输入： chmod 777 docker-build.sh && sh docker-build.sh
+
                 点击【Add post-build step】，选择【Send files or execute commands over SSH】
 
                 在【SSH Publishers】一栏输入应用服务信息：
 
                     【Name】：选择应用服务器
 
-                    【Transfers】-【Source files】：填入 target/*.jar
+                    【Transfers】-【Source files】：填入 docker-deploy.sh
 
-                    【Transfers】-【Remove prefix】：填入target
+                    【Transfers】-【Remove prefix】：不填写
 
                     【Transfers】-【Remote directory】：填入 /usr/local/springboot/
 
-                    【Transfers】-【Exec command】：填入执行脚本  sh /usr/local/springboot/startup.sh
+                    【Transfers】-【Exec command】：填入执行脚本  chmod 777 /usr/local/springboot/docker-deploy.sh && sh /usr/local/springboot/docker-deploy.sh
 
                 可点击【Add Server】多次输入应用服务信息
 
@@ -369,5 +402,3 @@
   * 访问发布的应用：
 
         http://192.168.140.130:8888/
-
-        http://192.168.140.131:8888/

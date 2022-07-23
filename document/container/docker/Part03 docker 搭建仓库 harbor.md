@@ -88,9 +88,32 @@
 
         cp /usr/local/harbor/cert/server.crt /etc/docker/certs.d/192.168.140.209/
 
+  * 配置免输入 docker registry 账号密码：
+
+        # 获取 账号:密码 base64 字符串：
+        echo -n "admin:admin123456" | base64
+
+        ->
+
+            YWRtaW46YWRtaW4xMjM0NTY=
+
+        # 添加 base64 账号密码到 auths 配置
+        vi ~/.docker/config.json
+
+        =>
+
+            {
+                "auths": {
+                    "192.168.140.209:5000": {
+                        "auth": "YWRtaW46YWRtaW4xMjM0NTY="
+                    }
+                }
+            }
+
   * 上传镜像测试，输入命令：
 
-        docker login 192.168.140.209
+        # 不需要再使用 docker login
+        # docker login 192.168.140.209
 
         docker pull redis
 

@@ -1,6 +1,8 @@
 
 # Jenkins 持续集成 springboot 服务(svn)
 
+  * 操作与使用 git 类似，当前 blog 只为演示 svn 与 git 的差异性
+
   * 持续集成过程
 
         ①，jenkins 从 svn 仓库拉取指定分支源码
@@ -10,8 +12,6 @@
         ③，jenkins 远程发布 jar 包到目标服务器
 
         ④，jenkins 远程执行目标服务器 shell 脚本，启动 springboot 服务
-
-        (以下操作与 git 类似，区别在于不需要 git 客户端，以及源码库差异)
 
   * 官方网站地址：
 
