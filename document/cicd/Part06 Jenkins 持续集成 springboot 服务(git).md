@@ -282,33 +282,13 @@
 
                 选择【Git】
 
-                在【Repository URL】输入：ssh://git@192.168.140.131/home/repo/test.git
+                    【Repository URL】输入：ssh://git@192.168.140.131/home/repo/test.git
 
-                在【Credentials】一栏点击【添加】-【jenkins】
+                    【Credentials】一栏选择【-无-】(因为已经配置了 git 免登录)
 
-                在弹出框中输入jenkins私钥信息：
+                    【Branches to build】一栏【指定分支】输入：${branch}
 
-                    【Domain】：默认即可
-
-                    【类型】：选择 SSH Username with primary key
-
-                    【范围】：默认即可
-
-                    【ID】：填入 自定义唯一私钥ID即可
-
-                    【描述】：填入描述信息
-
-                    【Username】：填入git用户
-
-                    【Private Key】选中【Enter directly】，点击【Add】，使用文本工具打开 git 客户端(jenkins 服务器)私钥文件，将私钥文本粘贴到里面
-
-                    点击【添加】，完成创建私钥信息
-
-                在【Credentials】一栏选中刚刚添加的私钥
-
-                在【Branches to build】一栏【指定分支】输入：${branch}
-
-                在【源码库浏览器】一栏，默认即可
+                    【源码库浏览器】一栏，默认即可
 
             构建触发器
 
