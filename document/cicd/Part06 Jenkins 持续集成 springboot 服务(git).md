@@ -5,11 +5,11 @@
 
         ①，jenkins 从 git 仓库拉取指定分支源码
 
-        ②，jenkins 自动使用 maven 打包可执行 jar
+        ②，jenkins 自动使用 maven 打包可执行 jar 包
 
-        ③，jenkins 远程发布 jar 包到目标服务器
+        ③，jenkins 远程发布可执行 jar 包到目标服务器
 
-        ④，jenkins 远程执行目标服务器 shell 脚本，启动 springboot 服务
+        ④，jenkins 远程发布源码根目录 startup.sh 到目标服务器，并启动 springboot 服务
 
   * 官方网站地址：
 
@@ -28,6 +28,18 @@
         192.168.140.131         # git 服务器
 
 ### 准备 git springboot 源码
+
+  * springboot git 源码结构（主干分支都使用此结构，注意 pom.xml 和 startup.sh 位置）：
+
+        ssh://git@192.168.140.131/home/repo/test.git
+
+            +- src/main/java
+            +  +---------------- org.lushen.mrh.test.Application
+            +  +---------------- org.lushen.mrh.test.WelcomeController
+            +- src/main/resources
+            +  +---------------- application.yml
+            +- pom.xml
+            +- startup.sh
 
   * springboot 项目相关类：
 
@@ -82,63 +94,39 @@
             </plugins>
         </build>
 
-  * 上传到 git 服务器：
+  * springboot 启动脚本 startup.sh (注意，脚本执行不能出现阻塞操作，否则会使 jenkins 构建任务卡死)：
 
-        ssh://git@192.168.140.131/home/repo/test.git
-
-            +- src/main/java
-            +  +---------------- org.lushen.mrh.test.Application
-            +  +---------------- org.lushen.mrh.test.WelcomeController
-            +- src/main/resources
-            +  +---------------- application.yml
-            +- pom.xml
-
-### 初始化 springboot 服务器
-
-  * 创建远程执行目录、重启服务的脚本文件：
-
-        mkdir -p /usr/local/springboot
-
-        cd /usr/local/springboot
-
-        # 注意，脚本执行不能出现阻塞操作，否则会使 jenkins 构建任务卡死
-        vi startup.sh
-
-        =>
-
-            #!/bin/sh
-            CheckProcess()
-            {
-                if [ "$1" = "" ];
-                then
-                    return 1
-                fi
-
-                PROCESS_NUM=$(ps -ef|grep "$1"|grep -v "grep"|wc -l)
-                if [ "$PROCESS_NUM" = "1" ];
-                then
-                    return 0
-                else
-                    return 1
-                fi
-            }
-
-            CheckProcess "/usr/local/springboot/application.jar"
-            CheckQQ_RET=$?
-            if [ "$CheckQQ_RET" = "0" ];
+        #!/bin/sh
+        CheckProcess()
+        {
+            if [ "$1" = "" ];
             then
-                echo "restart test ..."
-                kill -9 $(ps -ef|grep /usr/local/springboot/application.jar |gawk '$0 !~/grep/ {print $2}' |tr -s '\n' ' ')
-                sleep 1
-                exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
-                echo "restart test success..."
-            else
-                echo "restart test..."
-                exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
-                echo "restart test success..."
+                return 1
             fi
 
-        chmod 777 startup.sh
+            PROCESS_NUM=$(ps -ef|grep "$1"|grep -v "grep"|wc -l)
+            if [ "$PROCESS_NUM" = "1" ];
+            then
+                return 0
+            else
+                return 1
+            fi
+        }
+
+        CheckProcess "/usr/local/springboot/application.jar"
+        CheckQQ_RET=$?
+        if [ "$CheckQQ_RET" = "0" ];
+        then
+            echo "restart test ..."
+            kill -9 $(ps -ef|grep /usr/local/springboot/application.jar |gawk '$0 !~/grep/ {print $2}' |tr -s '\n' ' ')
+            sleep 1
+            exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
+            echo "restart test success..."
+        else
+            echo "restart test..."
+            exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
+            echo "restart test success..."
+        fi
 
 ### 初始化 jenkins 服务器
 
@@ -150,13 +138,13 @@
 
         (过程略，maven 路径 /usr/local/maven )
 
-  * 安装 git 客户端，配置 ssh 免密访问 git 服务器：
+  * 安装 git 客户端：
 
-        (过程略，参考 git 安装与配置，git shell 路径 /bin/git )
+        (过程略，git shell 路径 /bin/git，注意，必须配置 jenkins 服务器 ssh 免密访问 git 服务器)
 
 ### 添加 jenkins 服务相关配置
 
-  * 安装 jenkins 插件：
+  * 安装以下 jenkins 插件：
 
         ①，Maven Integration
 
@@ -216,7 +204,7 @@
 
         第四步，点击【保存】，至此完成全局工具配置
 
-  * 添加 jenkins 构建远程服务器：
+  * 添加 jenkins 远程发布服务器：
 
         第一步，点击【Manage Jenkins】
 
@@ -242,7 +230,7 @@
 
             点击【Test Configuration】测试服务器连接是否成功
 
-        第四步，如果需要配置多个服务器，点击【新增】，重复第三步操作
+        第四步，需要配置多个服务器，点击【新增】，重复第三步操作
 
         第五步，点击【保存】，然后回到主界面
 
@@ -266,9 +254,9 @@
 
                     【策略】：默认即可
 
-                    【保持构建的天数】：填入 30
+                    【保持构建的天数】：填入 30 或者其他合适的数值
 
-                    【保持构建的最大个数】：填入 10
+                    【保持构建的最大个数】：填入 10 或者其他合适的数值
 
                 选中【参数化构建】，添加参数，选择【Git参数】：
 
@@ -300,7 +288,7 @@
 
             Pre Steps
 
-                不添加信息
+                不添加任何信息
 
             Build
 
@@ -316,7 +304,7 @@
 
                 在【SSH Publishers】一栏输入应用服务信息：
 
-                    【Name】：选择应用服务器
+                    选择【Name】应用服务器，例如 192.168.140.130
 
                     【Transfers】-【Source files】：填入 target/*.jar
 
@@ -324,9 +312,19 @@
 
                     【Transfers】-【Remote directory】：填入 /usr/local/springboot/
 
-                    【Transfers】-【Exec command】：填入执行脚本  sh /usr/local/springboot/startup.sh
+                    【Transfers】-【Exec command】：不填写
 
-                可点击【Add Server】多次输入应用服务信息
+                    点击【Add Transfer Set】
+
+                    【Transfers】-【Source files】：填入 startup.sh
+
+                    【Transfers】-【Remove prefix】：不填写
+
+                    【Transfers】-【Remote directory】：填入 /usr/local/springboot/
+
+                    【Transfers】-【Exec command】：填入 chmod 777 /usr/local/springboot/startup.sh && sh /usr/local/springboot/startup.sh
+
+                点击【Add Server】多次输入应用服务信息 (如有需要，此处继续添加 192.168.140.131 服务器)
 
         第六步，点击【保存】完成配置
 

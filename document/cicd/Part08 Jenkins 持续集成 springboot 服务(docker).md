@@ -1,5 +1,5 @@
 
-# Jenkins 持续集成 springboot docker 服务
+# Jenkins 持续集成 springboot 服务(docker)
 
   * 持续集成过程：
 
@@ -28,6 +28,20 @@
         192.168.140.130         # docker 运行节点
 
 ### 准备 git springboot 源码
+
+  * springboot git 源码结构 (创建分支的同时，更改分支代码、脚本中的相关版本号)：
+
+        ssh://git@192.168.140.131/home/repo/test.git
+
+            +- src/main/java
+            +  +---------------- org.lushen.mrh.test.Application
+            +  +---------------- org.lushen.mrh.test.WelcomeController
+            +- src/main/resources
+            +  +---------------- application.yml
+            +- pom.xml
+            +- Dockerfile
+            +- docker-build.sh
+            +- docker-deploy.sh
 
   * springboot 项目相关类：
 
@@ -90,85 +104,63 @@
         EXPOSE 8888
         ENTRYPOINT ["java", "-jar","/usr/local/application/application.jar"]
 
-  * springboot docker 相关脚本：
+  * springboot docker-build.sh 脚本：
 
-        (创建分支的同时，更改分支代码中的相关版本号)
+        #!/bin/sh
 
-        vi docker-build.sh
+        # 常量定义
+        JAR_NAME=app-test
+        JAR_VERSION=v1.0
+        REGISTRY_ADDR=192.168.140.136:5000
 
-        =>
+        # 镜像名称
+        ORIGIN_IMAGE_NAME=$JAR_NAME:$JAR_VERSION
+        TAG_IMAGE_NAME=$REGISTRY_ADDR/$ORIGIN_IMAGE_NAME
 
-            #!/bin/sh
+        # 构建镜像
+        docker build -t $ORIGIN_IMAGE_NAME .
 
-            # 常量定义
-            JAR_NAME=app-test
-            JAR_VERSION=v1.0
-            REGISTRY_ADDR=192.168.140.136:5000
+        # 镜像上传到私库
+        docker tag $ORIGIN_IMAGE_NAME $TAG_IMAGE_NAME
+        docker push $TAG_IMAGE_NAME
 
-            # 镜像名称
-            ORIGIN_IMAGE_NAME=$JAR_NAME:$JAR_VERSION
-            TAG_IMAGE_NAME=$REGISTRY_ADDR/$ORIGIN_IMAGE_NAME
+  * springboot docker-deploy.sh 脚本：
 
-            # 构建镜像
-            docker build -t $ORIGIN_IMAGE_NAME .
+        #!/bin/sh
 
-            # 镜像上传到私库
-            docker tag $ORIGIN_IMAGE_NAME $TAG_IMAGE_NAME
-            docker push $TAG_IMAGE_NAME
+        # 常量定义
+        JAR_NAME=app-test
+        JAR_VERSION=v1.0
+        REGISTRY_ADDR=192.168.140.136:5000
 
-        vi docker-deploy.sh
+        # 镜像容器名称
+        TAG_IMAGE_NAME=$REGISTRY_ADDR/$JAR_NAME:$JAR_VERSION
+        CONTIANER_SHORT_NAME=$JAR_NAME
+        CONTIANER_FULL_NAME=$JAR_NAME"_"$JAR_VERSION
 
-        =>
+        # 停止运行相同名称容器
+        CONTIANER_ID=$(docker ps --filter name=$CONTIANER_SHORT_NAME* -q)
+        if [ $CONTIANER_ID != "" ]; then
+            echo 'stop docker container id : $CONTIANER_ID'
+            docker stop $CONTIANER_ID
+        fi
 
-            #!/bin/sh
+        # 删除名称和版本相同的容器
+        CONTIANER_ID=$(docker ps -a --filter name=$CONTIANER_FULL_NAME -q)
+        if [ $CONTIANER_ID != "" ]; then
+            echo 'remove docker container id : $CONTIANER_ID'
+            docker rm $CONTIANER_ID
+        fi
 
-            # 常量定义
-            JAR_NAME=app-test
-            JAR_VERSION=v1.0
-            REGISTRY_ADDR=192.168.140.136:5000
+        # 拉取当前版本容器并启动
+        docker pull $TAG_IMAGE_NAME
 
-            # 镜像容器名称
-            TAG_IMAGE_NAME=$REGISTRY_ADDR/$JAR_NAME:$JAR_VERSION
-            CONTIANER_SHORT_NAME=$JAR_NAME
-            CONTIANER_FULL_NAME=$JAR_NAME"_"$JAR_VERSION
+        # 启动容器
+        docker run -it -d --name $CONTIANER_FULL_NAME -p 8888:8888 $TAG_IMAGE_NAME
 
-            # 停止运行相同名称容器
-            CONTIANER_ID=$(docker ps --filter name=$CONTIANER_SHORT_NAME* -q)
-            if [ $CONTIANER_ID != "" ]; then
-                echo 'stop docker container id : $CONTIANER_ID'
-                docker stop $CONTIANER_ID
-            fi
-
-            # 删除名称和版本相同的容器
-            CONTIANER_ID=$(docker ps -a --filter name=$CONTIANER_FULL_NAME -q)
-            if [ $CONTIANER_ID != "" ]; then
-                echo 'remove docker container id : $CONTIANER_ID'
-                docker rm $CONTIANER_ID
-            fi
-
-            # 拉取当前版本容器并启动
-            docker pull $TAG_IMAGE_NAME
-
-            # 启动容器
-            docker run -it -d --name $CONTIANER_FULL_NAME -p 8888:8888 $TAG_IMAGE_NAME
-
-            # 输出启动信息
-            CONTIANER_ID=$(docker ps -a --filter name=$CONTIANER_FULL_NAME -q)
-            echo 'start docker container id : $CONTIANER_ID'
-
-  * 上传到 git 服务器：
-
-        ssh://git@192.168.140.131/home/repo/test.git
-
-            +- src/main/java
-            +  +---------------- org.lushen.mrh.test.Application
-            +  +---------------- org.lushen.mrh.test.WelcomeController
-            +- src/main/resources
-            +  +---------------- application.yml
-            +- pom.xml
-            +- Dockerfile
-            +- docker-build.sh
-            +- docker-deploy.sh
+        # 输出启动信息
+        CONTIANER_ID=$(docker ps -a --filter name=$CONTIANER_FULL_NAME -q)
+        echo 'start docker container id : $CONTIANER_ID'
 
 ### 初始化 jenkins 服务器
 
@@ -180,9 +172,9 @@
 
         (过程略，maven 路径 /usr/local/maven )
 
-  * 安装 git 客户端，配置 ssh 免密访问 git 服务器：
+  * 安装 git 客户端：
 
-        (过程略，参考 git 安装与配置，git shell 路径 /bin/git )
+        (过程略，参考 git 安装与配置，git shell 路径 /bin/git，注意，必须配置 ssh 免密访问 git 服务器)
 
   * 安装 docker 服务：
 
@@ -190,7 +182,7 @@
 
   * 安装 docker registry 私库：
 
-        (过程略，注意在 docker 运行节点配置免登录)
+        (过程略，注意在 docker 运行节点配置免登录，当前配置三台服务器免登陆)
 
 ### 添加 jenkins 服务相关配置
 
@@ -304,9 +296,9 @@
 
                     【策略】：默认即可
 
-                    【保持构建的天数】：填入 30
+                    【保持构建的天数】：填入 30 或者其他合适的数值
 
-                    【保持构建的最大个数】：填入 10
+                    【保持构建的最大个数】：填入 10 或者其他合适的数值
 
                 选中【参数化构建】，添加参数，选择【Git参数】：
 

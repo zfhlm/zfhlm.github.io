@@ -1,17 +1,15 @@
 
 # Jenkins 持续集成 springboot 服务(svn)
 
-  * 操作与使用 git 类似，当前 blog 只为演示 svn 与 git 的差异性
-
-  * 持续集成过程
+  * 持续集成过程(与使用 git 略微差异)：
 
         ①，jenkins 从 svn 仓库拉取指定分支源码
 
-        ②，jenkins 自动使用 maven 打包可执行 jar
+        ②，jenkins 自动使用 maven 打包可执行 jar 包
 
-        ③，jenkins 远程发布 jar 包到目标服务器
+        ③，jenkins 远程发布可执行 jar 包到目标服务器
 
-        ④，jenkins 远程执行目标服务器 shell 脚本，启动 springboot 服务
+        ④，jenkins 远程发布源码根目录 startup.sh 到目标服务器，并启动 springboot 服务
 
   * 官方网站地址：
 
@@ -30,6 +28,28 @@
         192.168.140.131         # svn 服务器
 
 ### 准备 svn springboot 源码
+
+  * 上传到 svn 服务器（注意 pom.xml 和 startup.sh 位置）：
+
+        主干地址 svn://192.168.140.131/test/trunk
+
+            +- src/main/java
+            +  +---------------- org.lushen.mrh.test.Application
+            +  +---------------- org.lushen.mrh.test.WelcomeController
+            +- src/main/resources
+            +  +---------------- application.yml
+            +- pom.xml
+            +- startup.sh
+
+        分支地址 svn://192.168.140.131/test/branches/{branch-name}
+
+            +- src/main/java
+            +  +---------------- org.lushen.mrh.test.Application
+            +  +---------------- org.lushen.mrh.test.WelcomeController
+            +- src/main/resources
+            +  +---------------- application.yml
+            +- pom.xml
+            +- startup.sh
 
   * springboot 项目相关类：
 
@@ -84,72 +104,39 @@
             </plugins>
         </build>
 
-  * 上传到 svn 服务器：
+  * springboot 启动脚本 startup.sh (注意，脚本执行不能出现阻塞操作，否则会使 jenkins 构建任务卡死)：
 
-        主干地址 svn://192.168.140.131/test/trunk
-
-            +- src/main/java
-            +  +---------------- org.lushen.mrh.test.Application
-            +  +---------------- org.lushen.mrh.test.WelcomeController
-            +- src/main/resources
-            +  +---------------- application.yml
-            +- pom.xml
-
-        分支地址 svn://192.168.140.131/test/branches/{branch-name}
-
-            +- src/main/java
-            +  +---------------- org.lushen.mrh.test.Application
-            +  +---------------- org.lushen.mrh.test.WelcomeController
-            +- src/main/resources
-            +  +---------------- application.yml
-            +- pom.xml
-
-### 初始化 springboot 服务器
-
-  * 创建远程执行目录、重启服务的脚本文件：
-
-        mkdir -p /usr/local/springboot
-
-        cd /usr/local/springboot
-
-        # 注意，脚本执行不能出现阻塞操作，否则会使 jenkins 构建任务卡死
-        vi startup.sh
-
-        =>
-
-            #!/bin/sh
-            CheckProcess()
-            {
-                if [ "$1" = "" ];
-                then
-                    return 1
-                fi
-
-                PROCESS_NUM=$(ps -ef|grep "$1"|grep -v "grep"|wc -l)
-                if [ "$PROCESS_NUM" = "1" ];
-                then
-                    return 0
-                else
-                    return 1
-                fi
-            }
-
-            CheckProcess "/usr/local/springboot/application.jar"
-            CheckQQ_RET=$?
-            if [ "$CheckQQ_RET" = "0" ];
+        #!/bin/sh
+        CheckProcess()
+        {
+            if [ "$1" = "" ];
             then
-                echo "restart test ..."
-                kill -9 $(ps -ef|grep /usr/local/springboot/application.jar |gawk '$0 !~/grep/ {print $2}' |tr -s '\n' ' ')
-                sleep 1
-                exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
-                echo "restart test success..."
-            else
-                echo "restart test..."
-                exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
-                echo "restart test success..."
+                return 1
             fi
 
-        chmod 777 startup.sh
+            PROCESS_NUM=$(ps -ef|grep "$1"|grep -v "grep"|wc -l)
+            if [ "$PROCESS_NUM" = "1" ];
+            then
+                return 0
+            else
+                return 1
+            fi
+        }
+
+        CheckProcess "/usr/local/springboot/application.jar"
+        CheckQQ_RET=$?
+        if [ "$CheckQQ_RET" = "0" ];
+        then
+            echo "restart test ..."
+            kill -9 $(ps -ef|grep /usr/local/springboot/application.jar |gawk '$0 !~/grep/ {print $2}' |tr -s '\n' ' ')
+            sleep 1
+            exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
+            echo "restart test success..."
+        else
+            echo "restart test..."
+            exec nohup /usr/local/jdk/bin/java -jar /usr/local/springboot/application.jar >/dev/null 2>&1 &
+            echo "restart test success..."
+        fi
 
 ### 初始化 jenkins 服务器
 
@@ -267,9 +254,9 @@
 
                     【策略】：默认即可
 
-                    【保持构建的天数】：填入 30
+                    【保持构建的天数】：填入 30 或者其他合适的数值
 
-                    【保持构建的最大个数】：填入 10
+                    【保持构建的最大个数】：填入 10 或者其他合适的数值
 
                 选中【参数化构建】，添加参数，选择【List Subversion tags】：
 
@@ -289,7 +276,7 @@
 
                         【密码】：填入 svn 密码例如 admin
 
-                        【ID】：填入例如 admin
+                        【ID】：填入例如 svn-admin
 
                         【描述】：填入描述信息例如 svn admin
 
@@ -333,7 +320,7 @@
 
                 在【SSH Publishers】一栏输入应用服务信息：
 
-                    【Name】：选择应用服务器
+                    选择【Name】应用服务器，例如 192.168.140.130
 
                     【Transfers】-【Source files】：填入 target/*.jar
 
@@ -341,7 +328,17 @@
 
                     【Transfers】-【Remote directory】：填入 /usr/local/springboot/
 
-                    【Transfers】-【Exec command】：填入执行脚本  sh /usr/local/springboot/startup.sh
+                    【Transfers】-【Exec command】：不填写
+
+                    点击【Add Transfer Set】
+
+                    【Transfers】-【Source files】：填入 startup.sh
+
+                    【Transfers】-【Remove prefix】：不填写
+
+                    【Transfers】-【Remote directory】：填入 /usr/local/springboot/
+
+                    【Transfers】-【Exec command】：填入 chmod 777 /usr/local/springboot/startup.sh && sh /usr/local/springboot/startup.sh
 
                 可点击【Add Server】多次输入应用服务信息
 
