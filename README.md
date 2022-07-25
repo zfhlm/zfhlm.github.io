@@ -158,3 +158,4 @@
     * [jenkins 持续集成 springboot 服务(svn)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part07%20Jenkins%20%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%20springboot%20%E6%9C%8D%E5%8A%A1(svn).md)
     * [jenkins 持续集成 springboot 服务(docker)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part08%20Jenkins%20%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%20springboot%20%E6%9C%8D%E5%8A%A1(docker).md)
     * [jenkins 持续集成 springboot 服务(pipeline)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part09%20Jenkins%20%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%20springboot%20%E6%9C%8D%E5%8A%A1(pipeline).md)
+    * [jenkins 持续集成 简单总结](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part10%20Jenkins%20%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%20%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93.md)
