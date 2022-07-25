@@ -118,7 +118,7 @@
         TAG_IMAGE_NAME=$REGISTRY_ADDR/$ORIGIN_IMAGE_NAME
 
         # 构建镜像
-        docker build -t $ORIGIN_IMAGE_NAME .
+        docker build -t $ORIGIN_IMAGE_NAME $(cd $(dirname $0); pwd)
 
         # 镜像上传到私库
         docker tag $ORIGIN_IMAGE_NAME $TAG_IMAGE_NAME
