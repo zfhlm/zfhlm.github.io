@@ -1,11 +1,6 @@
 
   * TODO
 
-    * [mysql 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part01%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
-    * [mysql 集群-主从](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part02%20%E9%9B%86%E7%BE%A4%E5%9F%BA%E7%A1%80%E4%B8%BB%E4%BB%8E%E6%A8%A1%E5%BC%8F.md)
-    * [mysql 集群-双主](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part03%20%E9%9B%86%E7%BE%A4%E5%9F%BA%E7%A1%80%E5%8F%8C%E4%B8%BB%E6%A8%A1%E5%BC%8F.md)
-    * [mysql 半同步复制](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part04%20%E9%9B%86%E7%BE%A4%E5%9F%BA%E7%A1%80%E5%BC%82%E6%AD%A5%E5%92%8C%E5%8D%8A%E5%90%8C%E6%AD%A5%E5%A4%8D%E5%88%B6.md)
-    * [mysql 开启GTID](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part05%20%E9%9B%86%E7%BE%A4%E5%9F%BA%E7%A1%80binlog%E5%81%8F%E7%A7%BB%E9%87%8F%E5%92%8CGTID.md)
     * [mysql 集群-MHA](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part06%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E4%B8%BB%E4%BB%8EMHA.md)
     * [mysql 集群-MGR](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part07%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E4%B8%BB%E4%BB%8EMGR.md)
     * [mysql 集群-MIC](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part08%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E4%B8%BB%E4%BB%8EMIC.md)
