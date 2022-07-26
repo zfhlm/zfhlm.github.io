@@ -116,6 +116,15 @@
     * [nacos 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/nacos/Part1%20%E5%AE%89%E8%A3%85nacos.md)
     * [zookeeper 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/zookeeper/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [zookeeper 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/zookeeper/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
+  * 数据库
+    * [Mysql 单点配置]()
+    * [Mysql 主从模式]()
+    * [Mysql 数据备份]()
+    * [Mysql 日志订阅(canal)]()
+    * [Oracle 单点配置]()
+    * [PostgreSQL 单点配置]()
+    * [MongoDB 单点配置]()
+    * [Neo4j Community 单点配置]()
   * 文件存储
     * [ftp 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/ftp/Part1%20%E5%AE%89%E8%A3%85ftp.md)
     * [fastdfs 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/fastdfs/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)

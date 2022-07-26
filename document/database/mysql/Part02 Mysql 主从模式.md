@@ -7,7 +7,7 @@
 
         ②，业务禁止使用管理员，read_only=0 对管理员账号无效，如果管理员在从节点新增数据，而主从单向复制，导致从节点比主节点多数据
 
-### 一主多从模式
+### 一主多从模式(完整 binlog 日志)
 
   * 服务器准备( 安装配置好单点 Mysql 服务 )：
 
@@ -26,14 +26,12 @@
             server_id=136                                                   #服务器ID(注意保持唯一)
             read_only=0                                                     #开启只读
 
-            # 主库开启以下配置也没问题
             #relay-log=mysql-relay-bin                                      #主从中继日志名称
             #relay_log_purge=1                                              #主从中继日志开启自动删除
             #relay_log_recovery=1                                           #主从中继日志损坏丢弃重新获取
             #max_relay_log_size=1024M                                       #主从中继日志文件最大值
             #log-slave-updates=1                                            #主从中继是否写入binlog
 
-            # 主库开启以下配置也没问题
             #replicate-ignore-db=mysql                                      #主从忽略指定数据库
             #replicate-ignore-db=information_schema                         #主从忽略指定数据库
             #replicate-ignore-db=performance_schema                         #主从忽略指定数据库
@@ -163,9 +161,9 @@
 
             Empty set (0.00 sec)
 
-  * 主从同步，binlog 不完整的情况下，需要先备份导入从库，再建立主从连接：
+### 一主多从模式(不完整 binlog 日志)
 
-        # ================ 主节点导出数据 ================
+  * 主节点，导出全量备份，并上传到从节点：
 
         cd /usr/local/backup
 
@@ -173,20 +171,22 @@
 
         scp -r ./backup.test.sql 192.168.140.130:/usr/local/backup
 
-        # ================ 从节点导入数据 ================
+  * 从节点，导入备份备份：
 
         cd /usr/local/backup
 
         mysql < ./backup.test.sql
 
-        # ================ 从节点建立主从 ================
-
+        # 获取当前备份的 binlog 偏移量
         head -100 ./backup.test.sql | grep 'CHANGE MASTER TO'
 
         ->
+
             CHANGE MASTER TO MASTER_LOG_FILE='mysql-bin.000010', MASTER_LOG_POS=2260;
 
-        # 注意修改  MASTER_LOG_FILE MASTER_LOG_POS 使用上一条命令输出值
+  * 从节点，建立主从同步：
+
+        # 注意修改  MASTER_LOG_FILE 和 MASTER_LOG_POS
         change master to master_host='192.168.140.136', master_user='replicator', master_password='123456', master_log_file='mysql-bin.000010', master_log_pos=2260;
 
         start slave;
@@ -195,21 +195,21 @@
 
 ### 双主互从模式
 
-  * 与一主多从模式类似 (实际过程略过)：
+  * 与一主多从模式类似(假设 A 和 B 两个节点)：
 
-        ①，两个节点配置 read_only=0
+        ①，A 和 B 节点配置 read_only=0
 
-        ①，先将一个节点提升为主节点
+        ②，将 A 节点配置为 B 节点的从节点
 
-        ②，再将另一个节点提升为主节点
+        ③，再将 B 节点配置为 A 节点的从节点
 
-  * 关于双主互从写入数据：
+  * 注意事项：
 
         ①，虽然双主都允许写入数据，但是为了保证数据的一致性，只允许写入一个主节点，另一个主节点可承担部分读请求
 
-        ②，可以搭配 keepalived + VIP 的方式，主节点 down 掉后转移 VIP 到另一个主节点，继续提供服务
+        ②，可以搭配 keepalived + VIP 的方式，主节点 down 掉后转移 VIP 到另一个主节点，继续提供服务，可能会丢失少量未同步数据
 
-### 主从模式半同步复制
+### 半同步复制
 
   * 半同步复制：
 
@@ -242,7 +242,7 @@
             ...
             Start semi-sync replication to master ......
 
-### 主从模式开启GTID
+### binlog GTID
 
   * 主从节点更改 my.cnf 配置 ( GTID binlog 格式必须为 ROW )：
 
@@ -264,9 +264,9 @@
 
         start slave;
 
-### 最终配置文件
+### 示例配置文件
 
-  * 按实际情况，更改 server_id 和 read_only 配置：
+  * 按实际情况调整相关配置：
 
         [client]
 
@@ -329,25 +329,25 @@
         innodb_flush_method=O_DIRECT                                    #innodb磁盘读写模式
         innodb_print_all_deadlocks=1                                    #innodb输出死锁日志
 
-        relay-log=mysql-relay-bin                                       #主从中继日志名称
-        relay_log_purge=1                                               #主从中继日志开启自动删除
-        relay_log_recovery=1                                            #主从中继日志损坏丢弃重新获取
-        max_relay_log_size=1024M                                        #主从中继日志文件最大值
-        log-slave-updates=1                                             #主从中继是否写入binlog
+        #gtid_mode=ON                                                    #开启GTID
+        #enforce_gtid_consistency=ON                                     #开启GTID强一致性事务
 
-        replicate-ignore-db=mysql                                       #主从忽略指定数据库
-        replicate-ignore-db=information_schema                          #主从忽略指定数据库
-        replicate-ignore-db=performance_schema                          #主从忽略指定数据库
-        replicate-ignore-db=sys                                         #主从忽略指定数据库
+        #relay-log=mysql-relay-bin                                      #主从中继日志名称
+        #relay_log_purge=1                                              #主从中继日志开启自动删除
+        #relay_log_recovery=1                                           #主从中继日志损坏丢弃重新获取
+        #max_relay_log_size=1024M                                       #主从中继日志文件最大值
+        #log-slave-updates=1                                            #主从中继是否写入binlog
+
+        #replicate-ignore-db=mysql                                      #主从忽略指定数据库
+        #replicate-ignore-db=information_schema                         #主从忽略指定数据库
+        #replicate-ignore-db=performance_schema                         #主从忽略指定数据库
+        #replicate-ignore-db=sys                                        #主从忽略指定数据库
         #replicate-ignore-table=test.t_test1                            #主从忽略指定表
         #replicate-ignore-table=test.t_test2                            #主从忽略指定表
         #replicate-ignore-table=test.t_test3                            #主从忽略指定表
         #replicate-wild-ignore-table=test.%                             #主从忽略指定表(模糊)
 
-        plugin_load="rpl_semi_sync_master=semisync_master.so;rpl_semi_sync_slave=semisync_slave.so"
-        loose-rpl_semi_sync_master_enabled=1                            #开启主节点半同步复制
-        loose-rpl_semi_sync_slave_enabled=1                             #开启从节点半同步复制
-        loose-rpl_semi_sync_master_timeout=5000                         #半同步复制等待超时时间(超时退化为异步复制)
-
-        gtid_mode=ON                                                    #开启GTID
-        enforce_gtid_consistency=ON                                     #开启GTID强一致性事务
+        #plugin_load="rpl_semi_sync_master=semisync_master.so;rpl_semi_sync_slave=semisync_slave.so"
+        #loose-rpl_semi_sync_master_enabled=1                            #开启主节点半同步复制
+        #loose-rpl_semi_sync_slave_enabled=1                             #开启从节点半同步复制
+        #loose-rpl_semi_sync_master_timeout=5000                         #半同步复制等待超时时间(超时退化为异步复制)

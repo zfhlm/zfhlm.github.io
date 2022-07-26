@@ -7,20 +7,8 @@
     * [mysql 集群-MNC](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part09%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84MNC.md)
     * [mysql 集群-PXC](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part10%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E5%A4%9A%E4%B8%BBPXC.md)
     * [mysql 集群-MGC](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part11%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E5%A4%9A%E4%B8%BBMGC.md)
-    * [mysql 备份-mysqldump](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part12%20%E5%A4%87%E4%BB%BD%E4%B9%8Bmysqldump.md)
-    * [mysql 备份-xtrabackup](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part13%20%E5%A4%87%E4%BB%BD%E4%B9%8Bxtrabackup.md)
     * [mysql 集群主从一致性监测恢复 percona-toolkit](#)
     * [mysql 集群可视化管理 orchestrator](#)
-
-    * [canal for mysql 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/canal/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEcanal.md)
-    * [canel for mysql 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/canal/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AEcanal.md)
-    * [canel for mysql 客户端](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/canal/Part3%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5canal.md)
-
-    * [oracle 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/oracle/Part1%20%E5%AE%89%E8%A3%85oracle.md)
-    * [postgresql 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/postgresql/Part01%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
-    * [postgresql 客户端](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/postgresql/Part02%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%B7%A5%E5%85%B7.md)
-    * [mongodb 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mongodb/Part1%20%E5%8D%95%E7%82%B9%E5%AE%89%E8%A3%85mongodb.md)
-    * [neo4j 社区版单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/neo4j/Part1%20%E5%AE%89%E8%A3%85%E7%A4%BE%E5%8C%BA%E7%89%88neo4j.md)
 
     * [kubernetes 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part01%20kubernetes%20%E5%AE%89%E8%A3%85.md)
     * [kubernetes 对象 Namespace](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part02%20kubernetes%20Namespace.md)

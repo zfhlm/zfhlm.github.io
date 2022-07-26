@@ -1,21 +1,19 @@
 
-# 安装社区版 neo4j
+# Neo4j Community 单点配置
 
-### 下载安装包
+  * 下载安装包
 
-    下载地址：https://neo4j.com/download-center/#community
+        下载地址：https://neo4j.com/download-center/#community
 
-    下载包：neo4j-community-4.4.8-unix.tar.gz
+        下载包：neo4j-community-4.4.8-unix.tar.gz
 
-    上传到服务器目录：/usr/local/software
+        上传到服务器目录：/usr/local/software
 
-### 安装 neo4j
-
-    安装依赖环境：
+  * 安装依赖环境：
 
         (jdk11+)
 
-    更改系统限制，输入命令：
+  * 更改系统限制，输入命令：
 
         vi /etc/security/limits.conf
 
@@ -28,7 +26,7 @@
 
         reboot
 
-    解压 neo4j 安装包，输入命令：
+  * 解压 neo4j 安装包，输入命令：
 
         cd /usr/local/software
 
@@ -40,7 +38,7 @@
 
         ln -s neo4j-community-4.4.8 neo4j
 
-    更改 neo4j 配置文件，输入命令：
+  * 更改 neo4j 配置文件，输入命令：
 
         cd /usr/local/neo4j
 
@@ -62,7 +60,7 @@
             dbms.connector.http.enabled=true
             dbms.connector.http.listen_address=:7474
 
-    启动 neo4j 进程，输入命令：
+  * 启动 neo4j 进程，输入命令：
 
         cd /usr/local/neo4j
 
@@ -70,7 +68,7 @@
 
         # ./bin/neo4j stop
 
-    访问 neo4j web 控制台：
+  * 访问 neo4j web 控制台：
 
         http://192.168.140.136:7474
 

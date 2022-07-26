@@ -1,17 +1,15 @@
 
-# 单点安装 mongodb
+# MongoDB 单点配置
 
-#### 下载安装包
+  * 下载安装包
 
-    下载地址：https://www.mongodb.com/try/download/community
+        下载地址：https://www.mongodb.com/try/download/community
 
-    下载安装包：mongodb-linux-x86_64-rhel70-5.0.4.tgz
+        下载安装包：mongodb-linux-x86_64-rhel70-5.0.4.tgz
 
-    上传到服务器目录： /usr/local/software
+        上传到服务器目录： /usr/local/software
 
-#### 解压配置
-
-    输入命令：
+  * 解压并配置，输入命令：
 
         tar -zxvf mongodb-linux-x86_64-rhel70-5.0.4.tgz
 
@@ -25,9 +23,7 @@
 
         source /etc/profile
 
-#### 创建用户
-
-    启动数据库：
+  * 启动数据库：
 
         mkdir -p /usr/local/mongodb/{data,logs}
 
@@ -35,7 +31,7 @@
 
         tail -f /usr/local/mongodb/logs/mongod.log
 
-    创建超级管理员：
+  * 创建超级管理员：
 
         cd /usr/local/mongodb
 
@@ -49,7 +45,7 @@
 
         exit
 
-    重启数据库，开启授权登录：
+  * 重启数据库，开启授权登录：
 
         ./bin/mongo
 
@@ -59,7 +55,7 @@
 
         mongod --dbpath /usr/local/mongodb/data --logpath /usr/local/mongodb/logs/mongod.log --fork --auth
 
-    创建连接账号：
+  * 创建连接账号：
 
         ./bin/mongo
 
