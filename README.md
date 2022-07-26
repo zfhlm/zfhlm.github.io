@@ -75,10 +75,11 @@
 ## 我的笔记
 
   * 运行环境
-    * [java 运行环境与优化](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part1%20Java%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
-    * [golang 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part2%20golang%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
-    * [nodejs 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part3%20nodejs%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
-    * [centos 服务开机自启](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part2%20%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8.md)
+    * [Java 运行环境与优化](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part01%20Java%20%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
+    * [golang 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part02%20golang%20%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
+    * [nodejs 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part03%20nodejs%20%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
+    * [CentOS 服务开机自启](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part04%20CentOS%20%E6%9C%8D%E5%8A%A1%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF.md)
+    * [CentOS 升级内核版本](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part05%20CentOS%20%E5%8D%87%E7%BA%A7%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC.md)
   * 消息中间件
     * [kafka 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/mq/kafka/Part1%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
     * [kafka 管理页面](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/mq/kafka/Part2%20%E7%95%8C%E9%9D%A2%E5%8C%96%E7%AE%A1%E7%90%86cmak.md)
@@ -121,11 +122,11 @@
     * [fastdfs 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/fastdfs/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
     * [nfs 挂载](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/fs/nfs/Part1%20%E7%BD%91%E7%BB%9C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9Fnfs.md)
   * 日志采集
-    * [elasticsearch 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEelasticsearch.md)
-    * [elasticsearch 集群配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AEelasticsearch.md)
-    * [filebeat 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part5%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEfilebeat.md)
-    * [logstash 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part6%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AElogstash.md)
-    * [kibana 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part4%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEkibana.md)
+    * [elasticsearch 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/elk/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEelasticsearch.md)
+    * [elasticsearch 集群配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/elk/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AEelasticsearch.md)
+    * [filebeat 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/elk/Part5%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEfilebeat.md)
+    * [logstash 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/elk/Part6%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AElogstash.md)
+    * [kibana 安装配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/elk/Part4%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEkibana.md)
   * 应用监控
     * [prometheus 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AEprometheus.md)
     * [prometheus 联邦集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/apm/prometheus/Part2%20%E8%81%94%E9%82%A6%E9%9B%86%E7%BE%A4prometheus.md)

@@ -1,7 +1,7 @@
 
 # golang运行环境配置
 
-    下载 golang，输入命令：
+  * 下载 golang，输入命令：
 
         cd /usr/local/software
 
@@ -11,7 +11,7 @@
 
         mv go ..
 
-    配置环境变量，输入命令：
+  * 配置环境变量，输入命令：
 
         vi /etc/profile
 

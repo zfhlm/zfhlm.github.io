@@ -3,15 +3,15 @@
 
 ### systemd
 
-    centos7 以上版本使用 systemd 对开启启动进行管理
+  * centos7 以上版本使用 systemd 对开启启动进行管理
 
-    systemd 配置存放目录：
+  * systemd 配置存放目录：
 
         /lib/systemd/system/    系统存放目录
 
         /etc/systemd/system/    用户存放目录
 
-    systemd 使用 <service-name>.service 来描述一个服务，以下为常用的配置项：
+  * systemd 使用 <service-name>.service 来描述一个服务，以下为常用的配置项：
 
         [Unit]                      #控制单元
         Description=                #描述信息
@@ -37,7 +37,7 @@
 
 #### nginx 开机自启动 配置示例
 
-    添加 systemd 服务，输入命令：
+  * 添加 systemd 服务，输入命令：
 
         cd /etc/systemd/system
 
@@ -64,7 +64,7 @@
 
         systemctl daemon-reload
 
-    使用 systemd 启停服务，输入命令：
+  * 使用 systemd 启停服务，输入命令：
 
         systemctl start nginx
 
@@ -72,7 +72,7 @@
 
         systemctl stop nginx
 
-    配置开启自启动，输入命令：
+  * 配置开启自启动，输入命令：
 
         # 允许服务开机启动
         systemctl enable nginx.service

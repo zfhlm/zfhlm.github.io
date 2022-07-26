@@ -1,14 +1,6 @@
 
   * TODO
 
-    * [centos vmware 虚拟机](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part1%20%E5%88%9B%E5%BB%BAVMware%E8%99%9A%E6%8B%9F%E6%9C%BA.md)
-    * [centos 网络抓包](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part3%20%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7.md)
-    * [centos 升级内核](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part5%20%E5%8D%87%E7%BA%A7%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC.md)
-    * [centos 防火墙命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/system/Part4%20%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%98%B2%E7%81%AB%E5%A2%99.md)
-    * [elasticsearch 基础命令](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/elastic/Part3%20%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9Celasticsearch.md)
-
-  * TODO
-
     * [mysql 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part01%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [mysql 集群-主从](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part02%20%E9%9B%86%E7%BE%A4%E5%9F%BA%E7%A1%80%E4%B8%BB%E4%BB%8E%E6%A8%A1%E5%BC%8F.md)
     * [mysql 集群-双主](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part03%20%E9%9B%86%E7%BE%A4%E5%9F%BA%E7%A1%80%E5%8F%8C%E4%B8%BB%E6%A8%A1%E5%BC%8F.md)

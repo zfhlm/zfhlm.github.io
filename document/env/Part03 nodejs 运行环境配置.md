@@ -1,7 +1,7 @@
 
 # 安装配置 nodejs
 
-    下载安装包：
+  * 下载安装包：
 
         下载地址：https://nodejs.org/en/download/
 
@@ -9,7 +9,7 @@
 
         上传到服务器目录： /usr/local/software
 
-    解压安装包：
+  * 解压安装包：
 
         cd /usr/local/software
 
@@ -21,7 +21,7 @@
 
         ln -s ./node-v16.13.1-linux-x64/ nodejs
 
-    配置环境变量：
+  * 配置环境变量：
 
         vi /etc/profile
 

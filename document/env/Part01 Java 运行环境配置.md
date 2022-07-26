@@ -1,13 +1,13 @@
 
 #### Java运行环境配置
 
-    1，下载安装包：
+  * 下载安装包：
 
         在oracle官网下载安装包 jdk-8u161-linux-x64.tar.gz
 
         上传到服务器目录 /usr/local/backup/
 
-    2，解压安装包，输入命令：
+  * 解压安装包，输入命令：
 
         cd /usr/local/backup
 
@@ -19,7 +19,7 @@
 
         ln -s ./jdk1.8.0_161 ./jdk
 
-    3，配置环境变量，输入命令：
+  * 配置环境变量，输入命令：
 
         vi /etc/profile
 
@@ -35,7 +35,7 @@
 
 #### Java8 JVM 内存模型
 
-    内存划分方式：
+  * JVM 内存划分：
 
         程序计数寄存器：当前线程所执行的Java字节码的行号指示器
 
@@ -47,7 +47,7 @@
 
         堆空间：分为新生代、老年代，而新生代又分为 1个 Eden 区和 2个 Survivor 区
 
-    垃圾回收：
+  * 垃圾回收：
 
         Young GC：只收集young gen的GC
 
@@ -61,7 +61,7 @@
 
 #### 生产环境调优
 
-    启动参数：
+  * 启动参数：
 
         -server                                       #使用服务器模式启动
 
@@ -101,7 +101,7 @@
 
         -XX:HeapDumpPath=/usr/local/logs/heap.dump    #打印内存溢出错误日志位置
 
-    使用示例：
+  * 使用示例：
 
         nohup java -jar
             -server
@@ -127,9 +127,9 @@
 
 #### 实时监控工具 jvisualvm
 
-    Windows 系统直接启动 JDK 目录下的可执行文件 bin/jvisualvm.exe
+  * Windows 系统直接启动 JDK 目录下的可执行文件 bin/jvisualvm.exe
 
-    Linux 系统无法通过图形化界面查看，可开启 JMX 后远程连接查看，加入启动参数：
+  * Linux 系统无法通过图形化界面查看，可开启 JMX 后远程连接查看，加入启动参数：
 
         -Dcom.sun.management.jmxremote=true
         -Dcom.sun.management.jmxremote.authenticate=false
@@ -137,13 +137,13 @@
         -Djava.rmi.server.hostname=192.168.140.200
         -Dcom.sun.management.jmxremote.port=8060
 
-    然后本地打开 jvisualvm 客户端，添加远程 JMX 连接：
+  * 然后本地打开 jvisualvm 客户端，添加远程 JMX 连接：
 
         192.168.140.200:8060
 
 #### GC 日志分析工具
 
-    可以使用以下两种类型的工具：
+  * 可以使用以下两种类型的工具：
 
         gceasy，web在线分析工具，访问地址：https://gceasy.io/
 
