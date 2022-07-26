@@ -17,7 +17,7 @@
 
         (简单了解即可，一般都使用云数据库)
 
-### MySQL NDB Cluster
+# MySQL NDB Cluster
 
   * 集群组成部分：
 
@@ -367,7 +367,7 @@
 
             create nodegroup [nodeid1],[nodeid2]             #创建数据节点分组
 
-### MySQL Master HA
+# MySQL Master HA
 
   * 服务器准备
 
@@ -717,7 +717,7 @@
             # 故障切换 VIP 到备用 master
             master_ip_failover_script=/usr/local/bin/master_ip_failover
 
-### Percona XtraDB Cluster
+# Percona XtraDB Cluster
 
   * 三台服务器信息：
 
@@ -1029,7 +1029,7 @@
 
         2，如果故障节点加入集群binlog不能补全，可以通过添加新节点的方式
 
-### Mysql Galera Cluster
+# Mysql Galera Cluster
 
   * 三台服务器信息：
 

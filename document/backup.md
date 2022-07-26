@@ -1,9 +1,6 @@
 
   * TODO
 
-    * [mysql 集群主从一致性监测恢复 percona-toolkit](#)
-    * [mysql 集群可视化管理 orchestrator](#)
-
     * [kubernetes 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part01%20kubernetes%20%E5%AE%89%E8%A3%85.md)
     * [kubernetes 对象 Namespace](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part02%20kubernetes%20Namespace.md)
     * [kubernetes 对象 Pod](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/k8s/Part03%20kubernetes%20Pod.md)
