@@ -1,5 +1,5 @@
 
-# Mysql 日志订阅(canal)
+# MySQL 日志订阅(canal)
 
   * 官方文档：
 

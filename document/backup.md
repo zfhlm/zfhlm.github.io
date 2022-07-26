@@ -1,12 +1,6 @@
 
   * TODO
 
-    * [mysql 集群-MHA](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part06%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E4%B8%BB%E4%BB%8EMHA.md)
-    * [mysql 集群-MGR](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part07%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E4%B8%BB%E4%BB%8EMGR.md)
-    * [mysql 集群-MIC](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part08%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E4%B8%BB%E4%BB%8EMIC.md)
-    * [mysql 集群-MNC](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part09%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84MNC.md)
-    * [mysql 集群-PXC](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part10%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E5%A4%9A%E4%B8%BBPXC.md)
-    * [mysql 集群-MGC](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/storage/mysql/Part11%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88%E5%A4%9A%E4%B8%BBMGC.md)
     * [mysql 集群主从一致性监测恢复 percona-toolkit](#)
     * [mysql 集群可视化管理 orchestrator](#)
 
