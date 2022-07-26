@@ -120,7 +120,7 @@
     * [MySQL 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/database/mysql/Part01%20MySQL%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [MySQL 主从模式](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/database/mysql/Part02%20MySQL%20%E4%B8%BB%E4%BB%8E%E6%A8%A1%E5%BC%8F.md)
     * [MySQL 数据备份](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/database/mysql/Part03%20MySQL%20%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD.md)
-    * [MySQL 日志订阅(canal)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/database/mysql/Part04%20MySQL%20%E6%97%A5%E5%BF%97%E8%AE%A2%E9%98%85(canal).md)
+    * [MySQL 日志订阅 Alibaba Canal](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/database/mysql/Part04%20MySQL%20%E6%97%A5%E5%BF%97%E8%AE%A2%E9%98%85(canal).md)
     * [MySQL 集群方案](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/database/mysql/Part05%20MySQL%20%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88.md)
     * [MySQL 主从拓扑管理 Orchestrator](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/database/mysql/Part06%20MySQL%20%E4%B8%BB%E4%BB%8E%E6%8B%93%E6%89%91%E7%AE%A1%E7%90%86%20Orchestrator.md)
     * [Oracle 单点配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/database/oracle/Part01%20Oracle%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
