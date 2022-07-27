@@ -9,6 +9,11 @@
 
 ### 升级最新版本内核
 
+  * 如有必要，更新所有依赖包：
+
+        # 谨慎使用 -y 可能会影响已运行服务
+        yum update -y
+
   * 查看当前内核版本，输入命令：
 
         uname -r
@@ -46,7 +51,7 @@
   * 安装 lt 版本内核，输入命令：
 
         # 安装内核
-        yum -y --enablerepo=elrepo-kernel install kernel-lt
+        yum -y --enablerepo=elrepo-kernel install kernel-lt kernel-lt-devel
 
         # 列出已安装内核
         awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg

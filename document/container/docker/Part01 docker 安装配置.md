@@ -57,7 +57,7 @@
 
   * 授权系统其他用户使用 docker，输入命令：
 
-        usradd bizuser
+        useradd bizuser
 
         passwd bizuser
 
