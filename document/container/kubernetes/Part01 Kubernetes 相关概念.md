@@ -11,7 +11,7 @@
 
   * 集群组件交互图：
 
-      ![官方文档组件交互图](./Part01.components.png)
+      ![官方文档组件交互图](./images/Part01.components.png)
 
   * 文档地址：
 
@@ -51,7 +51,7 @@
 
   * 集群资源：
 
-      ![集群资源](./Part01.resource.png)
+      ![集群资源](./images/Part01.resource.png)
 
   * 文档地址：
 
@@ -121,7 +121,7 @@
 
   * 集群资源管理三种方式：
 
-      ![集群资源管理方式](./Part01.management.png)
+      ![集群资源管理方式](./images/Part01.management.png)
 
         指令式命令                              # 使用命令行声明所有参数
 
