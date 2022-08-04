@@ -9,6 +9,12 @@
 
 ### Namespace
 
+  * 简单介绍：
+
+        Namespace 用于划分多个虚拟集群，不同虚拟集群互不影响
+
+        Namespace 不指定，默认使用 default，建议使用自定义命名空间编排服务
+
   * 文档地址：
 
         https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/

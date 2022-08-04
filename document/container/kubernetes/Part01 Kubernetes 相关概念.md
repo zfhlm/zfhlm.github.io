@@ -69,7 +69,7 @@
 
             ReplicaSet                              # Pod 副本集           //  用于保证一定数量的 Pod 能够在集群中正常运行
 
-            Deployment                              # Pod 副本发布调度     //  用于管理 ReplicaSet，并提供运行策略、更新策略、版本回滚等功能
+            Deployment                              # Pod 发布副本集       //  用于管理 ReplicaSet，并提供运行策略、更新策略、版本回滚等功能
 
             StatefulSet                             # Pod 有状态副本集     //  用来管理某 Pod 集合的部署和扩缩，并为这些 Pod 提供持久存储和持久标识符
 
