@@ -178,4 +178,6 @@
 
         https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#endpointslice-v1-discovery-k8s-io
 
-  * Service 使用 EndpointSlice 创建无头服务，用于代理集群外的网络资源：
+  * 注意，一般不直接创建 Endpoints/EndpointSlice，除非使用下面的 Headless Service 无头服务
+
+## Headless Service
