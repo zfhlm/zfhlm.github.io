@@ -598,4 +598,8 @@
 
       ![DaemonSet](./images/Part05.daemonset.png)
 
+## StatefulSet
+
+
+
 ## HorizontalPodAutoscaler
