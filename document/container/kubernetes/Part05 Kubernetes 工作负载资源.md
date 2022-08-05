@@ -118,10 +118,6 @@
           - name: nginx
             image: nginx
             imagePullPolicy: Always
-            # 环境参数
-            env:
-            - name: test
-              value: t1
             # 端口配置
             ports:
             - name: http
@@ -291,9 +287,6 @@
               - name: nginx
                 image: nginx
                 imagePullPolicy: Always
-                env:
-                - name: test
-                  value: t1
                 ports:
                 - name: http
                   protocol: TCP
@@ -398,9 +391,6 @@
               - name: nginx
                 image: nginx
                 imagePullPolicy: Always
-                env:
-                - name: test
-                  value: t1
                 ports:
                 - name: http
                   protocol: TCP
@@ -439,9 +429,7 @@
                 hostPath:
                   path: /var/log/nginx/
 
-  * Deployment 版本回退：
-
-        # (一般不这么操作，保留历史 yaml 文件，使用 kubectl apply -f deployment.yaml 进行回滚)
+  * Deployment 版本回退 (一般不这么操作，保留历史 yaml 文件，使用 kubectl apply -f deployment.yaml 进行回滚)：
 
         kubectl rollout history deployment nginx --namespace=mrh-cluster
 
@@ -636,6 +624,45 @@
 
   * HorizontalPodAutoscaler 对象配置示例：
 
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: nginx
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          replicas: 3
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 0
+              maxUnavailable: 1
+          revisionHistoryLimit: 5
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: nginx
+              version: v1.23.1
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: nginx
+                version: v1.23.1
+            spec:
+              restartPolicy: Always
+              containers:
+              - name: nginx
+                image: nginx
+                imagePullPolicy: Always
+                ports:
+                - name: http
+                  protocol: TCP
+                  containerPort: 80
+        --------------------------------------------------------
         apiVersion: autoscaling/v2beta2
         kind: HorizontalPodAutoscaler
         metadata:
@@ -732,7 +759,7 @@
 
         https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#statefulset-v1-apps
 
-  * StatefulSet 对象配置，基于 mysql 示例 (此处只关注其顺序，在服务资源、存储卷资源再关注其他)：
+  * StatefulSet 对象配置，基于 mysql 示例 (此处只关注其顺序)：
 
         apiVersion: apps/v1
         kind: StatefulSet

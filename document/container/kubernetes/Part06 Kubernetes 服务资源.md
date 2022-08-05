@@ -47,12 +47,54 @@
 
 ## Service — ClusterIP
 
-  * 创建 nginx Deployment 用于测试：
-
-        (略)
-
   * 配置示例：
 
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: nginx
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          replicas: 3
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 0
+              maxUnavailable: 1
+          revisionHistoryLimit: 5
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: nginx
+              version: v1.23.1
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: nginx
+                version: v1.23.1
+            spec:
+              restartPolicy: Always
+              containers:
+              - name: nginx
+                image: nginx
+                imagePullPolicy: Always
+                ports:
+                - name: http
+                  protocol: TCP
+                  containerPort: 80
+                lifecycle:
+                  postStart:
+                    exec:
+                      command: ['/bin/sh', '-c', 'echo postStart > /usr/share/nginx/html/index.html']
+                  preStop:
+                    exec:
+                      command: ['/bin/sh', '-c', 'echo preStop > /usr/share/nginx/html/index.html']
+        --------------------------------------------------------
         apiVersion: v1
         kind: Service
         metadata:
@@ -95,6 +137,52 @@
 
   * 配置示例：
 
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: nginx
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          replicas: 3
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 0
+              maxUnavailable: 1
+          revisionHistoryLimit: 5
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: nginx
+              version: v1.23.1
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: nginx
+                version: v1.23.1
+            spec:
+              restartPolicy: Always
+              containers:
+              - name: nginx
+                image: nginx
+                imagePullPolicy: Always
+                ports:
+                - name: http
+                  protocol: TCP
+                  containerPort: 80
+                lifecycle:
+                  postStart:
+                    exec:
+                      command: ['/bin/sh', '-c', 'echo postStart > /usr/share/nginx/html/index.html']
+                  preStop:
+                    exec:
+                      command: ['/bin/sh', '-c', 'echo preStop > /usr/share/nginx/html/index.html']
+        --------------------------------------------------------
         apiVersion: v1
         kind: Service
         metadata:
@@ -168,8 +256,72 @@
 
         Headless Service 可用于配合 StatefulSet 给每个 Pod 分配一个稳定的 DNS，或用于绕开 K8S 集群的负载均衡
 
-  * Headless Service + StatefulSet 对象配置示例：
+  * 文档地址：
 
+        https://kubernetes.io/docs/concepts/services-networking/service/#headless-services
+
+  * Headless Service + StatefulSet 对象配置示例（创建 MySQL StatefulSet 参考 [Kubernetes 工作负载资源##StatefulSet] ）：
+
+        apiVersion: apps/v1
+        kind: StatefulSet
+        metadata:
+          name: mysql
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          replicas: 2
+          revisionHistoryLimit: 5
+          updateStrategy:
+            type: RollingUpdate
+            rollingUpdate:
+              partition: 0
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: mysql
+              version: 5.7.39
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: mysql
+                version: 5.7.39
+            spec:
+              restartPolicy: Always
+              containers:
+              - name: mysql
+                image: mysql:5.7.39
+                imagePullPolicy: IfNotPresent
+                env:
+                - name: MYSQL_ROOT_PASSWORD
+                  value: '123456'
+                ports:
+                - name: http
+                  protocol: TCP
+                  containerPort: 3306
+                resources:
+                  requests:
+                    cpu: 0.2
+                    memory: 128M
+                  limits:
+                    cpu: 0.4
+                    memory: 256M
+                readinessProbe:
+                  initialDelaySeconds: 20
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  exec:
+                    command: ['/bin/sh', '-c', 'mysqladmin ping -uroot -p123456']
+                livenessProbe:
+                  initialDelaySeconds: 60
+                  timeoutSeconds: 2
+                  periodSeconds: 15
+                  exec:
+                    command: ['/bin/sh', '-c', 'mysqladmin ping -uroot -p123456']
+        --------------------------------------------------------
         apiVersion: v1
         kind: Service
         metadata:
@@ -202,6 +354,45 @@
 
   * Headless Service + Deployment 对象配置示例：
 
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: nginx
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          replicas: 3
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 0
+              maxUnavailable: 1
+          revisionHistoryLimit: 5
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: nginx
+              version: v1.23.1
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: nginx
+                version: v1.23.1
+            spec:
+              restartPolicy: Always
+              containers:
+              - name: nginx
+                image: nginx
+                imagePullPolicy: Always
+                ports:
+                - name: http
+                  protocol: TCP
+                  containerPort: 80
+        --------------------------------------------------------
         apiVersion: v1
         kind: Service
         metadata:
@@ -234,6 +425,8 @@
 
         Running 状态 Pod 都有自己的 Endpoint，Service 根据 selector 筛选符合条件的 Endpoint 加入到与自身同名的 Endpoints/EndpointSlice
 
+        注意，一般不直接使用 Endpoints/EndpointSlice，由 Service 创建和管理即可
+
   * 文档地址：
 
         https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/
@@ -245,3 +438,150 @@
 ## Ingress
 
   * 简单介绍：
+
+        Ingress 作为集群的流量入口，用于路由的转发，方便统一管理，本身就是基于 NodePort 的 Nginx Service
+
+        其他替代方案，自定义 NodePort Service，或者使用云服务商提供的 LoadBalancer 收费服务
+
+  * 为什么要使用
+
+        Ingress Nginx 本质上是一个使用 NodePort 的 Nginx
+
+        微服务集群，通常只有 gateway 需要暴露到集群外部访问，也可以使用 NodePort 方式进行多宿主机暴露
+
+        但是，Ingress Nginx 并发支撑度大，能大大减少 NodePort 宿主机的数量，方便进行管理。
+
+  * 文档地址：
+
+        https://kubernetes.io/docs/concepts/services-networking/ingress/
+
+        https://kubernetes.io/docs/reference/kubernetes-api/service-resources/ingress-v1/
+
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#ingress-v1-networking-k8s-io
+
+        https://github.com/kubernetes/ingress-nginx/releases
+
+  * 先初始化 Ingress Nginx 资源：
+
+        wget -o ingress-controller-v1.2.1.tar.gz https://github.com/kubernetes/ingress-nginx/archive/refs/tags/controller-v1.2.1.tar.gz
+
+        tar -zxvf ingress-controller-v1.2.1.tar.gz
+
+        cp ingress-nginx-controller-v1.2.1/deploy/static/provider/baremetal/deploy.yaml ./ingress-nginx-deploy.yaml
+
+        # 自定义配置
+        vi ingress-nginx-deploy.yaml
+
+        => (固定端口号，方便外部进行映射)
+
+            apiVersion: v1
+            kind: Service
+            ...
+                ...
+                # http 端口固定为 30080
+                nodePort: 30080
+                ...
+                # https 端口固定为 30443
+                nodePort: 30443
+              ...
+              type: NodePort
+
+        => (固定运行 Node 节点，高可用集群)
+
+            apiVersion: apps/v1
+            kind: Deployment
+            ...
+              ...
+              # 副本数，根据运行 Ingress Nginx 的 Node 个数更改
+              replicas: 3
+              ...
+              # 根据 Label 选择运行节点，配置之前需要给 Node 添加 Label
+              nodeSelector:
+                kubernetes.io/ingress-node: ''
+
+        # 拉取出现错误，可替换为国内镜像源，或使用 VPN 工具
+        kubectl deploy -f ingress-nginx-deploy.yaml
+
+  * Ingress Nginx 配置示例：
+
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: tomcat
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          replicas: 2
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 0
+              maxUnavailable: 1
+          revisionHistoryLimit: 5
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: tomcat
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: tomcat
+            spec:
+              containers:
+              - name: tomcat
+                image: tomcat
+                ports:
+                - containerPort: 8080
+                lifecycle:
+                  postStart:
+                    exec:
+                      command: ['/bin/sh', '-c', 'mkdir -p /usr/local/tomcat/webapps/ROOT && echo hello > /usr/local/tomcat/webapps/ROOT/index.html']
+        ---------------------------------------
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: tomcat-svc
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          type: ClusterIP
+          ports:
+          - name: http
+            port: 8080
+            targetPort: 8080
+          selector:
+            cluster: mrh-cluster
+            service: tomcat
+        ---------------------------------------
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+          name: tomcat-ingress
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          ingressClassName: nginx
+          rules:
+            - http:
+                paths:
+                - path: /
+                  pathType: 'Prefix'
+                  backend:
+                    service:
+                      name: tomcat-svc
+                      port:
+                        number: 8080
+
+  * Ingress 资源对象发布后，使用 Node 节点地址进行访问：
+
+        http://node-ip:30080/
