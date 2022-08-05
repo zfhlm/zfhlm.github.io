@@ -131,10 +131,6 @@
 
 ## Service — NodePort
 
-  * 创建 nginx Deployment 用于测试：
-
-        (略)
-
   * 配置示例：
 
         apiVersion: apps/v1
