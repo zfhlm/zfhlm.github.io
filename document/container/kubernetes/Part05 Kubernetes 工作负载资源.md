@@ -71,6 +71,26 @@
 
         lifecycle.preStop           # 停止前执行
 
+  * Pod 对象配置，基于 centos7 示例：
+
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: centos
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            service: centos
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          restartPolicy: Always
+          containers:
+          - name: centos
+            image: centos:centos7
+            imagePullPolicy: IfNotPresent
+            command: ['/bin/sh', '-c', '/usr/sbin/init']
+
   * Pod 对象配置，基于 nginx 示例：
 
         apiVersion: v1
@@ -690,4 +710,94 @@
 
   * 简单介绍：
 
-        
+        StatefulSet 用来管理某 Pod 集合的部署和扩缩，并为这些 Pod 提供持久存储和持久标识符
+
+        StatefulSet 被删除，则对应的 Pod 也会被删除，但是 Pod 挂载的永久存储卷不会被删除，且下次创建启动后会自动关联对应的永久存储卷
+
+  * 主要特点：
+
+        稳定的存储：Pod 都有各自的永久存储（使用 PVC 实现）
+
+        稳定的网络：Pod Name 和 HostName 不变，与 Pod 运行的节点无关（使用 Headless Service 实现）
+
+        有序的启动：Pod 启动按顺序执行，状态为 Running | Ready 后才会执行下一个 Pod 启动，并且 Pod 名称后缀 0-N 分配
+
+        有序的收缩：Pod 被删除，从 N 后缀的 Pod 开始，到 0 后缀 Pod
+
+  * 文档地址：
+
+        https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+
+        https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/stateful-set-v1/
+
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#statefulset-v1-apps
+
+  * StatefulSet 对象配置，基于 mysql 示例 (此处只关注其顺序，在服务资源、存储卷资源再关注其他)：
+
+        apiVersion: apps/v1
+        kind: StatefulSet
+        metadata:
+          name: mysql
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          replicas: 2
+          revisionHistoryLimit: 5
+          updateStrategy:
+            type: RollingUpdate
+            rollingUpdate:
+              partition: 0
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: mysql
+              version: 5.7.39
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: mysql
+                version: 5.7.39
+            spec:
+              restartPolicy: Always
+              containers:
+              - name: mysql
+                image: mysql:5.7.39
+                imagePullPolicy: IfNotPresent
+                env:
+                - name: MYSQL_ROOT_PASSWORD
+                  value: '123456'
+                ports:
+                - name: http
+                  protocol: TCP
+                  containerPort: 3306
+                resources:
+                  requests:
+                    cpu: 0.2
+                    memory: 128M
+                  limits:
+                    cpu: 0.4
+                    memory: 256M
+                readinessProbe:
+                  initialDelaySeconds: 20
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  exec:
+                    command: ['/bin/sh', '-c', 'mysqladmin ping -uroot -p123456']
+                livenessProbe:
+                  initialDelaySeconds: 60
+                  timeoutSeconds: 2
+                  periodSeconds: 15
+                  exec:
+                    command: ['/bin/sh', '-c', 'mysqladmin ping -uroot -p123456']
+
+  * 控制台界面，查看已创建的 StatefulSet 资源对象（ 1 个 StatefulSet，2 个 Pod ）：
+
+      ![image](./images/Part05.statefulset.png)
+
+      ![image](./images/Part05.statefulset.delete.png)
+
+      ![image](./images/Part05.statefulset.rebuild.png)

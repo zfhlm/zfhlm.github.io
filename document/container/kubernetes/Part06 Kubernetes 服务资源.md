@@ -45,7 +45,7 @@
 
         https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#service-v1-core
 
-## Service ClusterIP
+## Service — ClusterIP
 
   * 创建 nginx Deployment 用于测试：
 
@@ -87,7 +87,7 @@
 
       ![image](./images/Part06.service.clusterip.dns.png)
 
-## Service NodePort
+## Service — NodePort
 
   * 创建 nginx Deployment 用于测试：
 
@@ -133,7 +133,7 @@
 
       ![image](./images/Part06.service.nodeport.dns.node2.png)
 
-## Service ExternalName
+## Service — ExternalName
 
   * 配置示例，以百度首页为例：
 
@@ -160,15 +160,79 @@
 
       ![image](./images/Part06.service.externalname.dns.png)
 
-## Endpoints 和 EndpointSlice
+## Service — Headless
+
+  * 简单介绍：
+
+        Headless Service 不分配 clusterIP，可以通过解析 Service DNS 返回所有 Pod 的 IP 和 DNS
+
+        Headless Service 可用于配合 StatefulSet 给每个 Pod 分配一个稳定的 DNS，或用于绕开 K8S 集群的负载均衡
+
+  * Headless Service + StatefulSet 对象配置示例：
+
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: mysql-svc
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          ports:
+          - name: http
+            port: 3306
+            targetPort: 3306
+          clusterIP: None
+          selector:
+            cluster: mrh-cluster
+            service: mysql
+            version: 5.7.39
+
+      除了 Service 本身的 hostname，还会为每个 Pod 分配单独的 hostname
+
+        mysql-svc.mrh-cluster.svc.cluster.local
+
+        mysql-0.mysql-svc.mrh-cluster.svc.cluster.local
+
+        mysql-1.mysql-svc.mrh-cluster.svc.cluster.local
+
+      ![image](./images/Part06.service.headless.png)
+
+  * Headless Service + Deployment 对象配置示例：
+
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: nginx-svc
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          ports:
+          - name: http
+            port: 80
+            targetPort: 80
+          clusterIP: None
+          selector:
+            cluster: mrh-cluster
+            service: nginx
+            version: v1.23.1
+
+      这种方式适合例如微服务注册信息的查找，分配给 Pod 的 hostname 无太大意义
+
+      ![image](./images/Part06.service.headless.deployment.png)
+
+## Endpoints & EndpointSlice
 
   * Endpoints 和 EndpointSlice 区别：
 
-        两者都可以用于代理 endpoint 集合，一般配合 Service 资源对象进行使用
-
         Endpoints 在端点集过多的时候有性能问题，新版本默认使用的都是 EndpointSlice
 
-        Service 类型为 ClusterIP 或 NodePort 时，自动创建相应的 endpoint 集合 (前面截图可见)
+        Running 状态 Pod 都有自己的 Endpoint，Service 根据 selector 筛选符合条件的 Endpoint 加入到与自身同名的 Endpoints/EndpointSlice
 
   * 文档地址：
 
@@ -177,14 +241,6 @@
         https://kubernetes.io/docs/reference/kubernetes-api/service-resources/endpoint-slice-v1/
 
         https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#endpointslice-v1-discovery-k8s-io
-
-  * 注意，一般不直接创建 Endpoints/EndpointSlice，除非使用下面的 Headless Service 无头服务
-
-## Headless Service
-
-  * 简单介绍：
-
-        (待完成，StatefulSet 相关)
 
 ## Ingress
 
