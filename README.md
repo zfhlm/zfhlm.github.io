@@ -165,6 +165,9 @@
     * [Kubernetes Minikube 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part03%20Kubernetes%20Minikube%20%E5%AE%89%E8%A3%85.md)
     * [Kubernetes 集群资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part04%20Kubernetes%20%E9%9B%86%E7%BE%A4%E8%B5%84%E6%BA%90.md)
     * [Kubernetes 工作负载资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part05%20Kubernetes%20%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E8%B5%84%E6%BA%90.md)
+    * [Kubernetes 服务资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part06%20Kubernetes%20%E6%9C%8D%E5%8A%A1%E8%B5%84%E6%BA%90.md)
+    * [Kubernetes 配置资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part07%20Kubernetes%20%E9%85%8D%E7%BD%AE%E8%B5%84%E6%BA%90.md)
+    * [Kubernetes 存储卷资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part08%20Kubernetes%20%E5%AD%98%E5%82%A8%E5%8D%B7%E8%B5%84%E6%BA%90.md)
   * 持续集成
     * [SVN 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part01%20svn%20%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
     * [Git 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part02%20git%20%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE.md)

@@ -13,7 +13,7 @@
 
         Pod                                     # 容器基本运行单元
 
-        PodTemplate                             # Pod 模板(其他资源对象使用)
+        PodTemplate                             # Pod 模板(不直接创建，由其他资源对象声明与使用)
 
         ReplicaSet                              # Pod 副本集
 
@@ -598,8 +598,96 @@
 
       ![DaemonSet](./images/Part05.daemonset.png)
 
+## HorizontalPodAutoscaler
+
+  * 简单介绍：
+
+        HorizontalPodAutoscaler 用于对 Pod 副本的水平自动扩大和缩减，根据 metrics-server 指标自动管理实现 scale 子资源的任何资源的副本数
+
+        注意，metrics-server 通过 kubectl get pod --namespace=kube-system 查询是否存在，不存在则必须下载并运行 Pod
+
+  * 文档地址：
+
+        https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2beta2/
+
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#horizontalpodautoscaler-v2beta2-autoscaling
+
+        https://github.com/kubernetes-sigs/metrics-server
+
+  * HorizontalPodAutoscaler 对象配置示例：
+
+        apiVersion: autoscaling/v2beta2
+        kind: HorizontalPodAutoscaler
+        metadata:
+          name: nginx
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          # 最小副本数
+          minReplicas: 3
+          # 最大副本数
+          maxReplicas: 6
+          # 控制资源
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: nginx
+          # 控制行为
+          behavior:
+            # 缩容配置
+            scaleDown:
+              # 统计指标时间窗口(秒)
+              stabilizationWindowSeconds: 60
+              # 缩容策略
+              policies:
+                # 每 15 秒缩减一个 Pod
+              - type: Pods
+                value: 1
+                periodSeconds: 15
+            # 扩容配置
+            scaleUp:
+              # 统计指标时间窗口(秒)
+              stabilizationWindowSeconds: 15
+              # 扩容策略
+              policies:
+                # 每 15 秒增加一个 Pod
+              - type: Pods
+                value: 1
+                periodSeconds: 15
+                # 每 15 秒增加一半 Pod
+              - type: Percent
+                value: 50
+                periodSeconds: 15
+          # 计算指标，相关类型查看官方文档
+          metrics:
+            # CPU 平均利用率达到 80%
+          - type: Resource
+            resource:
+              name: cpu
+              target:
+                type: Utilization
+                averageUtilization: 80
+            # 内存平均使用数达到 64M
+          - type: Resource
+            resource:
+              name: memory
+              target:
+                type: AverageValue
+                averageValue: 64Mi
+
+  * 测试时将内存阈值降低到 1 Mi，效果：
+
+      ![image](./images/Part05.hpa.before.png)
+
+      ![image](./images/Part05.hpa.doing.png)
+
+      ![image](./images/Part05.hpa.after.png)
+
 ## StatefulSet
 
+  * 简单介绍：
 
-
-## HorizontalPodAutoscaler
+        

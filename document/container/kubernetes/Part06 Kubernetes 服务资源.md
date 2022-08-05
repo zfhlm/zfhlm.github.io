@@ -181,3 +181,11 @@
   * 注意，一般不直接创建 Endpoints/EndpointSlice，除非使用下面的 Headless Service 无头服务
 
 ## Headless Service
+
+  * 简单介绍：
+
+        (待完成，StatefulSet 相关)
+
+## Ingress
+
+  * 简单介绍：
