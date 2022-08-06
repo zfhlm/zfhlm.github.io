@@ -65,13 +65,13 @@
 
             Pod                                     # 容器基本运行单元     //  一个 Pod 包含一组容器，Pod 内的容器共享相同的ip和端口空间
 
-            PodTemplate                             # Pod 模板             //  用于创建多个预定义的 Pod 副本
+            PodTemplate                             # 模板                 //  用于创建多个预定义的 Pod 副本
 
-            ReplicaSet                              # Pod 副本集           //  用于保证一定数量的 Pod 能够在集群中正常运行
+            ReplicaSet                              # 副本集               //  用于保证一定数量的 Pod 能够在集群中正常运行
 
-            Deployment                              # Pod 发布副本集       //  用于管理 ReplicaSet，并提供运行策略、更新策略、版本回滚等功能
+            Deployment                              # 发布副本集           //  用于管理 ReplicaSet，并提供运行策略、更新策略、版本回滚等功能
 
-            StatefulSet                             # Pod 有状态副本集     //  用来管理某 Pod 集合的部署和扩缩，并为这些 Pod 提供持久存储和持久标识符
+            StatefulSet                             # 有状态副本集         //  用来管理某 Pod 集合的部署和扩缩，并为这些 Pod 提供持久存储和持久标识符
 
             DaemonSet                               # 守护程序集           //  确保指定的节点上都运行一个 Pod 的副本
 
@@ -79,7 +79,9 @@
 
             CronJob                                 # 定时任务             //  单个定时作业的配置
 
-            HorizontalPodAutoscaler(v1/v2/v2beta2)  # Pod 水平自动扩缩器   //  根据指标自动管理实现 scale 子资源的任何资源的副本数
+            HorizontalPodAutoscaler(v1/v2/v2beta2)  # 水平自动扩缩器       //  根据指标自动管理实现 scale 子资源的任何资源的副本数
+
+            PriorityClass                           # 优先级类型           //  用于对 Pod 进行优先级定义
 
         // 服务资源：
 

@@ -13,9 +13,9 @@
 
         Volume                                  # 存储卷
 
-        PersistentVolumeClaim                   # 持久卷声明
-
         PersistentVolume                        # 持久卷
+
+        PersistentVolumeClaim                   # 持久卷声明
 
         StorageClass                            # 持久卷存储类型
 
@@ -27,9 +27,9 @@
 
         创建 Pod 时，会先创建一个基础容器 pause，Pod 里面所有的容器共享一个网络名称空间和文件系统，挂载卷的工作就是由基础容器 pause 来完成的
 
-        常用的 Volume 有 configMap、secret、emptyDir、hostPath、nfs、persistentVolumeClaim，云服务商还提供了其他高性能的 Volume 收费服务
+        常用的 Volume 有 configMap、secret、emptyDir、hostPath、nfs、PersistentVolumeClaim，云服务商还提供了其他高性能的 Volume 收费服务
 
-  * Volume 常用类型：
+  * Volume 常用类型( 暂不考虑 PV、PVC )：
 
         ConfigMap                               # 将 ConfigMap 挂载卷
 
@@ -41,7 +41,13 @@
 
         nfs                                     # 网络文件系统挂载，可在容器间共享
 
-        PersistentVolumeClaim                   # 持久卷挂载
+  * 文档地址：
+
+        https://kubernetes.io/docs/concepts/storage/volumes/
+
+        https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/volume/
+
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#volume-v1-core
 
   * ConfigMap 挂载配置示例：
 
@@ -280,3 +286,145 @@
         #
         #  +- /usr/local/software (对应 nfs 目录 /usr/local/software )
         #
+
+## PersistentVolume
+
+  * 简单介绍：
+
+        PersistentVolume 是对存储资源的抽象，将存储定义为一种容器应用可以使用的资源，需要手动进行创建
+
+        PersistentVolumeClaim 用于 Pod 申请 PersistentVolume，可根据存储空间大小、访问模式、标签信息、存储类别等信息进行匹配选择
+
+        注意，PersistentVolume + PersistentVolumeClaim 只能实现静态存储供给
+
+  * 文档地址：
+
+        https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+
+        https://kubernetes.io/docs/concepts/storage/persistent-volumes/#types-of-persistent-volumes
+
+        https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+
+        https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-v1/
+
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#persistentvolume-v1-core
+
+        https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/
+
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#persistentvolumeclaim-v1-core
+
+  * PersistentVolume nfs 配置示例：
+
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          # 集群级别资源，不用指定 namespace 无效
+          name: nfs
+          labels:
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          # 访问模式
+          accessModes: ['ReadWriteOnce']
+          # 回收策略
+          persistentVolumeReclaimPolicy: Retain
+          # 存储类型名称(自定义任意名称，用于给 PVC 匹配)
+          storageClassName: nfs
+          # 存储容量
+          capacity:
+            storage: 10G
+          # nfs 配置
+          nfs:
+            server: 192.168.140.140
+            readOnly: false
+            path: /usr/local/software
+
+  * PersistentVolume local 配置示例 (必须配置节点亲和度，会将 Pod 固定在某些 Node 上面，不太建议使用)：
+
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: local
+          labels:
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          accessModes: ['ReadWriteOnce']
+          persistentVolumeReclaimPolicy: Retain
+          storageClassName: local
+          capacity:
+            storage: 10G
+          local:
+            path: /usr/local/storage
+          nodeAffinity:
+            required:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values: ['worker-01', 'worker-02', 'worker-03']
+
+  * PersistentVolume 其他类型，查看官方文档进行配置
+
+  * PersistentVolumeClaim 配置示例：
+
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          name: pvc
+          # 注意声明命名空间
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          # 匹配访问模式
+          accessModes: ['ReadWriteOnce']
+          # 匹配存储类型
+          storageClassName: nfs
+          # 匹配 PersistentVolume Label
+          selector:
+            matchLabels:
+              created-by: mrh
+          # 资源额度
+          resources:
+            # 最低额度
+            requests:
+              storage: 8Gi
+            # 最大额度
+            limits:
+              storage: 20Gi
+
+  * PersistentVolumeClaim 挂载到 Pod 示例：
+
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: centos-volume-pvc
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            service: centos-volume-pvc
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          restartPolicy: Always
+          containers:
+          - name: centos
+            image: centos:centos7
+            imagePullPolicy: IfNotPresent
+            command: ['/bin/sh', '-c', '/usr/sbin/init']
+            # 挂载卷
+            volumeMounts:
+            - name: pvc
+              mountPath: /usr/local/software
+          # 声明卷
+          volumes:
+          - name: pvc
+            persistentVolumeClaim:
+              claimName: pvc
+
+## StorageClass
+
+    (待完善)

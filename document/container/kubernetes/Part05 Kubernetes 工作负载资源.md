@@ -27,7 +27,9 @@
 
         CronJob                                 # 定时任务
 
-        HorizontalPodAutoscaler(v1/v2/v2beta2)  # Pod 水平自动扩缩器
+        HorizontalPodAutoscaler                 # Pod 水平自动扩缩器
+
+        PriorityClass                           # 优先级类型
 
 ## Pod
 
@@ -447,6 +449,154 @@
 
       ![Deployment](./images/Part05.deployment.png)
 
+## StatefulSet
+
+  * 简单介绍：
+
+        StatefulSet 用来管理某 Pod 集合的部署和扩缩，并为这些 Pod 提供持久存储和持久标识符
+
+        StatefulSet 被删除，则对应的 Pod 也会被删除，但是 Pod 挂载的永久存储卷不会被删除，且下次创建启动后会自动关联对应的永久存储卷
+
+  * 主要特点：
+
+        稳定的存储：Pod 都有各自的永久存储（使用 PVC 实现）
+
+        稳定的网络：Pod Name 和 HostName 不变，与 Pod 运行的节点无关（使用 Headless Service 实现）
+
+        有序的启动：Pod 启动按顺序执行，状态为 Running | Ready 后才会执行下一个 Pod 启动，并且 Pod 名称后缀 0-N 分配
+
+        有序的收缩：Pod 被删除，从 N 后缀的 Pod 开始，到 0 后缀 Pod
+
+  * 文档地址：
+
+        https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+
+        https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/stateful-set-v1/
+
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#statefulset-v1-apps
+
+  * StatefulSet 对象配置，基于 mysql 示例 (此处只关注其顺序)：
+
+        apiVersion: apps/v1
+        kind: StatefulSet
+        metadata:
+          name: mysql
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          replicas: 2
+          revisionHistoryLimit: 5
+          updateStrategy:
+            type: RollingUpdate
+            rollingUpdate:
+              partition: 0
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: mysql
+              version: 5.7.39
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: mysql
+                version: 5.7.39
+            spec:
+              restartPolicy: Always
+              containers:
+              - name: mysql
+                image: mysql:5.7.39
+                imagePullPolicy: IfNotPresent
+                env:
+                - name: MYSQL_ROOT_PASSWORD
+                  value: '123456'
+                ports:
+                - name: http
+                  protocol: TCP
+                  containerPort: 3306
+                resources:
+                  requests:
+                    cpu: 0.2
+                    memory: 128M
+                  limits:
+                    cpu: 0.4
+                    memory: 256M
+                readinessProbe:
+                  initialDelaySeconds: 20
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  exec:
+                    command: ['/bin/sh', '-c', 'mysqladmin ping -uroot -p123456']
+                livenessProbe:
+                  initialDelaySeconds: 60
+                  timeoutSeconds: 2
+                  periodSeconds: 15
+                  exec:
+                    command: ['/bin/sh', '-c', 'mysqladmin ping -uroot -p123456']
+
+  * 控制台界面，查看已创建的 StatefulSet 资源对象（ 1 个 StatefulSet，2 个 Pod ）：
+
+      ![image](./images/Part05.statefulset.png)
+
+      ![image](./images/Part05.statefulset.delete.png)
+
+      ![image](./images/Part05.statefulset.rebuild.png)
+
+## DaemonSet
+
+  * 简单介绍：
+
+        DaemonSet 用于确保指定的节点上都运行一个 Pod 的副本，可用于例如 filebeat 服务器日志采集等
+
+        DaemonSet 创建之后，会创建对应数量的 Pod
+
+        DaemonSet 删除后，对应的 Pod 也会被删除
+
+  * 文档地址：
+
+        https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+
+        https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/daemon-set-v1/
+
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#daemonset-v1-apps
+
+  * DaemonSet 对象配置示例：
+
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          name: nginx
+          namespace: mrh-cluster
+          labels:
+            cluster: mrh-cluster
+            created-by: mrh
+            website: zfhlm.github.io
+        spec:
+          selector:
+            matchLabels:
+              cluster: mrh-cluster
+              service: nginx
+              version: v1.23.1
+          template:
+            metadata:
+              labels:
+                cluster: mrh-cluster
+                service: nginx
+                version: v1.23.1
+            spec:
+              containers:
+              - name: nginx
+                image: nginx
+                ports:
+                - containerPort: 80
+
+  * 控制台界面，查看已创建的 DaemonSet 资源对象（ 1 个 DaemonSet，因为使用的是 minikube 所以只有 1 个 Pod ）：
+
+      ![DaemonSet](./images/Part05.daemonset.png)
+
 ## Job
 
   * 简单介绍：
@@ -553,58 +703,6 @@
   * 控制台界面，查看已创建的 CronJob 资源对象（ 1 个 CronJob，多对 Job 和 Pod ）：
 
       ![CronJob](./images/Part05.cronjob.png)
-
-## DaemonSet
-
-  * 简单介绍：
-
-        DaemonSet 用于确保指定的节点上都运行一个 Pod 的副本，可用于例如 filebeat 服务器日志采集等
-
-        DaemonSet 创建之后，会创建对应数量的 Pod
-
-        DaemonSet 删除后，对应的 Pod 也会被删除
-
-  * 文档地址：
-
-        https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
-
-        https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/daemon-set-v1/
-
-        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#daemonset-v1-apps
-
-  * DaemonSet 对象配置示例：
-
-        apiVersion: apps/v1
-        kind: DaemonSet
-        metadata:
-          name: nginx
-          namespace: mrh-cluster
-          labels:
-            cluster: mrh-cluster
-            created-by: mrh
-            website: zfhlm.github.io
-        spec:
-          selector:
-            matchLabels:
-              cluster: mrh-cluster
-              service: nginx
-              version: v1.23.1
-          template:
-            metadata:
-              labels:
-                cluster: mrh-cluster
-                service: nginx
-                version: v1.23.1
-            spec:
-              containers:
-              - name: nginx
-                image: nginx
-                ports:
-                - containerPort: 80
-
-  * 控制台界面，查看已创建的 DaemonSet 资源对象（ 1 个 DaemonSet，因为使用的是 minikube 所以只有 1 个 Pod ）：
-
-      ![DaemonSet](./images/Part05.daemonset.png)
 
 ## HorizontalPodAutoscaler
 
@@ -733,98 +831,108 @@
 
       ![image](./images/Part05.hpa.after.png)
 
-## StatefulSet
+## PriorityClass
 
   * 简单介绍：
 
-        StatefulSet 用来管理某 Pod 集合的部署和扩缩，并为这些 Pod 提供持久存储和持久标识符
+        PriorityClass 定义了优先级类名跟优先级整数值的映射，Pod 通过配置 priorityClassName 关联优先级数值，可以类比 Java 中的枚举
 
-        StatefulSet 被删除，则对应的 Pod 也会被删除，但是 Pod 挂载的永久存储卷不会被删除，且下次创建启动后会自动关联对应的永久存储卷
-
-  * 主要特点：
-
-        稳定的存储：Pod 都有各自的永久存储（使用 PVC 实现）
-
-        稳定的网络：Pod Name 和 HostName 不变，与 Pod 运行的节点无关（使用 Headless Service 实现）
-
-        有序的启动：Pod 启动按顺序执行，状态为 Running | Ready 后才会执行下一个 Pod 启动，并且 Pod 名称后缀 0-N 分配
-
-        有序的收缩：Pod 被删除，从 N 后缀的 Pod 开始，到 0 后缀 Pod
+        Pod 调度过程中，调度高优先级 Pod，当 Pod 无法被调度时，会尝试驱逐优先级低的 Pod 再进行高优先级 Pod 调度
 
   * 文档地址：
 
-        https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+        https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/priority-class-v1/
 
-        https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/stateful-set-v1/
+        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#priorityclass-v1-scheduling-k8s-io
 
-        https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#statefulset-v1-apps
+  * PriorityClass 对象配置示例：
 
-  * StatefulSet 对象配置，基于 mysql 示例 (此处只关注其顺序)：
+        # 三个优先级： critical-high 100  critical-middle 50  critical-low 10
 
-        apiVersion: apps/v1
-        kind: StatefulSet
+        apiVersion: scheduling.k8s.io/v1
+        kind: PriorityClass
+        # 名称定义
         metadata:
-          name: mysql
+          name: critical-high
+          labels:
+            created-by: mrh
+            website: zfhlm.github.io
+        # 抢占策略
+        preemptionPolicy: PreemptLowerPriority
+        # 作为默认优先级
+        globalDefault: false
+        # 优先级数值
+        value: 100
+        ------------------------------------------
+        apiVersion: scheduling.k8s.io/v1
+        kind: PriorityClass
+        metadata:
+          name: critical-middle
+          labels:
+            created-by: mrh
+            website: zfhlm.github.io
+        preemptionPolicy: PreemptLowerPriority
+        globalDefault: false
+        value: 50
+        ------------------------------------------
+        apiVersion: scheduling.k8s.io/v1
+        kind: PriorityClass
+        metadata:
+          name: critical-low
+          labels:
+            created-by: mrh
+            website: zfhlm.github.io
+        preemptionPolicy: PreemptLowerPriority
+        globalDefault: false
+        value: 10
+
+  * PriorityClass 控制台不支持查询该类型，使用命令：
+
+        kubectl get PriorityClass
+
+        ->
+
+            NAME                      VALUE        GLOBAL-DEFAULT   AGE
+            critical-high             100          false            3m22s
+            critical-low              10           true             2m58s
+            critical-middle           50           false            3m10s
+            system-cluster-critical   2000000000   false            17h
+            system-node-critical      2000001000   false            17h
+
+  * Pod 使用 PriorityClass 配置示例：
+
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: centos
           namespace: mrh-cluster
           labels:
             cluster: mrh-cluster
+            service: centos
             created-by: mrh
             website: zfhlm.github.io
         spec:
-          replicas: 2
-          revisionHistoryLimit: 5
-          updateStrategy:
-            type: RollingUpdate
-            rollingUpdate:
-              partition: 0
-          selector:
-            matchLabels:
-              cluster: mrh-cluster
-              service: mysql
-              version: 5.7.39
-          template:
-            metadata:
-              labels:
-                cluster: mrh-cluster
-                service: mysql
-                version: 5.7.39
-            spec:
-              restartPolicy: Always
-              containers:
-              - name: mysql
-                image: mysql:5.7.39
-                imagePullPolicy: IfNotPresent
-                env:
-                - name: MYSQL_ROOT_PASSWORD
-                  value: '123456'
-                ports:
-                - name: http
-                  protocol: TCP
-                  containerPort: 3306
-                resources:
-                  requests:
-                    cpu: 0.2
-                    memory: 128M
-                  limits:
-                    cpu: 0.4
-                    memory: 256M
-                readinessProbe:
-                  initialDelaySeconds: 20
-                  periodSeconds: 10
-                  timeoutSeconds: 2
-                  exec:
-                    command: ['/bin/sh', '-c', 'mysqladmin ping -uroot -p123456']
-                livenessProbe:
-                  initialDelaySeconds: 60
-                  timeoutSeconds: 2
-                  periodSeconds: 15
-                  exec:
-                    command: ['/bin/sh', '-c', 'mysqladmin ping -uroot -p123456']
+          restartPolicy: Always
+          # 指定优先级名称
+          priorityClassName: critical-middle
+          containers:
+          - name: centos
+            image: centos:centos7
+            imagePullPolicy: IfNotPresent
+            command: ['/bin/sh', '-c', '/usr/sbin/init']
+            resources:
+              requests:
+                cpu: 0.1
+                memory: 16M
+              limits:
+                cpu: 0.5
+                memory: 32M
 
-  * 控制台界面，查看已创建的 StatefulSet 资源对象（ 1 个 StatefulSet，2 个 Pod ）：
+  * Pod 查看 Priority 优先级，输入命令：
 
-      ![image](./images/Part05.statefulset.png)
+        kubectl describe pod centos --namespace=mrh-cluster | grep Priority
 
-      ![image](./images/Part05.statefulset.delete.png)
+        ->
 
-      ![image](./images/Part05.statefulset.rebuild.png)
+            Priority:             50
+            Priority Class Name:  critical-middle
