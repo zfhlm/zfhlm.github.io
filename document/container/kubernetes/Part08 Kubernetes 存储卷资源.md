@@ -17,6 +17,8 @@
 
         PersistentVolume                        # 持久卷
 
+        StorageClass                            # 持久卷存储类型
+
 ## Volume
 
   * 简单介绍：
@@ -27,7 +29,7 @@
 
         常用的 Volume 有 configMap、secret、emptyDir、hostPath、nfs、persistentVolumeClaim，云服务商还提供了其他高性能的 Volume 收费服务
 
-  * Volume 种类：
+  * Volume 常用类型：
 
         ConfigMap                               # 将 ConfigMap 挂载卷
 

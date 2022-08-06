@@ -87,6 +87,8 @@
 
             Endpoints                               # 网络端点集           //  用于暴露集群内部、外部的访问端点
 
+            EndpointSlice                           # 网络端口切片         //  相比 Endpoints 进行了优化，最新版本默认替代了 Endpoints
+
             Ingress                                 # 集群网络入口         //  服务端点暴露、路由转发
 
         // 配置资源：
@@ -103,21 +105,23 @@
 
             PersistentVolume                        # 持久卷               //  管理员制备的一个持久存储资源
 
+            StorageClass                            # 持久卷存储类型       //  对存储卷进行描述分类
+
         // 运行策略资源：
 
             LimitRange                              # 资源用量限制         //  可用于限制内存和 CPU 使用量
 
-            ResourceQuota                           # 资源配额             // 限制命名空间的资源消耗总量
+            ResourceQuota                           # 资源配额             //  限制命名空间的资源消耗总量
 
-            NetworkPolicy                           # 网络策略             // 可用于控制 Pod 出入流量
+            NetworkPolicy                           # 网络策略             //  可用于控制 Pod 出入流量
 
-            PodDisruptionBudget                     # 中断预算             // 可用于配置 Pod 最低个数或百分比数
+            PodDisruptionBudget                     # 中断预算             //  可用于配置 Pod 最低个数或百分比数
 
         // 集群资源：
 
-            Node                                    # 工作节点             // 可以是一台物理机、虚拟机
+            Node                                    # 工作节点             //  可以是一台物理机、虚拟机
 
-            Namespace                               # 命名空间             // 用于隔离不同环境的资源
+            Namespace                               # 命名空间             //  用于隔离不同环境的资源
 
   * 集群资源管理三种方式：
 

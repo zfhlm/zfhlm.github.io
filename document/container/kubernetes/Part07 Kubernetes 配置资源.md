@@ -16,8 +16,6 @@
 
         Secret                                  # 保密类型数据
 
-        (注意，以下关于 Volume 挂载都在 [Kubernetes 存储卷]，此处不做任何示例)
-
 ## ConfigMap
 
   * ConfigMap 简单介绍
