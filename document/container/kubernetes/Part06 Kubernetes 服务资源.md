@@ -21,13 +21,13 @@
 
 ## Service
 
-  * 简单介绍：
+  * Service 简单介绍：
 
         Service 用于提供负载均衡和服务自动发现，并提供稳定的访问地址（因为 Pod 地址不确定，且随时可能发生变化）
 
         注意，集群内部可以使用 <service-name>.<cluster-name>.svc.cluster.local 作为 host 访问 Service 提供的服务
 
-  * Service 有四种类型：
+  * Service 四种类型：
 
         ClusterIP                               # 通过集群的内部 IP 暴露服务，默认类型，只能在集群内部访问
 
@@ -37,7 +37,7 @@
 
         ExternalName                            # 将指定的域名或 IP 地址暴露为服务，只能在集群内部访问
 
-  * 文档地址：
+  * Service 文档地址：
 
         https://kubernetes.io/docs/concepts/services-networking/service/
 
@@ -435,9 +435,13 @@
 
   * 简单介绍：
 
-        Ingress 作为集群的流量入口，用于路由的转发，方便统一管理，本身就是基于 NodePort 的 Nginx Service
+        Ingress 作为集群的流量入口，用于路由的转发，方便统一管理，本质上是基于 NodePort 的 Service
 
-        其他替代方案，自定义 NodePort Service，或者使用云服务商提供的 LoadBalancer 收费服务
+        其他替代方案，自定义 NodePort Service，或者使用云服务商提供的 Service LoadBalancer 收费服务
+
+        常见的 Ingress 实现：Kubernetes Ingress、Nginx Ingress、Kong Ingress、HAProxy Ingress
+
+        以下实现使用 Nginx Ingress，由 Nginx 官方开源的 Ingress
 
   * 为什么要使用
 
