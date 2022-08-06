@@ -13,13 +13,13 @@
 
         Pod                                     # 容器基本运行单元
 
-        PodTemplate                             # Pod 模板(不直接创建，由其他资源对象声明与使用)
+        PodTemplate                             # 模板(不直接创建，由其他资源对象声明与使用)
 
-        ReplicaSet                              # Pod 副本集
+        ReplicaSet                              # 副本集
 
-        Deployment                              # Pod 发布副本集
+        Deployment                              # 发布副本集
 
-        StatefulSet                             # Pod 有状态副本集
+        StatefulSet                             # 有状态副本集
 
         DaemonSet                               # 守护程序集
 
@@ -27,7 +27,7 @@
 
         CronJob                                 # 定时任务
 
-        HorizontalPodAutoscaler                 # Pod 水平自动扩缩器
+        HorizontalPodAutoscaler                 # 水平自动扩缩器
 
         PriorityClass                           # 优先级类型
 
@@ -894,7 +894,7 @@
 
             NAME                      VALUE        GLOBAL-DEFAULT   AGE
             critical-high             100          false            3m22s
-            critical-low              10           true             2m58s
+            critical-low              10           false            2m58s
             critical-middle           50           false            3m10s
             system-cluster-critical   2000000000   false            17h
             system-node-critical      2000001000   false            17h
