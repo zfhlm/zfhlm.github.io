@@ -163,6 +163,7 @@
   * 容器编排
     * [Kubernetes 相关概念](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part01%20Kubernetes%20%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5.md)
     * [Kubernetes Minikube 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part03%20Kubernetes%20Minikube%20%E5%AE%89%E8%A3%85.md)
+    * [Kubernetes Kubeadm 安装](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part02%20Kubernetes%20Kubeadm%20%E5%AE%89%E8%A3%85.md)
     * [Kubernetes 集群资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part04%20Kubernetes%20%E9%9B%86%E7%BE%A4%E8%B5%84%E6%BA%90.md)
     * [Kubernetes 工作负载资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part05%20Kubernetes%20%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E8%B5%84%E6%BA%90.md)
     * [Kubernetes 服务资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part06%20Kubernetes%20%E6%9C%8D%E5%8A%A1%E8%B5%84%E6%BA%90.md)
