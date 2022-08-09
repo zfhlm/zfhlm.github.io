@@ -182,3 +182,133 @@
              +---- service.yaml                     # 资源文件
              +---- pod.yaml                         # 资源文件
              +---- ...                              # 资源文件
+
+  * 创建 chart 空模板：
+
+        cd /usr/local/software
+
+        # 先创建一份默认的模板
+        helm create mrh-cluster
+
+        cd templates
+
+        # 删除多余的配置文件
+        rm -rf deployment.yaml  hpa.yaml ingress.yaml serviceaccount.yaml service.yaml tests
+
+        # 清空默认配置信息
+        echo '' > ../values.yaml && echo '' > NOTES.txt
+
+        cd /usr/local/software
+
+        # 输出渲染后的模板信息，注意不会进行安装
+        helm install --debug --dry-run mrh-cluster ./mrh-cluster/
+
+  * 添加 chart 资源对象配置：
+
+        cd /usr/local/software/templates
+
+        vi namespace.yaml
+
+        ==>
+
+            apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: mrh-cluster
+              labels:
+                created-by: mrh
+                website: zfhlm.github.io
+
+        vi centos-pod.yaml
+
+        ==>
+
+            apiVersion: v1
+            kind: Pod
+            metadata:
+              name: centos
+              namespace: mrh-cluster
+              labels:
+                cluster: mrh-cluster
+                service: centos
+                created-by: mrh
+                website: zfhlm.github.io
+            spec:
+              restartPolicy: Always
+              containers:
+              - name: centos
+                # 引用 values.yaml 中定义的属性
+                image: centos:{{ .Values.centos.version }}
+                imagePullPolicy: IfNotPresent
+                command: ['/bin/sh', '-c', '/usr/sbin/init']
+
+        cd ..
+
+        vi values.yaml
+
+        ==>
+
+            # 以下属性可以使用 {{ .Values.centos.version }} 引用
+            centos:
+              version: centos7
+
+        vi Chart.yaml
+
+        ==>
+
+            # 注意更改为与发布版本一致的版本号
+            version: 1.0.1
+
+  * 发布 chart 资源：
+
+        cd /usr/local/software
+
+        helm upgrade -i --debug --dry-run mrh-cluster ./mrh-cluster/
+
+        # 参数 -i 无则创建，有则更新
+        helm upgrade -i mrh-cluster ./mrh-cluster/
+
+## Helm 私库
+
+  * 安装 Nginx 并配置 /usr/local/helm/charts 为根目录：
+
+        (略)
+
+  * 创建 Helm 打包并上传到私库：
+
+        cd /usr/local/software
+
+        # 打包
+        helm package mrh-cluster/
+
+        # 移动到私库目录
+        mv mrh-cluster-1.0.1.tgz /usr/local/helm/charts
+
+        # 创建或刷新索引(注意每次上传新的安装包都要刷新索引)
+        helm repo index .
+
+  * 使用私库安装包：
+
+        helm repo add local http://192.168.140.140
+
+        helm repo update
+
+        helm repo list
+
+        -->
+
+            NAME      URL
+            stable    https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+            aliyun    https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+            local     http://192.168.140.140
+
+        helm search repo mrh
+
+        -->
+
+            NAME                  CHART VERSION     APP VERSION     DESCRIPTION
+            local/mrh-cluster     1.0.1             1.16.0          A Helm chart for Kubernetes
+            local/mrh-test        0.1.0             1.16.0          A Helm chart for Kubernetes
+
+        # 指定版本部署
+        helm upgrade -i mrh-cluster local/mrh-cluster --version=1.0.1

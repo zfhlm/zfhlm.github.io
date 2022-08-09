@@ -69,8 +69,6 @@
 
         -Xmx1024m                                     #堆空间最大值，默认为物理内存的1/4，一般设置为可使用内存的 5/8
 
-        -Xmn512m                                      #堆空间新生代大小，默认新生代/老年代=1/2，新生代+老年代=堆空间内存，根据实际情况调整
-
         -Xss256k                                      #线程栈内存大小，默认linux 64bit系统下为1m
 
         -XX:MetaspaceSize=64m                         #元空间初始值，默认不限制，根据实际情况调整
@@ -107,7 +105,6 @@
             -server
             -Xms1024m
             -Xmx1024m
-            -Xmn512m
             -Xss512k
             -XX:MetaspaceSize=64m
             -XX:MaxMetaspaceSize=128m

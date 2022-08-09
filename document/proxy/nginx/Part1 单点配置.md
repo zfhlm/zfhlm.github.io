@@ -25,7 +25,7 @@
 
     ①，初始化编译环境：
 
-        yum install gcc-c++
+        yum install gcc-c++ -y
 
     ②，安装依赖包：
 
