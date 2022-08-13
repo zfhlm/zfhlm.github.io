@@ -220,7 +220,7 @@
             --disable traefik \
             --disable-cloud-controller
 
-  * 查看集群节点：
+  * 查看集群控制节点：
 
     kubectl get nodes
 
@@ -244,7 +244,7 @@
             --disable traefik \
             --disable-cloud-controller
 
-  * 查看集群节点：
+  * 查看集群所有节点：
 
     kubectl get nodes
 
@@ -255,3 +255,83 @@
         k3s-master-148   Ready    control-plane,master   13m     v1.23.9+k3s1
         k3s-master-149   Ready    control-plane,master   2m50s   v1.23.9+k3s1
         k3s-master-150   Ready    <none>                 1m20s   v1.23.9+k3s1
+
+## 安装 K3s dashboard 控制台
+
+  * 发布 dashboard 资源对象：
+
+        wget https://github.com/kubernetes/dashboard/archive/refs/tags/v2.6.1.tar.gz
+
+        tar -zxvf v2.6.1.tar.gz
+
+        cp dashboard-2.6.1/aio/deploy/recommended.yaml recommended.yaml
+
+        # 更改 dashboard svc 为 NodePort 类型，端口 30443
+        vi recommended.yaml
+
+        =>
+
+            kind: Service
+            apiVersion: v1
+            metadata:
+              labels:
+                k8s-app: kubernetes-dashboard
+              name: kubernetes-dashboard
+              namespace: kubernetes-dashboard
+            spec:
+              type: NodePort
+              ports:
+                - port: 443
+                  targetPort: 8443
+                  nodePort: 30443
+              selector:
+                k8s-app: kubernetes-dashboard
+
+        kubectl apply -f recommended.yaml
+
+  * 创建 dashboard 集群账号：
+
+        vi dashboard.admin-user.yml
+
+        =>
+
+            apiVersion: v1
+            kind: ServiceAccount
+            metadata:
+              name: admin-user
+              namespace: kubernetes-dashboard
+
+        vi dashboard.admin-user-role.yml
+
+        =>
+
+            apiVersion: rbac.authorization.k8s.io/v1
+            kind: ClusterRoleBinding
+            metadata:
+              name: admin-user
+            roleRef:
+              apiGroup: rbac.authorization.k8s.io
+              kind: ClusterRole
+              name: cluster-admin
+            subjects:
+              - kind: ServiceAccount
+                name: admin-user
+                namespace: kubernetes-dashboard
+
+        kubectl apply -f dashboard.admin-user.yml
+
+        kubectl apply -f dashboard.admin-user-role.yml
+
+  * 登录 dashboard 控制台：
+
+        # 获取登录令牌
+        kubectl -n kubernetes-dashboard describe secret admin-user-token | grep '^token'
+
+        ->
+
+            token:      eyJhbGciOiJSUzI1NiIsImtpZCI6Iml3TDFWWXEtLVhiSVFERzRsaDQxdlM4Z1ZLTW1za3JYd1VaNjFjQURVTWMifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLXFseGt3Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyYzU0Y2EwYi0wODU1LTQwOGYtOTNlNy0zNjhmYzk1MzY4YjQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.y2567tlxpkO6GDxYJDm4iQ-a5mVUwcrZ-AwvBamGBR6UN-i5eS7tYh-jJUo8hyU4GL4oG9CqpQuYsYIEwNfmMIprxVmMJEznIcBl8qA89Q0ldq8OgEQ5gVgGfwLO2vbNW9Kfc57ad7qzCgoeyYwnBlKyQ-YhTyt0Xotn-GcDGcs_zNC6xFZh_YhwpH80e0x3hHfecd3ESp-jDIrrGVyGgpOkOgoyIwTCHixsr6l1SIhPb0hxaI0FitDANYt-16jiIOLZe5cMYh7M4TFhDUdaJyLnBBZa1QsajUFA90JIDmJRLxGR3XgcfRa6vf-6BcWC5nBAVGEmj1QeXVVGRhKehQ
+
+        # 控制台地址
+        # https://192.168.140.147:30443
+        # https://192.168.140.148:30443
+        # https://192.168.140.149:30443

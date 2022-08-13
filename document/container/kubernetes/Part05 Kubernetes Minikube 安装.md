@@ -96,6 +96,8 @@
             kube-system   kube-scheduler-minikube            1/1     Running   0          18s
             kube-system   storage-provisioner                1/1     Running   0          15s
 
+### Minikube dashboard 控制台
+
   * 启动 minikube web 可视化控制台：
 
         minikube dashboard --url=true --port=8050
