@@ -25,6 +25,22 @@
 
         ln -s etcd-v3.5.4-linux-amd64/ etcd
 
+  * 安装 cfssl 工具：
+
+        wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+
+        wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+
+        wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64
+
+        chmod +x cfssl_linux-amd64 cfssljson_linux-amd64 cfssl-certinfo_linux-amd64
+
+        mv cfssl_linux-amd64 /usr/bin/cfssl
+
+        mv cfssljson_linux-amd64 /usr/bin/cfssljson
+
+        mv cfssl-certinfo_linux-amd64 /usr/bin/cfssl-certinfo
+
   * 生成 TLS 证书：
 
         cd /usr/local/software
@@ -110,17 +126,11 @@
 
         cd /usr/local/software
 
-        mv etcd-root-ca.pem ca.crt
+        scp ./* root@192.168.140.147:/usr/local/etcd/certs/
 
-        mv etcd.pem etcd.crt
+        scp ./* root@192.168.140.148:/usr/local/etcd/certs/
 
-        mv etcd-key.pem etcd.key
-
-        scp ./{ca.crt,etcd.crt,etcd.key} root@192.168.140.147:/usr/local/etcd/certs/
-
-        scp ./{ca.crt,etcd.crt,etcd.key} root@192.168.140.148:/usr/local/etcd/certs/
-
-        scp ./{ca.crt,etcd.crt,etcd.key} root@192.168.140.149:/usr/local/etcd/certs/
+        scp ./* root@192.168.140.149:/usr/local/etcd/certs/
 
         rm -rf ./*
 
@@ -143,15 +153,15 @@
             initial-cluster-state: new
             client-transport-security:
               client-cert-auth: true
-              trusted-ca-file: /usr/local/etcd/certs/ca.crt
-              cert-file: /usr/local/etcd/certs/etcd.crt
-              key-file: /usr/local/etcd/certs/etcd.key
+              trusted-ca-file: /usr/local/etcd/certs/etcd-root-ca.pem
+              cert-file: /usr/local/etcd/certs/etcd.pem
+              key-file: /usr/local/etcd/certs/etcd-key.pem
               auto-tls: true
             peer-transport-security:
               client-cert-auth: true
-              trusted-ca-file: /usr/local/etcd/certs/ca.crt
-              cert-file: /usr/local/etcd/certs/etcd.crt
-              key-file: /usr/local/etcd/certs/etcd.key
+              trusted-ca-file: /usr/local/etcd/certs/etcd-root-ca.pem
+              cert-file: /usr/local/etcd/certs/etcd.pem
+              key-file: /usr/local/etcd/certs/etcd-key.pem
               auto-tls: true
 
   * 节点二配置，输入命令：
@@ -173,15 +183,15 @@
             initial-cluster-state: new
             client-transport-security:
               client-cert-auth: true
-              trusted-ca-file: /usr/local/etcd/certs/ca.crt
-              cert-file: /usr/local/etcd/certs/etcd.crt
-              key-file: /usr/local/etcd/certs/etcd.key
+              trusted-ca-file: /usr/local/etcd/certs/etcd-root-ca.pem
+              cert-file: /usr/local/etcd/certs/etcd.pem
+              key-file: /usr/local/etcd/certs/etcd-key.pem
               auto-tls: true
             peer-transport-security:
               client-cert-auth: true
-              trusted-ca-file: /usr/local/etcd/certs/ca.crt
-              cert-file: /usr/local/etcd/certs/etcd.crt
-              key-file: /usr/local/etcd/certs/etcd.key
+              trusted-ca-file: /usr/local/etcd/certs/etcd-root-ca.pem
+              cert-file: /usr/local/etcd/certs/etcd.pem
+              key-file: /usr/local/etcd/certs/etcd-key.pem
               auto-tls: true
 
   * 节点三配置，输入命令：
@@ -203,15 +213,15 @@
             initial-cluster-state: new
             client-transport-security:
               client-cert-auth: true
-              trusted-ca-file: /usr/local/etcd/certs/ca.crt
-              cert-file: /usr/local/etcd/certs/etcd.crt
-              key-file: /usr/local/etcd/certs/etcd.key
+              trusted-ca-file: /usr/local/etcd/certs/etcd-root-ca.pem
+              cert-file: /usr/local/etcd/certs/etcd.pem
+              key-file: /usr/local/etcd/certs/etcd-key.pem
               auto-tls: true
             peer-transport-security:
               client-cert-auth: true
-              trusted-ca-file: /usr/local/etcd/certs/ca.crt
-              cert-file: /usr/local/etcd/certs/etcd.crt
-              key-file: /usr/local/etcd/certs/etcd.key
+              trusted-ca-file: /usr/local/etcd/certs/etcd-root-ca.pem
+              cert-file: /usr/local/etcd/certs/etcd.pem
+              key-file: /usr/local/etcd/certs/etcd-key.pem
               auto-tls: true
 
   * 添加到系统服务，并启动集群，输入命令：
@@ -244,9 +254,9 @@
 
   * 测试各个节点，输入命令：
 
-        ./etcdctl --cacert=/usr/local/etcd/certs/ca.crt \
-            --cert=/usr/local/etcd/certs/etcd.crt \
-            --key=/usr/local/etcd/certs/etcd.key \
+        ./etcdctl --cacert=/usr/local/etcd/certs/etcd-root-ca.pem \
+            --cert=/usr/local/etcd/certs/etcd.pem \
+            --key=/usr/local/etcd/certs/etcd-key.pem \
             --endpoints=https://192.168.140.147:2379,https://192.168.140.148:2379,https://192.168.140.149:2379 \
             endpoint status -w table
 
