@@ -1,9 +1,7 @@
 
 # 搭建 etcd 集群
 
-### 服务器准备
-
-    三台服务器：
+  * 三台服务器：
 
         192.168.140.130     节点一
 
@@ -11,9 +9,9 @@
 
         192.168.140.132     节点三
 
-### 下载安装
+## 下载安装
 
-    下载安装包，输入命令：
+  * 下载安装包，输入命令：
 
         cd /usr/local/software
 
@@ -27,7 +25,106 @@
 
         ln -s etcd-v3.5.4-linux-amd64/ etcd
 
-    节点一配置，输入命令：
+  * 生成 TLS 证书：
+
+        cd /usr/local/software
+
+        vi etcd-root-ca-csr.json
+
+        =>
+
+            {
+               "key": {
+                 "algo": "rsa",
+                 "size": 4096
+               },
+               "names": [
+                 {
+                   "O": "etcd",
+                   "OU": "etcd Security",
+                   "L": "Beijing",
+                   "ST": "Beijing",
+                   "C": "CN"
+                 }
+               ],
+               "CN": "etcd-root-ca"
+            }
+
+        vi etcd-gencert.json
+
+        =>
+
+            {
+              "signing": {
+                "default": {
+                    "usages": [
+                      "signing",
+                      "key encipherment",
+                      "server auth",
+                      "client auth"
+                    ],
+                    "expiry": "87600h"
+                }
+              }
+            }
+
+        vi etcd-csr.json
+
+        => (以下 hosts 可以配置为 "hosts": [""] 不限制任何客户端)
+
+            {
+              "key": {
+                "algo": "rsa",
+                "size": 4096
+              },
+              "names": [
+                {
+                  "O": "etcd",
+                  "OU": "etcd Security",
+                  "L": "Beijing",
+                  "ST": "Beijing",
+                  "C": "CN"
+                }
+              ],
+              "CN": "etcd",
+              "hosts": [
+                "127.0.0.1",
+                "localhost",
+                "192.168.140.147",
+                "192.168.140.148",
+                "192.168.140.149",
+                "k3s-master-147",
+                "k3s-master-148",
+                "k3s-master-149",
+                "etcd01",
+                "etcd02",
+                "etcd03"
+              ]
+            }
+
+        cfssl gencert --initca=true etcd-root-ca-csr.json | cfssljson --bare etcd-root-ca
+
+        cfssl gencert --ca etcd-root-ca.pem --ca-key etcd-root-ca-key.pem --config etcd-gencert.json etcd-csr.json | cfssljson --bare etcd
+
+  * 分发 TLS 证书：
+
+        cd /usr/local/software
+
+        mv etcd-root-ca.pem ca.crt
+
+        mv etcd.pem etcd.crt
+
+        mv etcd-key.pem etcd.key
+
+        scp ./{ca.crt,etcd.crt,etcd.key} root@192.168.140.147:/usr/local/etcd/certs/
+
+        scp ./{ca.crt,etcd.crt,etcd.key} root@192.168.140.148:/usr/local/etcd/certs/
+
+        scp ./{ca.crt,etcd.crt,etcd.key} root@192.168.140.149:/usr/local/etcd/certs/
+
+        rm -rf ./*
+
+  * 节点一配置，输入命令：
 
         cd /usr/local/etcd
 
@@ -37,15 +134,27 @@
 
             name: etcd01
             data-dir: /usr/local/etcd/data
-            advertise-client-urls: http://192.168.140.130:2379
-            listen-client-urls: http://192.168.140.130:2379
-            initial-advertise-peer-urls: http://192.168.140.130:2380
-            listen-peer-urls: http://192.168.140.130:2380
-            initial-cluster: etcd01=http://192.168.140.130:2380,etcd02=http://192.168.140.131:2380,etcd03=http://192.168.140.132:2380
+            advertise-client-urls: https://192.168.140.147:2379
+            listen-client-urls: https://192.168.140.147:2379
+            initial-advertise-peer-urls: https://192.168.140.147:2380
+            listen-peer-urls: https://192.168.140.147:2380
+            initial-cluster: etcd01=https://192.168.140.147:2380,etcd02=https://192.168.140.148:2380,etcd03=https://192.168.140.149:2380
             initial-cluster-token: mrh-etcd-cluster
             initial-cluster-state: new
+            client-transport-security:
+              client-cert-auth: true
+              trusted-ca-file: /usr/local/etcd/certs/ca.crt
+              cert-file: /usr/local/etcd/certs/etcd.crt
+              key-file: /usr/local/etcd/certs/etcd.key
+              auto-tls: true
+            peer-transport-security:
+              client-cert-auth: true
+              trusted-ca-file: /usr/local/etcd/certs/ca.crt
+              cert-file: /usr/local/etcd/certs/etcd.crt
+              key-file: /usr/local/etcd/certs/etcd.key
+              auto-tls: true
 
-    节点二配置，输入命令：
+  * 节点二配置，输入命令：
 
         cd /usr/local/etcd
 
@@ -55,15 +164,27 @@
 
             name: etcd02
             data-dir: /usr/local/etcd/data
-            advertise-client-urls: http://192.168.140.131:2379
-            listen-client-urls: http://192.168.140.131:2379
-            initial-advertise-peer-urls: http://192.168.140.131:2380
-            listen-peer-urls: http://192.168.140.131:2380
-            initial-cluster: etcd01=http://192.168.140.130:2380,etcd02=http://192.168.140.131:2380,etcd03=http://192.168.140.132:2380
+            advertise-client-urls: https://192.168.140.148:2379
+            listen-client-urls: https://192.168.140.148:2379
+            initial-advertise-peer-urls: https://192.168.140.148:2380
+            listen-peer-urls: https://192.168.140.148:2380
+            initial-cluster: etcd01=https://192.168.140.147:2380,etcd02=https://192.168.140.148:2380,etcd03=https://192.168.140.149:2380
             initial-cluster-token: mrh-etcd-cluster
             initial-cluster-state: new
+            client-transport-security:
+              client-cert-auth: true
+              trusted-ca-file: /usr/local/etcd/certs/ca.crt
+              cert-file: /usr/local/etcd/certs/etcd.crt
+              key-file: /usr/local/etcd/certs/etcd.key
+              auto-tls: true
+            peer-transport-security:
+              client-cert-auth: true
+              trusted-ca-file: /usr/local/etcd/certs/ca.crt
+              cert-file: /usr/local/etcd/certs/etcd.crt
+              key-file: /usr/local/etcd/certs/etcd.key
+              auto-tls: true
 
-    节点三配置，输入命令：
+  * 节点三配置，输入命令：
 
         cd /usr/local/etcd
 
@@ -73,15 +194,27 @@
 
             name: etcd03
             data-dir: /usr/local/etcd/data
-            advertise-client-urls: http://192.168.140.132:2379
-            listen-client-urls: http://192.168.140.132:2379
-            initial-advertise-peer-urls: http://192.168.140.132:2380
-            listen-peer-urls: http://192.168.140.132:2380
-            initial-cluster: etcd01=http://192.168.140.130:2380,etcd02=http://192.168.140.131:2380,etcd03=http://192.168.140.132:2380
+            advertise-client-urls: https://192.168.140.149:2379
+            listen-client-urls: https://192.168.140.149:2379
+            initial-advertise-peer-urls: https://192.168.140.149:2380
+            listen-peer-urls: https://192.168.140.149:2380
+            initial-cluster: etcd01=https://192.168.140.147:2380,etcd02=https://192.168.140.148:2380,etcd03=https://192.168.140.149:2380
             initial-cluster-token: mrh-etcd-cluster
             initial-cluster-state: new
+            client-transport-security:
+              client-cert-auth: true
+              trusted-ca-file: /usr/local/etcd/certs/ca.crt
+              cert-file: /usr/local/etcd/certs/etcd.crt
+              key-file: /usr/local/etcd/certs/etcd.key
+              auto-tls: true
+            peer-transport-security:
+              client-cert-auth: true
+              trusted-ca-file: /usr/local/etcd/certs/ca.crt
+              cert-file: /usr/local/etcd/certs/etcd.crt
+              key-file: /usr/local/etcd/certs/etcd.key
+              auto-tls: true
 
-    添加到系统服务，并启动集群，输入命令：
+  * 添加到系统服务，并启动集群，输入命令：
 
         cd /etc/systemd/system
 
@@ -109,28 +242,26 @@
 
         systemctl start etcd
 
-    测试各个节点，输入命令：
+  * 测试各个节点，输入命令：
 
-        ./etcdctl endpoint status --cluster --endpoints=192.168.140.130:2380 -w table
+        ./etcdctl --cacert=/usr/local/etcd/certs/ca.crt \
+            --cert=/usr/local/etcd/certs/etcd.crt \
+            --key=/usr/local/etcd/certs/etcd.key \
+            --endpoints=https://192.168.140.147:2379,https://192.168.140.148:2379,https://192.168.140.149:2379 \
+            endpoint status -w table
 
         ->
 
-            +-----------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
-            |          ENDPOINT           |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
-            +-----------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
-            | http://192.168.140.132:2379 | 7d16af429d0fa6bd |   3.5.4 |   25 kB |     false |      false |         5 |         20 |                 20 |        |
-            | http://192.168.140.130:2379 | b91ac90008b0ba8c |   3.5.4 |   20 kB |     false |      false |         5 |         20 |                 20 |        |
-            | http://192.168.140.131:2379 | e74be5e48af37cb7 |   3.5.4 |   20 kB |      true |      false |         5 |         20 |                 20 |        |
-            +-----------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+            +------------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+            |           ENDPOINT           |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
+            +------------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+            | https://192.168.140.147:2379 | 6807f64d2d4951a5 |   3.5.4 |   20 kB |      true |      false |         2 |         12 |                 12 |        |
+            | https://192.168.140.148:2379 | 922a91c9534cb5d7 |   3.5.4 |   20 kB |     false |      false |         2 |         12 |                 12 |        |
+            | https://192.168.140.149:2379 | f583b9a8001353d2 |   3.5.4 |   20 kB |     false |      false |         2 |         12 |                 12 |        |
+            +------------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
 
-        ./etcdctl put /test hi --endpoints=192.168.140.132:2380
+  * 踩坑记录：
 
-        ./etcdctl get /test --endpoints=192.168.140.132:2380
+        tls: first record does not look like a TLS handshake
 
-        ./etcdctl get /test --endpoints=192.168.140.131:2380
-
-        ./etcdctl get /test --endpoints=192.168.140.130:2380
-
-        ./etcdctl del /test --endpoints=192.168.140.130:2380
-
-        ./etcdctl get /test --endpoints=192.168.140.130:2380
+        开始使用 http 再配置证书无效，需要删除 data 目录信息，再重启各个 etcd 节点

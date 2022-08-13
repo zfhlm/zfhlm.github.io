@@ -19,7 +19,7 @@
 
   * 更新服务器内核版本：
 
-        (过程略)
+        (略)
 
   * 关闭服务器防火墙：
 
@@ -52,7 +52,7 @@
   * 配置服务器时间同步：
 
         yum install ntpdate -y
-        
+
         ntpdate time.windows.com
 
   * 配置服务器 ipvs

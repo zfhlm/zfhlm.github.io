@@ -15,11 +15,55 @@
 
         https://rancher.com/docs/k3s/latest/en/
 
+  * 单机版服务器：
+
+        192.168.140.151
+
+  * 集群版服务器：
+
+        192.168.140.147             # 控制节点一
+
+        192.168.140.148             # 控制节点二
+
+        192.168.140.149             # 控制节点三
+
+        192.168.140.150             # 工作节点一
+
+        (注意，控制节点也作为工作节点)
+
 ## 安装 K3s 单机版
+
+  * 更新服务器内核版本、依赖库：
+
+        (略)
+
+  * 关闭服务器防火墙：
+
+        systemctl stop firewalld
+
+        systemctl disable firewalld
+
+  * 更改 hostname 配置：
+
+        hostnamectl set-hostname k3s-151
+
+        echo '192.168.140.151 k3s-151' >> /etc/hosts
+
+  * 禁用 selinux 访问控制：
+
+        sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+        cat /etc/selinux/config
+
+  * 禁用 swap 内存交换：
+
+        sed -i 's/.*swap.*/#&/' /etc/fstab
+
+        cat /etc/fstab
 
   * 安装 docker 容器引擎：
 
-        (略)
+        (略，注意 cgroup 不能更改为 systemd 只能使用 cgroupfs )
 
   * 安装 K3s 1.23 版本 ( 1.24+ 版本使用 containerd 作为默认容器引擎，使用 docker 需要额外安装 cri-dockerd ) ：
 
@@ -29,24 +73,39 @@
 
         curl -sfL https://get.k3s.io | sh -s - server --docker
 
+        # 国内加速镜像安装
+        # curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server --docker
+
   * 运行测试，创建资源对象实例：
 
-        kubectl create namespace mrh-cluster
+        kubectl get pods -A
 
-        kubectl get namespace
+        ->
 
-        -->
+            NAMESPACE     NAME                                      READY   STATUS      RESTARTS   AGE
+            kube-system   local-path-provisioner-6c79684f77-tq44f   1/1     Running     0          4m58s
+            kube-system   helm-install-traefik-crd-v2lz2            0/1     Completed   0          4m58s
+            kube-system   coredns-d76bd69b-rrn6b                    1/1     Running     0          4m58s
+            kube-system   metrics-server-7cd5fcb6b7-nq5lk           1/1     Running     0          4m58s
+            kube-system   helm-install-traefik-67gxv                0/1     Completed   2          4m58s
+            kube-system   svclb-traefik-e2f5155c-x27r9              2/2     Running     0          3m
+            kube-system   traefik-df4ff85d6-26k9z                   1/1     Running     0          3m4s
 
-            NAME              STATUS   AGE
-            default           Active   8m34s
-            kube-system       Active   8m34s
-            kube-public       Active   8m34s
-            kube-node-lease   Active   8m34s
-            mrh-cluster       Active   5m26s
+        vi namespace.yaml
 
-        vi pod.yaml
+        =>
 
-        ==>
+            apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: mrh-cluster
+              labels:
+                created-by: mrh
+                website: zfhlm.github.io
+
+        vi centos-pod.yaml
+
+        =>
 
             apiVersion: v1
             kind: Pod
@@ -66,6 +125,53 @@
                 imagePullPolicy: Always
                 command: ['/bin/sh', '-c', '/usr/sbin/init']
 
-        kubectl get pods -o wide -n mrh-cluster
+        kubectl apply -f namespace.yaml
+
+        kubectl apply -f centos-pod.yaml
+
+        kubectl get pods -n mrh-cluster
+
+        ->
+
+            NAME     READY   STATUS    RESTARTS   AGE
+            centos   1/1     Running   0          97s
 
 ## 安装 K3s 集群版
+
+  * 更新服务器内核版本、依赖库：
+
+        (略)
+
+  * 关闭服务器防火墙：
+
+        systemctl stop firewalld
+
+        systemctl disable firewalld
+
+  * 更改 hostname 配置：
+
+        # hostnamectl set-hostname k3s-master-147
+        # hostnamectl set-hostname k3s-master-148
+        # hostnamectl set-hostname k3s-master-149
+        # hostnamectl set-hostname k3s-worker-150
+
+        echo '192.168.140.147 k3s-master-147' >> /etc/hosts
+        echo '192.168.140.148 k3s-master-148' >> /etc/hosts
+        echo '192.168.140.149 k3s-master-149' >> /etc/hosts
+        echo '192.168.140.150 k3s-worker-150' >> /etc/hosts
+
+  * 禁用 selinux 访问控制：
+
+        sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+        cat /etc/selinux/config
+
+  * 禁用 swap 内存交换：
+
+        sed -i 's/.*swap.*/#&/' /etc/fstab
+
+        cat /etc/fstab
+
+  * 安装 docker 容器引擎：
+
+        (略，注意 cgroup 不能更改为 systemd 只能使用 cgroupfs )

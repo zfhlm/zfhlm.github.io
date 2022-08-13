@@ -51,9 +51,9 @@
 
         systemctl status docker
 
-        systemctl enable docker.service
+        systemctl enable docker
 
-        systemctl enable containerd.service
+        systemctl enable containerd
 
   * 授权系统其他用户使用 docker，输入命令：
 

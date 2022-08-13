@@ -17,15 +17,45 @@
 
         https://github.com/kubernetes/minikube
 
+  * 服务器信息：
+
+        192.168.140.140
+
 ### Minikube 安装与启动
 
-  * 升级服务器依赖库、内核版本：
+  * 更新服务器内核版本、依赖库：
 
-        [参考链接](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part05%20CentOS%20%E5%8D%87%E7%BA%A7%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC.md)
+        (略)
 
-  * 安装 docker 运行环境：
+  * 关闭服务器防火墙：
 
-        [参考链接](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/docker/Part01%20docker%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE.md)
+        systemctl stop firewalld
+
+        systemctl disable firewalld
+
+  * 更改 hostname 配置：
+
+        hostnamectl set-hostname minikube-140
+
+        echo '192.168.140.140 minikube-140' >> /etc/hosts
+
+  * 禁用 selinux 访问控制：
+
+        sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+        cat /etc/selinux/config
+
+  * 禁用 swap 内存交换：
+
+        sed -i 's/.*swap.*/#&/' /etc/fstab
+
+        cat /etc/fstab
+
+  * 安装 docker 容器引擎：
+
+        (略)
+
+  * 更改 docker cgroup 配置：
 
         vi /etc/docker/daemon.json
 
@@ -96,12 +126,13 @@
 
   * 进入 minikube docker 实例：
 
+        # 可见，真实运行的容器实例运行在 minikube 容器实例里，即容器里面又运行了容器
+        # 所以，访问真实容器实例，先进入 minikube 实例
+
         docker exec -it minikube /bin/bash
 
         docker ps
 
-        # 可见，真实运行的容器实例运行在 minikube 容器实例里，即容器里面又运行了容器
-        # 所以，访问真实容器实例，先进入 minikube 实例
         ->
 
             CONTAINER ID   IMAGE                                                           COMMAND                  CREATED             STATUS             PORTS     NAMES
@@ -109,24 +140,7 @@
             af3dc0176dba   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 4 minutes ago       Up 4 minutes                 k8s_POD_nginx_mrh-cluster_017863e4-33a7-4d0f-a4a0-aecbb0e71f05_0
             64ae262263bb   6e38f40d628d                                                    "/storage-provisioner"   28 minutes ago      Up 28 minutes                k8s_storage-provisioner_storage-provisioner_kube-system_208f6f01-2f54-4454-a10d-21c1c8896fe0_15
             bb8702f1735f   e57a417f15d3                                                    "/metrics-server --c…"   About an hour ago   Up About an hour             k8s_metrics-server_metrics-server-854947c5d4-9jxmc_kube-system_07d7356c-7d10-44c4-978b-9484f93855b8_4
-            bdab0c04baff   1042d9e0d8fc                                                    "/dashboard --insecu…"   2 days ago          Up 2 days                    k8s_kubernetes-dashboard_kubernetes-dashboard-84d7457d44-rnrth_kubernetes-dashboard_3d18007a-6f9d-4296-8655-cd1fe9617fb5_2
-            e8b0c6a7da25   115053965e86                                                    "/metrics-sidecar"       2 days ago          Up 2 days                    k8s_dashboard-metrics-scraper_dashboard-metrics-scraper-657679d956-k5xrr_kubernetes-dashboard_df1089dd-0ecc-4690-9416-8732042ba121_1
-            913cd246b077   a4ca41631cc7                                                    "/coredns -conf /etc…"   2 days ago          Up 2 days                    k8s_coredns_coredns-65c54cc984-xzhfl_kube-system_bd3642bf-ee0e-4ac3-af35-8ba64bacaa8f_1
-            5aaeb538b30d   9e6a540eeeb6                                                    "/usr/local/bin/kube…"   2 days ago          Up 2 days                    k8s_kube-proxy_kube-proxy-8xjz6_kube-system_703f16fb-5e38-46fa-8f58-d30329fa4a9e_1
-            9662efbb6870   f6bc1b780606                                                    "kube-controller-man…"   2 days ago          Up 2 days                    k8s_kube-controller-manager_kube-controller-manager-minikube_kube-system_2fbbc9d7059c089bb423da48bad87b63_2
-            516ff9f1e2fc   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_metrics-server-854947c5d4-9jxmc_kube-system_07d7356c-7d10-44c4-978b-9484f93855b8_1
-            6fc44d3796fa   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_dashboard-metrics-scraper-657679d956-k5xrr_kubernetes-dashboard_df1089dd-0ecc-4690-9416-8732042ba121_1
-            c8c40b9487bc   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_coredns-65c54cc984-xzhfl_kube-system_bd3642bf-ee0e-4ac3-af35-8ba64bacaa8f_1
-            0ab12f20e1f1   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_storage-provisioner_kube-system_208f6f01-2f54-4454-a10d-21c1c8896fe0_1
-            b2f3dcaadfc0   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_kubernetes-dashboard-84d7457d44-rnrth_kubernetes-dashboard_3d18007a-6f9d-4296-8655-cd1fe9617fb5_1
-            76ee7c45dce6   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_kube-proxy-8xjz6_kube-system_703f16fb-5e38-46fa-8f58-d30329fa4a9e_1
-            bb96b1354e06   25f8c7f3da61                                                    "etcd --advertise-cl…"   2 days ago          Up 2 days                    k8s_etcd_etcd-minikube_kube-system_98867dbcf24f24b71d45440cb4d174a0_1
-            d5856ff125c6   5bc0062e9555                                                    "kube-apiserver --ad…"   2 days ago          Up 2 days                    k8s_kube-apiserver_kube-apiserver-minikube_kube-system_5b6565d67793724830b3dc997b7c1bfd_1
-            5a5fd9f1bea1   0198979b7707                                                    "kube-scheduler --au…"   2 days ago          Up 2 days                    k8s_kube-scheduler_kube-scheduler-minikube_kube-system_5c30494a23a63af4f72266a9c50836fc_1
-            5fd774225955   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_kube-scheduler-minikube_kube-system_5c30494a23a63af4f72266a9c50836fc_1
-            fbe35ab66e40   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_kube-controller-manager-minikube_kube-system_2fbbc9d7059c089bb423da48bad87b63_1
-            5ccda27e7343   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_kube-apiserver-minikube_kube-system_5b6565d67793724830b3dc997b7c1bfd_1
-            e2df89d6039e   registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.6   "/pause"                 2 days ago          Up 2 days                    k8s_POD_etcd-minikube_kube-system_98867dbcf24f24b71d45440cb4d174a0_1
+            ......
 
 ### Minikube 常用命令
 
@@ -134,6 +148,9 @@
 
         # 指定别名
         alias kubectl="minikube kubectl --"
+
+        # 写入环境变量中
+        echo 'alias kubectl="minikube kubectl --"' >> ~/.bash_profile
 
         # 等价命令
         # minikube kubectl -- get pods -A
