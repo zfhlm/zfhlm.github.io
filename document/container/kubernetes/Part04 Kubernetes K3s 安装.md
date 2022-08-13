@@ -192,9 +192,9 @@
             INSTALL_K3S_VERSION=v1.23.9+k3s1 \
             INSTALL_K3S_MIRROR=cn \
             K3S_DATASTORE_ENDPOINT='https://192.168.140.147:2379,https://192.168.140.148:2379,https://192.168.140.149:2379' \
-            K3S_DATASTORE_CAFILE='/usr/local/etcd/certs/ca.crt' \
-            K3S_DATASTORE_CERTFILE='/usr/local/etcd/certs/etcd.crt' \
-            K3S_DATASTORE_KEYFILE='/usr/local/etcd/certs/etcd.key' \
+            K3S_DATASTORE_CAFILE='/usr/local/etcd/certs/etcd-root-ca.pem' \
+            K3S_DATASTORE_CERTFILE='/usr/local/etcd/certs/etcd.pem' \
+            K3S_DATASTORE_KEYFILE='/usr/local/etcd/certs/etcd-key.pem' \
             K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee \
             sh -s - server --docker --cluster-init
 
@@ -204,9 +204,9 @@
             INSTALL_K3S_VERSION=v1.23.9+k3s1 \
             INSTALL_K3S_MIRROR=cn \
             K3S_DATASTORE_ENDPOINT='https://192.168.140.147:2379,https://192.168.140.148:2379,https://192.168.140.149:2379' \
-            K3S_DATASTORE_CAFILE='/usr/local/etcd/certs/ca.crt' \
-            K3S_DATASTORE_CERTFILE='/usr/local/etcd/certs/etcd.crt' \
-            K3S_DATASTORE_KEYFILE='/usr/local/etcd/certs/etcd.key' \
+            K3S_DATASTORE_CAFILE='/usr/local/etcd/certs/etcd-root-ca.pem' \
+            K3S_DATASTORE_CERTFILE='/usr/local/etcd/certs/etcd.pem' \
+            K3S_DATASTORE_KEYFILE='/usr/local/etcd/certs/etcd-key.pem' \
             K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee \
             K3S_URL=https://192.168.140.147:6443 \
             sh -s - server --docker
