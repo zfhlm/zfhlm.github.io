@@ -27,7 +27,13 @@
 
         192.168.140.149             # 控制节点三
 
-        192.168.140.150             # 工作节点一
+        192.168.140.147             # etcd 集群节点一
+
+        192.168.140.148             # etcd 集群节点二
+
+        192.168.140.149             # etcd 集群节点三
+
+        192.168.140.150             # 工作节点
 
         (注意，控制节点也作为工作节点)
 
@@ -175,3 +181,54 @@
   * 安装 docker 容器引擎：
 
         (略，注意 cgroup 不能更改为 systemd 只能使用 cgroupfs )
+
+  * 安装 etcd 集群：
+
+        (略，参考[etcd 集群])
+
+  * 控制节点一，安装 K3s 1.23 版本：
+
+        curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | \
+            INSTALL_K3S_VERSION=v1.23.9+k3s1 \
+            INSTALL_K3S_MIRROR=cn \
+            K3S_DATASTORE_ENDPOINT='https://192.168.140.147:2379,https://192.168.140.148:2379,https://192.168.140.149:2379' \
+            K3S_DATASTORE_CAFILE='/usr/local/etcd/certs/ca.crt' \
+            K3S_DATASTORE_CERTFILE='/usr/local/etcd/certs/etcd.crt' \
+            K3S_DATASTORE_KEYFILE='/usr/local/etcd/certs/etcd.key' \
+            K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee \
+            sh -s - server --docker --cluster-init
+
+  * 控制节点二 & 控制节点三，安装 K3s 1.23 版本：
+
+        curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | \
+            INSTALL_K3S_VERSION=v1.23.9+k3s1 \
+            INSTALL_K3S_MIRROR=cn \
+            K3S_DATASTORE_ENDPOINT='https://192.168.140.147:2379,https://192.168.140.148:2379,https://192.168.140.149:2379' \
+            K3S_DATASTORE_CAFILE='/usr/local/etcd/certs/ca.crt' \
+            K3S_DATASTORE_CERTFILE='/usr/local/etcd/certs/etcd.crt' \
+            K3S_DATASTORE_KEYFILE='/usr/local/etcd/certs/etcd.key' \
+            K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee \
+            K3S_URL=https://192.168.140.147:6443 \
+            sh -s - server --docker
+
+  * 查看集群节点：
+
+    kubectl get nodes
+
+    ->
+
+        NAME             STATUS   ROLES                  AGE     VERSION
+        k3s-master-147   Ready    control-plane,master   20m     v1.23.9+k3s1
+        k3s-master-148   Ready    control-plane,master   13m     v1.23.9+k3s1
+        k3s-master-149   Ready    control-plane,master   2m50s   v1.23.9+k3s1
+
+  * 工作节点，安装 K3s 1.23 版本：
+
+        cd /usr/local/software/
+
+        export INSTALL_K3S_VERSION=v1.23.9+k3s1
+        export INSTALL_K3S_MIRROR=cn
+        export K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee
+        export K3S_URL=https://192.168.140.147:6443
+
+        curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | sh -s - --docker
