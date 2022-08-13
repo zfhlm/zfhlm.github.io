@@ -196,7 +196,12 @@
             K3S_DATASTORE_CERTFILE='/usr/local/etcd/certs/etcd.pem' \
             K3S_DATASTORE_KEYFILE='/usr/local/etcd/certs/etcd-key.pem' \
             K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee \
-            sh -s - server --docker --cluster-init
+            sh -s - server \
+            --docker \
+            --disable servicelb \
+            --disable traefik \
+            --disable-cloud-controller \
+            --cluster-init
 
   * 控制节点二 & 控制节点三，安装 K3s 1.23 版本：
 
@@ -209,7 +214,11 @@
             K3S_DATASTORE_KEYFILE='/usr/local/etcd/certs/etcd-key.pem' \
             K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee \
             K3S_URL=https://192.168.140.147:6443 \
-            sh -s - server --docker
+            sh -s - server \
+            --docker \
+            --disable servicelb \
+            --disable traefik \
+            --disable-cloud-controller
 
   * 查看集群节点：
 
@@ -224,11 +233,25 @@
 
   * 工作节点，安装 K3s 1.23 版本：
 
-        cd /usr/local/software/
+        curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | \
+            INSTALL_K3S_VERSION=v1.23.9+k3s1 \
+            INSTALL_K3S_MIRROR=cn \
+            K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee \
+            K3S_URL=https://192.168.140.147:6443 \
+            sh -s - \
+            --docker \
+            --disable servicelb \
+            --disable traefik \
+            --disable-cloud-controller
 
-        export INSTALL_K3S_VERSION=v1.23.9+k3s1
-        export INSTALL_K3S_MIRROR=cn
-        export K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee
-        export K3S_URL=https://192.168.140.147:6443
+  * 查看集群节点：
 
-        curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | sh -s - --docker
+    kubectl get nodes
+
+    ->
+
+        NAME             STATUS   ROLES                  AGE     VERSION
+        k3s-master-147   Ready    control-plane,master   20m     v1.23.9+k3s1
+        k3s-master-148   Ready    control-plane,master   13m     v1.23.9+k3s1
+        k3s-master-149   Ready    control-plane,master   2m50s   v1.23.9+k3s1
+        k3s-master-150   Ready    <none>                 1m20s   v1.23.9+k3s1
