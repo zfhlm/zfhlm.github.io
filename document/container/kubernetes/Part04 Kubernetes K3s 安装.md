@@ -335,3 +335,23 @@
         # https://192.168.140.147:30443
         # https://192.168.140.148:30443
         # https://192.168.140.149:30443
+
+## 更新 K3s TLS 证书
+
+  * 到期 90 天内，重启各个 master worker 节点，直接会自动更新
+
+  * 查看证书过期时间，执行命令：
+
+        for i in `ls /var/lib/rancher/k3s/server/tls/*.crt`; do echo $i; openssl x509 -enddate -noout -in $i; done
+
+  * 重启更新不生效/已过期，解决办法：
+
+        kubectl --insecure-skip-tls-verify -n kube-system delete secrets k3s-serving
+
+        rm -f /var/lib/rancher/k3s/server/tls/dynamic-cert.json
+
+        systemctl restart k3s
+
+        systemctl restart k3s-agent
+
+        for i in `ls /var/lib/rancher/k3s/server/tls/*.crt`; do echo $i; openssl x509 -enddate -noout -in $i; done
