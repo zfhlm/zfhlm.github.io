@@ -449,7 +449,7 @@
 
         微服务集群，通常只有 gateway 需要暴露到集群外部访问，也可以使用 NodePort 方式进行多宿主机暴露
 
-        但是，Ingress Nginx 并发支撑度大，能大大减少 NodePort 宿主机的数量，方便进行管理。
+        Ingress Nginx 并发支撑度大，在有很多个 NodePort Service 的情况下使用，能大大减少宿主机 NodePort 的数量，方便进行管理。
 
   * 文档地址：
 
