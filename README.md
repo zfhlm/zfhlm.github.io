@@ -112,7 +112,8 @@
     * [HAProxy Keepalived 双主热备](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/proxy/haproxy/Part5%20%E5%8F%8C%E4%B8%BB%E7%83%AD%E5%A4%87(keepalived).md)
   * 注册中心
     * [Consul 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/consul/Part1%20%E6%90%AD%E5%BB%BAconsul%E9%9B%86%E7%BE%A4.md)
-    * [etcd 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/etcd/Part1%20%E6%90%AD%E5%BB%BAetcd%E9%9B%86%E7%BE%A4.md)
+    * [Etcd 集群(HTTP)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/etcd/Part1%20%E6%90%AD%E5%BB%BAetcd%E9%9B%86%E7%BE%A4(HTTP).md)
+    * [Etcd 集群(HTTPS)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/etcd/Part2%20%E6%90%AD%E5%BB%BAetcd%E9%9B%86%E7%BE%A4(HTTPS).md)
     * [Nacos 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/nacos/Part1%20%E5%AE%89%E8%A3%85nacos.md)
     * [ZooKeeper 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/zookeeper/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [ZooKeeper 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/zookeeper/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)

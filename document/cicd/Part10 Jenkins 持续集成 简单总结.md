@@ -31,4 +31,8 @@
 
   * ③-③，执行资源发布动作(kubernetes)：
 
-        (jenkins + docker + kubernetes + helm，与 docker 相似，暂时不讨论)
+        第一步，执行源码携带的 docker-build.sh 将 application.jar 打包为容器镜像，然后上传到指定的镜像仓库
+
+        第二步，执行源码携带的 helm-build.sh 将 kubernetes yaml 打包并上传到指定的私库
+
+        第三步，远程 ssh 控制节点执行 helm 发布资源动作
