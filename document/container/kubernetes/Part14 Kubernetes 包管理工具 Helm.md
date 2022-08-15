@@ -268,7 +268,7 @@
         # 参数 -i 无则创建，有则更新
         helm upgrade -i mrh-cluster ./mrh-cluster/
 
-## Helm 私库
+## Helm Nginx 私库
 
   * 安装 Nginx 并配置 /usr/local/helm/charts 为根目录：
 
@@ -312,3 +312,5 @@
 
         # 指定版本部署
         helm upgrade -i mrh-cluster local/mrh-cluster --version=1.0.1
+
+## Helm Chartmuseum 私库

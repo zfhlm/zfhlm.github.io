@@ -5,7 +5,7 @@
 
   * 服务器要求
 
-        服务器IP：192.168.140.209 (最小内存 4G，CPU 2核)
+        服务器IP：192.168.140.140 (最小内存 4G，CPU 2核)
 
         提前配置好 docker、docker compose 和 openssl
 
@@ -13,30 +13,33 @@
 
         wget https://github.com/goharbor/harbor/releases/download/v1.10.9/harbor-offline-installer-v1.10.9.tgz
 
+        # 国内代理
+        # wget https://ghproxy.com/https://github.com/goharbor/harbor/releases/download/v1.10.9/harbor-offline-installer-v1.10.9.tgz
+
         tar -zxvf harbor-offline-installer-v1.10.9.tgz
 
         mv ./harbor /usr/local/
 
         cd /usr/local/harbor
 
-  * 创建 ssl 自签名证书，输入命令：
+  * 创建 ssl 自签名证书，输入命令（有条件尽量使用合法机构签发的域名和证书）：
 
         mkdir cert && cd cert
 
         openssl genrsa -out ca.key 4096
 
-        openssl req -x509 -new -nodes -sha512 -days 3650  -subj "/CN=192.168.140.209"  -key ca.key  -out ca.crt
+        openssl req -x509 -new -nodes -sha512 -days 3650  -subj "/CN=192.168.140.140"  -key ca.key  -out ca.crt
 
         openssl genrsa -out server.key 4096
 
-        openssl req  -new -sha512  -subj "/CN=192.168.140.209"  -key server.key  -out server.csr
+        openssl req  -new -sha512  -subj "/CN=192.168.140.140"  -key server.key  -out server.csr
 
         cat > v3.ext <<-EOF
         authorityKeyIdentifier=keyid,issuer
         basicConstraints=CA:FALSE
         keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
         extendedKeyUsage = serverAuth
-        subjectAltName = IP:192.168.140.209
+        subjectAltName = IP:192.168.140.140
         EOF
 
         openssl x509 -req -sha512 -days 3650 -extfile v3.ext -CA ca.crt -CAkey ca.key -CAcreateserial -in server.csr -out server.crt
@@ -47,14 +50,14 @@
 
         =>
 
-          hostname: 192.168.140.209
+          hostname: 192.168.140.140
 
           https:
             port: 443
             certificate: /usr/local/harbor/cert/server.crt
             private_key: /usr/local/harbor/cert/server.key
 
-          harbor_admin_password: admin123456
+          harbor_admin_password: 123456
 
   * 初始化启动 harbor，输入命令：
 
@@ -68,11 +71,11 @@
 
   * 浏览器访问 harbor，地址：
 
-        https://192.168.140.209/
+        https://192.168.140.140/
 
-        账号 admin 密码 admin123456
+        账号 admin 密码 123456
 
-  * 配置 harbor 仓库：
+  * 添加 harbor 仓库项目：
 
         点击【项目】-【新建项目】
 
@@ -84,14 +87,14 @@
 
   * 配置 docker 信任证书，输入命令：
 
-        mkdir -p /etc/docker/certs.d/192.168.140.209
+        mkdir -p /etc/docker/certs.d/192.168.140.140
 
-        cp /usr/local/harbor/cert/server.crt /etc/docker/certs.d/192.168.140.209/
+        cp /usr/local/harbor/cert/server.crt /etc/docker/certs.d/192.168.140.140
 
   * 配置免输入 docker registry 账号密码：
 
         # 获取 账号:密码 base64 字符串：
-        echo -n "admin:admin123456" | base64
+        echo -n "admin:123456" | base64
 
         ->
 
@@ -104,7 +107,7 @@
 
             {
                 "auths": {
-                    "192.168.140.209:5000": {
+                    "192.168.140.140": {
                         "auth": "YWRtaW46YWRtaW4xMjM0NTY="
                     }
                 }
@@ -113,17 +116,17 @@
   * 上传镜像测试，输入命令：
 
         # 不需要再使用 docker login
-        # docker login 192.168.140.209
+        # docker login 192.168.140.140
 
         docker pull redis
 
-        docker tag redis 192.168.140.209/dev/redis:v1
+        docker tag redis 192.168.140.140/dev/redis:v1
 
-        docker push 192.168.140.209/dev/redis:v1
+        docker push 192.168.140.140/dev/redis:v1
 
         ->
 
-          The push refers to repository [192.168.140.209/dev/redis]
+          The push refers to repository [192.168.140.140/dev/redis]
           146262eb3841: Pushed
           0bd13b42de4d: Pushed
           6b01cc47a390: Pushed
