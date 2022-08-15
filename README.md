@@ -80,6 +80,7 @@
     * [NodeJS 运行环境](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part03%20nodejs%20%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
     * [CentOS 服务开机自启](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part04%20CentOS%20%E6%9C%8D%E5%8A%A1%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF.md)
     * [CentOS 升级内核版本](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part05%20CentOS%20%E5%8D%87%E7%BA%A7%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC.md)
+    * [CentOS 服务器优化](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/env/Part08%20CentOS%20%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BC%98%E5%8C%96.md)
   * 消息中间件
     * [Kafka 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/mq/kafka/Part1%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
     * [Kafka 管理页面](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/mq/kafka/Part2%20%E7%95%8C%E9%9D%A2%E5%8C%96%E7%AE%A1%E7%90%86cmak.md)
@@ -112,7 +113,8 @@
     * [HAProxy Keepalived 双主热备](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/proxy/haproxy/Part5%20%E5%8F%8C%E4%B8%BB%E7%83%AD%E5%A4%87(keepalived).md)
   * 注册中心
     * [Consul 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/consul/Part1%20%E6%90%AD%E5%BB%BAconsul%E9%9B%86%E7%BE%A4.md)
-    * [etcd 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/etcd/Part1%20%E6%90%AD%E5%BB%BAetcd%E9%9B%86%E7%BE%A4.md)
+    * [Etcd 集群(HTTP)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/etcd/Part1%20%E6%90%AD%E5%BB%BAetcd%E9%9B%86%E7%BE%A4(HTTP).md)
+    * [Etcd 集群(HTTPS)](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/etcd/Part2%20%E6%90%AD%E5%BB%BAetcd%E9%9B%86%E7%BE%A4(HTTPS).md)
     * [Nacos 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/nacos/Part1%20%E5%AE%89%E8%A3%85nacos.md)
     * [ZooKeeper 单点](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/zookeeper/Part1%20%E5%8D%95%E7%82%B9%E9%85%8D%E7%BD%AE.md)
     * [ZooKeeper 集群](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/registry/zookeeper/Part2%20%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE.md)
@@ -174,7 +176,8 @@
     * [Kubernetes 身份认证资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part11%20Kubernetes%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E8%B5%84%E6%BA%90.md)
     * [Kubernetes 鉴权资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part12%20Kubernetes%20%E9%89%B4%E6%9D%83%E8%B5%84%E6%BA%90.md)
     * [Kubernetes 运行策略资源](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part13%20Kubernetes%20%E8%BF%90%E8%A1%8C%E7%AD%96%E7%95%A5%E8%B5%84%E6%BA%90.md)
-    * [Kubernetes 包管理工具 Helm](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part14%20Kubernetes%20%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%20Helm.md)
+    * [Kubernetes 亲和性调度](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part14%20Kubernetes%20%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6.mds)
+    * [Kubernetes 包管理工具 Helm](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/container/kubernetes/Part15%20Kubernetes%20%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%20Helm.md)
   * 持续集成
     * [SVN 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part01%20svn%20%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE.md)
     * [Git 安装与配置](https://github.com/zfhlm/zfhlm.github.io/blob/main/document/cicd/Part02%20git%20%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE.md)

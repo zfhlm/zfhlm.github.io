@@ -1,19 +1,27 @@
 
-# Kubernetes Kubeadm 安装
+# Kubernetes 二进制安装
 
   * 官方文档：
 
         https://kubernetes.io/
 
-        https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/
+  * 服务器规划：
 
-  * 三台服务器：
+        192.168.119.139             # 控制节点一
 
-        192.168.140.141
+        192.168.119.140             # 控制节点二
 
-        192.168.140.142
+        192.168.119.141             # 控制节点三
 
-        192.168.140.143
+        192.168.119.142             # 工作节点
+
+        192.168.119.143             # 反向代理
+
+        192.168.119.139             # etcd 集群节点一
+
+        192.168.119.140             # etcd 集群节点二
+
+        192.168.119.141             # etcd 集群节点三
 
 ## 初始化服务器
 
@@ -29,11 +37,11 @@
 
   * 更改服务器 hostname 配置：
 
-        hostnamectl set-hostname k8s-141
-
-        hostnamectl set-hostname k8s-142
-
-        hostnamectl set-hostname k8s-143
+        # hostnamectl set-hostname k8s-master-139
+        # hostnamectl set-hostname k8s-master-140
+        # hostnamectl set-hostname k8s-master-141
+        # hostnamectl set-hostname k8s-worker-142
+        # hostnamectl set-hostname k8s-ha-143
 
         echo '192.168.140.141 k8s-141' >> /etc/hosts
 
@@ -116,8 +124,6 @@
         systemctl start containerd
 
   * 更改 docker cgroup 驱动类型：
-
-        mkdir -p /etc/docker
 
         vi /etc/docker/daemon.json
 
