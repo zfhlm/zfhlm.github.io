@@ -80,7 +80,14 @@
         curl -sfL https://get.k3s.io | sh -s - server --docker
 
         # 国内加速镜像安装
-        # curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server --docker
+        # curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | \
+                INSTALL_K3S_MIRROR=cn \
+                sh -s \
+                - server \
+                --docker \
+                --disable servicelb \
+                --disable traefik \
+                --disable-cloud-controller
 
   * 运行测试，创建资源对象实例：
 
@@ -239,10 +246,7 @@
             K3S_TOKEN=7cb7d3ad-cb8f-4629-b88e-896c93e0fcee \
             K3S_URL=https://192.168.140.147:6443 \
             sh -s - \
-            --docker \
-            --disable servicelb \
-            --disable traefik \
-            --disable-cloud-controller
+            --docker
 
   * 查看集群所有节点：
 
