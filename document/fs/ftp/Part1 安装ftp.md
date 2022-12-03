@@ -19,6 +19,16 @@
 
         chown -R ftptest:ftp /usr/local/file
 
+    关闭 selinux，输入命令：
+
+        vi /etc/selinux/config
+
+        =>
+
+            SELINUX=disabled
+
+        setenforce 0
+
     修改 FTP 配置文件，输入命令：
 
         cd /etc/vsftpd/
