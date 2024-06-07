@@ -122,3 +122,19 @@
             cd /usr/local/rabbitmq
 
             ./sbin/rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+
+# 使用 RPM 安装
+
+    1，下载安装包
+    
+        [RabbitMQ](https://github.com/rabbitmq/rabbitmq-server/releases)
+        
+        [erlang](https://github.com/rabbitmq/erlang-rpm/releases)
+
+    2，安装 erlang
+    
+        yum install -y erlang-25.3.2.7-1.el9.x86_64.rpm
+        
+    3，安装 RabbitMQ
+    
+        （略）
